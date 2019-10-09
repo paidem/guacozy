@@ -47,6 +47,9 @@ INSTALLED_APPS = [
     # Palymorphic - for Connection subclasses (RDP, SSH, VNC)
     'polymorphic',
 
+    # Django-rules permission model, enables discovery of rules.py files
+    'rules.apps.AutodiscoverRulesConfig',
+
     'users',
     'backend',
 ]
