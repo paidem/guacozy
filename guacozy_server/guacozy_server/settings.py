@@ -44,6 +44,9 @@ INSTALLED_APPS = [
     'mptt',
     'django_mptt_admin',
 
+    # Palymorphic - for Connection subclasses (RDP, SSH, VNC)
+    'polymorphic',
+
     'users',
     'backend',
 ]
