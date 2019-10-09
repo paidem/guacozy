@@ -1,10 +1,11 @@
 from django.contrib import admin
+from rules.contrib.admin import ObjectPermissionsModelAdmin
 
 from backend.models import Ticket
 
 
 @admin.register(Ticket)
-class TicketAdmin(admin.ModelAdmin):
+class TicketAdmin(ObjectPermissionsModelAdmin):
     readonly_fields = ["uuid", "created", "sessionid", 'user', "author", 'parent']
     list_display = ('__str__', )
 
