@@ -55,17 +55,8 @@ class Connection(PolymorphicModel):
     def __str__(self):
         return self.uri()
 
-    # save password on init,
-    # so we know how to revert on saving provided blank password
-    def __init__(self, *args, **kwargs):
-        super(Connection, self).__init__(*args, **kwargs)
-        self.original_password = self.password
-
     # check if provided password is blank. If it is, save old password
     def save(self, *args, **kwargs):
-        if not self.password:
-            self.password = self.original_password
-
         if not self.port:
             self.port = ProtocolsDict[self.protocol]['port']
 
