@@ -3,3 +3,4 @@ from .connection import ConnectionParentAdmin, ConnectionRdpAdmin, ConnectionSsh
 from .guacdserver import GuacdServerModelAdmin
 from .credentials import StaticCredentialsAdmin, PersonalNamedCredentialsAdmin
 from .ticket import TicketAdmin
+from .appsettings import AppSettingsModelAdmin
