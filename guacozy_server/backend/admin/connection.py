@@ -1,7 +1,7 @@
 from django import forms
 from django.conf.urls import url
 from django.contrib import admin
-from django.forms import ModelForm, CharField, PasswordInput, ModelChoiceField
+from django.forms import ModelForm, CharField, PasswordInput, ModelChoiceField, TextInput
 from django.utils.translation import ugettext as _
 from polymorphic.admin import PolymorphicChildModelAdmin, PolymorphicParentModelAdmin, PolymorphicChildModelFilter
 
@@ -34,9 +34,12 @@ class ConnectionChildForm(ModelForm):
         }
 
         widgets = {
-            'password': PasswordInput()
+            'name': TextInput(attrs={'autocomplete': 'off', 'data-lpignore': 'true'}),
+            'username': TextInput(attrs={'autocomplete': 'off', 'data-lpignore': 'true'}),
+            'domain': TextInput(attrs={'autocomplete': 'off', 'data-lpignore': 'true'}),
+            'password': PasswordInput(attrs={'autocomplete': 'off', 'data-lpignore': 'true'}),
+            'passphrase': TextInput(attrs={'autocomplete': 'off', 'data-lpignore': 'true'}),
         }
-
 
 class ConnectionChildAdmin(PolymorphicChildModelAdmin):
 
