@@ -47,6 +47,9 @@ INSTALLED_APPS += [
 
     # Django REST Framework
     'rest_framework',
+
+    # Django channels
+    'channels',
 ]
 
 # Application packages
@@ -140,3 +143,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ]
 }
+
+# Specify ASGI routing (needed for channels)
+ASGI_APPLICATION = "guacozy_server.routing.application"
