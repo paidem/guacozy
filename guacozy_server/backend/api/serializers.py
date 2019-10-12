@@ -67,7 +67,7 @@ class TicketSerializer(serializers.ModelSerializer):
             # Limit connection dropdown list in API browser
             # to connections user is allowed to view
             self.fields['connection'].queryset = Connection.objects \
-                .filter(parent__in=user_allowed_folders_ids(user))
+                .filter(parent__in=user_allowed_folders_ids(user, require_view_permission=True))
         except KeyError:
             pass
 

@@ -225,7 +225,7 @@ class TicketViewSet(viewsets.ModelViewSet):
 
         # Check that user is allowed to use this connection
         if ticket_serializer.validated_data['connection'].parent.id not in \
-                user_allowed_folders_ids(request.user):
+                user_allowed_folders_ids(request.user, require_view_permission=True):
             raise ValidationError("Wrong connection specified")
 
         try:
