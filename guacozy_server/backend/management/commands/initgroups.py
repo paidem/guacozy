@@ -12,6 +12,7 @@ GROUPS_PERMISSIONS = {
         models.FolderPermission: ['add', 'change', 'delete', 'view'],
         models.ConnectionRdp: ['add', 'change', 'delete', 'view'],
         models.ConnectionSsh: ['add', 'change', 'delete', 'view'],
+        models.Connection: ['add', 'change', 'delete', 'view'],
         models.GuacdServer: ['add', 'change', 'delete', 'view'],
         models.AppSettings: ['view'],
     },
