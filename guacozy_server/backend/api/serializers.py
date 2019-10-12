@@ -1,7 +1,8 @@
+from django.utils import timezone
 from rest_framework import serializers
 
 from backend.api.utils import user_allowed_folders_ids
-from backend.models import Folder
+from backend.models import Folder, Ticket, Connection
 from users.models import User
 
 
@@ -48,3 +49,43 @@ class FolderFlatSerializer(serializers.ModelSerializer):
 
         except KeyError:
             pass
+
+
+class TicketSerializer(serializers.ModelSerializer):
+    validto = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_validto(obj):
+        validtime = obj.created + obj.validityperiod
+        return timezone.localtime(validtime)
+
+    class Meta:
+        model = Ticket
+        fields = ['id', 'created', 'user', 'author', 'validto',
+                  'connection', 'validityperiod', 'parent']
+        read_only_fields = ['created', 'user', 'author', 'validto',
+                            'parent']
+
+    def __init__(self, *args, **kwargs):
+        super(TicketSerializer, self).__init__(*args, **kwargs)
+
+        try:
+            user = kwargs['context']['request'].user
+
+            # Limit connection dropdown list in API browser
+            # to connections user is allowed to view
+            self.fields['connection'].queryset = Connection.objects \
+                .filter(parent__in=user_allowed_folders_ids(user))
+        except KeyError:
+            pass
+
+
+class TicketReadSerializer(TicketSerializer):
+    user = UserShortSerializer()
+    author = UserShortSerializer()
+    connection = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_connection(obj):
+        return {'id': obj.connection.id, 'name': obj.connection.name,
+                'protocol': obj.connection.protocol}
