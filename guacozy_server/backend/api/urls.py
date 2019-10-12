@@ -1,10 +1,11 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from backend.models import Folder
+from backend.models import Folder, Connection
 from . import views
 
 router = routers.DefaultRouter()
+router.register(r'connections', views.ConnectionViewSet, basename=Connection)
 router.register(r'folders', views.FolderFlatViewSet, basename=Folder)
 router.register(r'tickets', views.TicketViewSet)
 router.register(r'users', views.UserViewSet)

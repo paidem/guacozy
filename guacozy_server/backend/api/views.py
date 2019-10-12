@@ -1,3 +1,4 @@
+import rules
 from django.db.models import F, Q
 from django.utils import timezone
 from rest_framework import viewsets, status
@@ -5,11 +6,13 @@ from rest_framework.decorators import api_view
 from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError, ParseError
 from rest_framework.permissions import IsAuthenticated, BasePermission
 from rest_framework.response import Response
+from rules.contrib.rest_framework import AutoPermissionViewSetMixin
 
 from backend.api.utils import user_allowed_folders, folder_to_object, user_allowed_folders_ids
-from backend.models import Folder, Ticket
+from backend.models import Folder, Ticket, Connection
 from users.models import User
-from .serializers import UserSerializer, FolderFlatSerializer, TicketSerializer, TicketReadSerializer
+from .serializers import UserSerializer, FolderFlatSerializer, TicketSerializer, TicketReadSerializer, \
+    ConnectionSerializer
 
 
 # Users
@@ -35,10 +38,14 @@ class FolderAccessPermission(BasePermission):
         return False
 
     def has_object_permission(self, request, view, obj):
-        if request.method in ["GET", 'HEAD', 'OPTIONS']:
+        if request.method in ["GET", 'HEAD', 'OPTIONS', 'POST']:
             return True
-        if obj.id in user_allowed_folders_ids(request.user):
-            return True
+
+        # Check that user has view permission to a parent if we want to show modification ui
+        if request.method in ['PUT', 'PATCH', 'DELETE']:
+            if obj.id in user_allowed_folders_ids(request.user, require_view_permission=True):
+                return True
+
         return False
 
 
@@ -49,21 +56,55 @@ class FolderFlatViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Folder.objects.filter(id__in=user_allowed_folders_ids(self.request.user))
 
+    # Override to check that user can create folder only inside of folder where user has view permission
+    def perform_create(self, serializer):
+        if serializer.validated_data['parent'] not in user_allowed_folders_ids(self.request.user, require_view_permission=True):
+            raise PermissionDenied(detail="You are not allowed to create folder here")
+        super(FolderFlatViewSet, self).perform_create(serializer)
+
+    # Override to check that user can only update folder if he has view permission to it
+    def perform_update(self, serializer):
+        allowed_to_view_folders = user_allowed_folders_ids(self.request.user, require_view_permission=True)
+        allowed_to_view_folders_ids = user_allowed_folders_ids(self.request.user, require_view_permission=True)
+
+        if serializer.instance.id not in allowed_to_view_folders_ids:
+            raise PermissionDenied(detail="You are not allowed to update this folder")
+
+        if serializer.validated_data['parent'].id not in allowed_to_view_folders_ids:
+            raise PermissionDenied(detail="You are not allowed to move folder here")
+
+        super(FolderFlatViewSet, self).perform_update(serializer)
+
+    def perform_destroy(self, instance):
+        if instance.id not in user_allowed_folders_ids(self.request.user, require_view_permission=True):
+            raise PermissionDenied(detail="You are not delete this folder")
+        super(FolderFlatViewSet, self).perform_destroy(instance)
+
 
 @api_view(['GET'])
 def folders_objects_treeview(request, include_objects=True):
     root_folders = Folder.objects.all().filter(parent=None)
-    allowed_to_list_folders = user_allowed_folders(request.user)
+    allowed_to_list = user_allowed_folders(request.user)
 
     result = []
 
     for folder in root_folders:
-        if folder in allowed_to_list_folders:
-            result += [folder_to_object(folder, user=request.user,
-                                        folders_allowed_to_list=allowed_to_list_folders,
+        if folder in allowed_to_list:
+            result += [folder_to_object(folder=folder,
+                                        user=request.user,
+                                        allowed_to_list=allowed_to_list,
                                         include_objects=include_objects)]
 
     return Response(result)
+
+
+class ConnectionViewSet(viewsets.ModelViewSet, AutoPermissionViewSetMixin):
+    serializer_class = ConnectionSerializer
+
+    # Limit queryset to only include connections located in allowed to view folders
+    def get_queryset(self):
+        allowed_to_view_folders = user_allowed_folders_ids(self.request.user, require_view_permission=True)
+        return Connection.objects.filter(parent__in=allowed_to_view_folders)
 
 
 # Ticket part

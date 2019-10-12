@@ -32,23 +32,15 @@ class UserShortSerializer(serializers.ModelSerializer):
 
 
 class FolderFlatSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Folder
         fields = ['id', 'name', 'parent']
 
-    def __init__(self, *args, **kwargs):
-        super(FolderFlatSerializer, self).__init__(*args, **kwargs)
 
-        try:
-            user = kwargs['context']['request'].user
-
-            # Limit folder
-            allowed_folders = user_allowed_folders_ids(user)
-            self.fields['parent'].queryset = Folder.objects.filter(id__in=allowed_folders)
-
-        except KeyError:
-            pass
+class ConnectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Connection
+        exclude = ['password']
 
 
 class TicketSerializer(serializers.ModelSerializer):
