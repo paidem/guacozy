@@ -18,8 +18,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Ticket',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('uuid', models.UUIDField(default=uuid.uuid4)),
+                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
                 ('sessionid', models.UUIDField(blank=True, null=True)),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('validityperiod', models.DurationField(default=datetime.timedelta(days=1))),

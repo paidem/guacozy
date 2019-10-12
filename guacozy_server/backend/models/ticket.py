@@ -8,7 +8,7 @@ from users.models import User
 
 
 class Ticket(models.Model):
-    uuid = models.UUIDField(default=uuid.uuid4, blank=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     sessionid = models.UUIDField(blank=True, null=True)
     connection = models.ForeignKey(Connection, on_delete=models.CASCADE, blank=False)
