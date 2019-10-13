@@ -1,10 +1,14 @@
 import React, {useContext, useEffect} from 'react';
-import {AppContext} from "../../Context/AppContext";
+
 import {Dimmer, Loader} from "semantic-ui-react";
+
+import {AppContext} from "../../Context/AppContext";
+import {LayoutContext} from "../../Layout/LayoutContext";
 
 function App() {
     // Context
     const [appState,] = useContext(AppContext);
+    const [layoutState,] = useContext(LayoutContext);
 
     useEffect(() => {
         appState.actions.checkLoginStatus(10);
