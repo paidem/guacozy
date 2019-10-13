@@ -12,10 +12,15 @@ const LayoutProvider = (props) => {
         state.model.doAction(FlexLayout.Actions.deleteTab(tabid));
     };
 
+    const activateTicket = (id) => {
+        console.log("Activating ticket "+id)
+    };
+
     const defaultState = {
         model: FlexLayout.Model.fromJson(defaultLayout),
         layout: layoutRef,
         actions: {
+            activateTicket: activateTicket,
             deleteTab: deleteTab
         }
     };

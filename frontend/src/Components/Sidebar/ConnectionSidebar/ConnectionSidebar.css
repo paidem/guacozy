@@ -24,3 +24,41 @@
     flex-shrink: 1;
     padding: 0;
 }
+
+
+/* ticket list main segment */
+.sidebarContainer .ui.segment.ticketList {
+    padding: 3px 5px 3px 5px;
+    min-height: 40px;
+    flex-shrink: 0;
+    flex-grow: 0;
+}
+
+/* internal segments - these are active tickets */
+.sidebarContainer .ui.segments.ticketList {
+    font-size: 0.9rem;
+    padding: 0 5px 0 5px;
+    margin-top: -20px;
+}
+
+.sidebarContainer .ui.segments.ticketList div.ticketItem:hover {
+    background-color: #292929;
+}
+
+.ticketSection {
+    margin-top: 8px;
+}
+
+.ticketSectionHeader {
+    color: darkgrey;
+}
+.sidebarContainer .ui.segments.ticketList div.ticketItem .ticketDetails{
+    background-color: #202020;
+    margin: 5px 0;
+    padding: 5px;
+    border: 1px #606060 dashed;
+}
+
+.sidebarContainer .ui.segments.ticketList div span:hover.activatable {
+    cursor: pointer;
+}

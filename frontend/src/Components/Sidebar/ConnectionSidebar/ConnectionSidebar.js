@@ -2,6 +2,7 @@ import React, {useRef, useState} from 'react';
 import {Container, Icon, Input, Segment} from "semantic-ui-react";
 import './ConnectionSidebar.css'
 import ConnectionsTree from "../ConnectionsTree/ConnectionsTree";
+import TicketsSegment from "../TicketsSegment/TicketsSegment";
 
 function ConnectionSidebar(props) {
     const [treeNodeFilterString, setTreeNodeFilterString] = useState("");
@@ -28,6 +29,9 @@ function ConnectionSidebar(props) {
             </Segment>
             <Segment raised color='grey' className='connectionList'>
                 <ConnectionsTree searchString={treeNodeFilterString} draggable={false}/>
+            </Segment>
+            <Segment raised color='grey' className='ticketList'>
+                <TicketsSegment searchString={treeNodeFilterString}/>
             </Segment>
         </Container>
     );
