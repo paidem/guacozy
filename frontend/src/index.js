@@ -7,9 +7,9 @@ import {AppProvider} from "./Context/AppContext";
 import {LayoutProvider} from "./Layout/LayoutContext";
 
 ReactDOM.render(
-    <AppProvider>
-        <LayoutProvider>
+    <LayoutProvider>
+        <AppProvider>
             <App/>
-        </LayoutProvider>
-    </AppProvider>
+        </AppProvider>
+    </LayoutProvider>
     , document.getElementById('root'));
