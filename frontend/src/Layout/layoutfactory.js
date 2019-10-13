@@ -1,5 +1,6 @@
 import React from 'react';
 import Welcome from "../Components/Welcome/Welcome";
+import ConnectionSidebar from "../Components/Sidebar/ConnectionSidebar/ConnectionSidebar";
 
 export const layoutFactory = (node) => {
         var component = node.getComponent();
@@ -7,7 +8,7 @@ export const layoutFactory = (node) => {
             return <Welcome />
         }
         if (component === "ConnectionSidebar") {
-            return <div/>
+            return <ConnectionSidebar/>
         }
         if (component === "SettingsSidebar") {
             return <div/>

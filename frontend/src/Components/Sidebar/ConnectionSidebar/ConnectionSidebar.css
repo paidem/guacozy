@@ -1,0 +1,6 @@
+.sidebarContainer {
+    height: 100%;
+    padding: 5px 5px 5px 5px;
+    display: flex !important;
+    flex-direction: column !important;
+}
