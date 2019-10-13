@@ -45,4 +45,8 @@ export default class GuacadminApi {
     logout() {
         return  this.apiInstance.get("/accounts/logout/",{baseURL:"/"})
     }
+
+    getConnections() {
+        return this.apiInstance.get("/connections/tree");
+    }
 }
