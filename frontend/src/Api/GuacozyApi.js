@@ -41,4 +41,8 @@ export default class GuacadminApi {
     getCurrentUser() {
         return this.apiInstance.get("/users/current/");
     }
+
+    logout() {
+        return  this.apiInstance.get("/accounts/logout/",{baseURL:"/"})
+    }
 }

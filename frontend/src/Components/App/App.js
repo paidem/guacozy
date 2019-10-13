@@ -1,9 +1,11 @@
 import React, {useContext, useEffect} from 'react';
 
 import {Dimmer, Loader} from "semantic-ui-react";
+import FlexLayout from "flexlayout-react";
 
 import {AppContext} from "../../Context/AppContext";
 import {LayoutContext} from "../../Layout/LayoutContext";
+import {layoutFactory} from "../../Layout/layoutfactory";
 
 function App() {
     // Context
@@ -25,12 +27,7 @@ function App() {
                 </Dimmer>
             )
         } else {
-            return (
-                <div>
-                    Hello {appState.user.username}<br/>
-                    <a href="/accounts/logout">Logout</a>
-                </div>
-            )
+            return <FlexLayout.Layout ref={layoutState.layout} model={layoutState.model} factory={layoutFactory}/>
         }
     };
 

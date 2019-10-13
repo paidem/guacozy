@@ -1,10 +1,17 @@
 import React, {useRef, useState} from 'react';
+import FlexLayout from "flexlayout-react";
+import {defaultLayout} from "./defaultLayout";
 
 const LayoutContext = React.createContext([{}, () => {
 }]);
 
 const LayoutProvider = (props) => {
-    const defaultState = {};
+    const layoutRef = useRef();
+    
+    const defaultState = {
+        model: FlexLayout.Model.fromJson(defaultLayout),
+        layout: layoutRef,
+    };
 
     const [state, setState] = useState(defaultState);
     
