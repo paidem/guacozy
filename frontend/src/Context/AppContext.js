@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import GuacozyApi from "../Api/GuacozyApi";
+import {LayoutContext} from "../Layout/LayoutContext";
 
 const api = new GuacozyApi();
 
@@ -7,6 +8,7 @@ const AppContext = React.createContext([{}, () => {
 }]);
 
 const AppProvider = (props) => {
+    const [layoutState,] = useContext(LayoutContext);
 
     const checkLoginStatus = (retriesLeft) => {
         retriesLeft--;
@@ -74,6 +76,18 @@ const AppProvider = (props) => {
             })
     };
 
+    const deleteTicket = (ticketid) => {
+        // delete ticket from state before makeing API call - optimistic delete
+        setState(state => ({...state, tickets: state.tickets.filter(ticket => ticket.id !== ticketid)}));
+
+        api.deleteTicket(ticketid)
+            .finally(() => {
+                // if we have a tab with this ticket - it should also be deleted
+                layoutState.actions.deleteTab(ticketid);
+                updateTickets();
+            })
+    };
+
     const defaultState = {
         api: api,
         apiError: null,
@@ -84,6 +98,7 @@ const AppProvider = (props) => {
         user: null,
         actions: {
             checkLoginStatus: checkLoginStatus,
+            deleteTicket: deleteTicket,
             logout: logout,
             updateConnections: updateConnections,
             updateTickets: updateTickets,

@@ -53,4 +53,12 @@ export default class GuacadminApi {
     getTickets() {
         return this.apiInstance.get("/tickets/");
     }
+    
+    deleteTicket(id, callback) {
+        return this.apiInstance.delete("/tickets/" + id + "")
+            .then(() => {
+                callback && callback();
+            })
+
+    }
 }
