@@ -49,4 +49,8 @@ export default class GuacadminApi {
     getConnections() {
         return this.apiInstance.get("/connections/tree");
     }
+    
+    getTickets() {
+        return this.apiInstance.get("/tickets/");
+    }
 }

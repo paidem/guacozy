@@ -15,6 +15,7 @@ const AppProvider = (props) => {
             .then(r => {
                 setState(oldState => ({...oldState, apiError: null, user: r.data}));
                 updateConnections();
+                updateTickets();
             })
             .catch(e => {
                     if (!e.response) {
@@ -53,17 +54,39 @@ const AppProvider = (props) => {
                 setState((state) => ({...state, connectionsLoading: false}));
             })
     };
-       
+
+    const updateTickets = () => {
+        setState((state) => ({...state, ticketsLoading: true}));
+
+        api.getTickets()
+            .then(r => {
+                let newTickets = r.data;
+                newTickets.sort((a, b) => (a.connection.name > b.connection.name) ? 1 : (a.connection.name < b.connection.name ? -1 : 0));
+                newTickets = newTickets.map(ticket => ({
+                    ...ticket,
+                    created: Date.parse(ticket.created),
+                    validto: Date.parse(ticket.validto),
+                }));
+                setState(state => ({...state, tickets: newTickets}));
+            })
+            .finally(() => {
+                setState((state) => ({...state, ticketsLoading: false}));
+            })
+    };
+
     const defaultState = {
         api: api,
         apiError: null,
         connections: [],
         connectionsLoading: false,
+        tickets: [],
+        ticketsLoading: false,
         user: null,
         actions: {
             checkLoginStatus: checkLoginStatus,
             logout: logout,
-            updateConnections: updateConnections
+            updateConnections: updateConnections,
+            updateTickets: updateTickets,
         }
     };
 
