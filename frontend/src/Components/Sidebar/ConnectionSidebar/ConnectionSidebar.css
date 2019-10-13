@@ -4,3 +4,23 @@
     display: flex !important;
     flex-direction: column !important;
 }
+
+.sidebarContainer .ui.segment {
+    margin: 5px !important;
+    overflow-x: hidden;
+    background-color: #151515;
+}
+
+/* Search input segment */
+.sidebarContainer .ui.segment.searchInputSegment {
+    padding: 8px;
+    flex-shrink: 0;
+    flex-grow: 0;
+}
+
+/* ConnectionsTree segment */
+.sidebarContainer .ui.segment.connectionList {
+    flex-grow: 1;
+    flex-shrink: 1;
+    padding: 0;
+}
