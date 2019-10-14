@@ -76,10 +76,10 @@ class Connection(PolymorphicModel):
         }
 
         parameters["username"] = self.username \
-            if self.connection_username else ""
+            if self.username else ""
         parameters["password"] = self.password \
-            if self.connection_password else ""
+            if self.password else ""
         parameters["domain"] = self.domain \
-            if self.connection_domain else ""
+            if self.domain else ""
 
         return parameters
