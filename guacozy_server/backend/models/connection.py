@@ -7,6 +7,7 @@ from model_utils.managers import InheritanceManager
 from polymorphic.models import PolymorphicModel
 
 from backend.common.dictionaries import ProtocolsDict
+from .credentials import Credentials, StaticCredentials, NamedCredentials, PersonalNamedCredentials
 from .guacdserver import GuacdServer
 from .folder import Folder
 
@@ -25,6 +26,12 @@ class Connection(PolymorphicModel):
     port = models.IntegerField(null=True, blank=True)
     protocol = models.CharField(max_length=10, blank=True, default="n/a",
                                 editable=False)
+
+    credentials = models.ForeignKey(Credentials,
+                                    verbose_name="Credentials",
+                                    on_delete=models.SET_NULL,
+                                    null=True,
+                                    blank=True)
 
     guacdserver = models.ForeignKey(GuacdServer,
                                     blank=True,
@@ -75,11 +82,40 @@ class Connection(PolymorphicModel):
             "port": self.port,
         }
 
-        parameters["username"] = self.username \
-            if self.username else ""
-        parameters["password"] = self.password \
-            if self.password else ""
-        parameters["domain"] = self.domain \
-            if self.domain else ""
+        if self.credentials is not None:
+            credentials_object = self.get_credentials_object(user)
+            parameters["username"] = credentials_object.username \
+                if credentials_object.username else ""
+            parameters["password"] = credentials_object.password \
+                if credentials_object.password else ""
+            parameters["domain"] = credentials_object.domain \
+                if credentials_object.domain else ""
+        else:
+            parameters["username"] = self.username \
+                if self.username else ""
+            parameters["password"] = self.password \
+                if self.password else ""
+            parameters["domain"] = self.domain \
+                if self.domain else ""
 
         return parameters
+
+    def get_credentials_object(self, user):
+        if self.credentials:
+            try:
+                # Check if credentials is StaticCredentials. Return if it is
+                static_credentials = StaticCredentials.objects.get(pk=self.credentials.pk)
+                return static_credentials
+            except ObjectDoesNotExist:
+                pass
+
+            try:
+                # Then check if this is a NamedCredentials
+                named_credentials = NamedCredentials.objects.get(pk=self.credentials.pk)
+                # If it is NamedCredentials, we need user-specific instance
+                named_credentials_instance = PersonalNamedCredentials.objects.get(reference=named_credentials, owner=user)
+                return named_credentials_instance
+            except NamedCredentials.DoesNotExist or PersonalNamedCredentials.DoesNotExist:
+                pass
+
+        return None

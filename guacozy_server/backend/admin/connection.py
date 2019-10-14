@@ -50,6 +50,7 @@ class ConnectionChildAdmin(PolymorphicChildModelAdmin):
         }),
         ("Authentication", {
             'fields': (
+                'credentials',
                 ('username',
                  'password',
                  'domain',
