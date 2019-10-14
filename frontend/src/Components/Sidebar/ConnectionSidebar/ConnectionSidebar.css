@@ -25,6 +25,12 @@
     padding: 0;
 }
 
+/* topButton inside connectionList segment */
+.sidebarContainer .ui.segment.connectionList .topButton {
+    float: right;
+    margin: 2px 2px 0 0;
+}
+
 
 /* ticket list main segment */
 .sidebarContainer .ui.segment.ticketList {
