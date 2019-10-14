@@ -2,14 +2,12 @@ import uuid
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from django.utils.decorators import classproperty
-from model_utils.managers import InheritanceManager
 from polymorphic.models import PolymorphicModel
 
 from backend.common.dictionaries import ProtocolsDict
 from .credentials import Credentials, StaticCredentials, NamedCredentials, PersonalNamedCredentials
-from .guacdserver import GuacdServer
 from .folder import Folder
+from .guacdserver import GuacdServer
 
 
 class Connection(PolymorphicModel):
@@ -113,7 +111,8 @@ class Connection(PolymorphicModel):
                 # Then check if this is a NamedCredentials
                 named_credentials = NamedCredentials.objects.get(pk=self.credentials.pk)
                 # If it is NamedCredentials, we need user-specific instance
-                named_credentials_instance = PersonalNamedCredentials.objects.get(reference=named_credentials, owner=user)
+                named_credentials_instance = PersonalNamedCredentials.objects.get(reference=named_credentials,
+                                                                                  owner=user)
                 return named_credentials_instance
             except NamedCredentials.DoesNotExist or PersonalNamedCredentials.DoesNotExist:
                 pass

@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.contrib import admin
 from django.forms import ModelForm, PasswordInput, ModelChoiceField, TextInput
 from polymorphic.admin import PolymorphicChildModelAdmin, PolymorphicParentModelAdmin, PolymorphicChildModelFilter
 
@@ -19,16 +18,13 @@ class ConnectionChildForm(ModelForm):
         model = Connection
 
         help_texts = {
-            "port": "If not specified, will use default for protocol",
-            'ignore_cert': 'Ignore server certificates ',
-            "credentials":
-                "If specified, will override username, password, "
-                "domain and host key fields",
-            "private_key": "Private RSA key to connect to host",
-            "passphrase": "IF passphrase is used to protect privat key enter it here",
-            "host_key": "Server's host key to verify host "
-                        "identity before connecting",
-
+            'port': 'If not specified, will use default port for selected protocol.',
+            'ignore_cert': 'Ignore server certificates.',
+            'credentials': 'If specified, will override username, password, domain and host key fields.',
+            'private_key': 'Private RSA key to connect to host.',
+            'passphrase': 'IF passphrase is used to protect private key enter it here.',
+            'host_key': 'Server''s host key to verify host identity before connecting.',
+            'guacdserver': 'Override default guacd server.',
         }
 
         widgets = {
@@ -48,7 +44,7 @@ class ConnectionChildAdmin(PolymorphicChildModelAdmin):
             'classes': 'wide',
             'fields': ('parent', 'name', ('host', 'port'), 'guacdserver')
         }),
-        ("Authentication", {
+        ('Authentication', {
             'fields': (
                 'credentials',
                 ('username',
@@ -72,7 +68,7 @@ class ConnectionRdpAdmin(ConnectionChildAdmin):
     base_model = ConnectionRdp
 
     fieldsets = (
-        ("Connection Security", {
+        ('Connection Security', {
             'classes': 'wide ',
             'fields': (
                 'disable_auth',
@@ -102,20 +98,18 @@ class ConnectionSshAdmin(ConnectionChildAdmin):
     base_model = ConnectionSsh
 
     fieldsets = (
-        ("PKI Authentication", {
-
+        ('PKI Authentication', {
             'fields': (
                 ('private_key', 'passphrase',),
                 'host_key',
             )
         }),
-        ("Display settings", {
+        ('Display settings', {
             'fields': (
                 'font_size',
             )
         }),
         ("Other", {
-
             'fields': (
                 'command',
             )
