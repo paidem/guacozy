@@ -1,0 +1,1 @@
+from .consumers import GuacamoleConsumer
