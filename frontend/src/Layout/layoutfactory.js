@@ -1,6 +1,7 @@
 import React from 'react';
 import Welcome from "../Components/Welcome/Welcome";
 import ConnectionSidebar from "../Components/Sidebar/ConnectionSidebar/ConnectionSidebar";
+import GuacViewer from "../Components/GuacViewer/GuacViewer";
 
 export const layoutFactory = (node) => {
         var component = node.getComponent();
@@ -14,7 +15,7 @@ export const layoutFactory = (node) => {
             return <div/>
         }
         if (component === "GuacViewer") {
-            return <div />
+            return <GuacViewer {...node.getConfig()} node={node}/>
         }        
         if (component === "TabIframe") {
             return <div />
