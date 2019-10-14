@@ -7,6 +7,7 @@ from model_utils.managers import InheritanceManager
 from polymorphic.models import PolymorphicModel
 
 from backend.common.dictionaries import ProtocolsDict
+from .guacdserver import GuacdServer
 from .folder import Folder
 
 
@@ -25,6 +26,11 @@ class Connection(PolymorphicModel):
     protocol = models.CharField(max_length=10, blank=True, default="n/a",
                                 editable=False)
 
+    guacdserver = models.ForeignKey(GuacdServer,
+                                    blank=True,
+                                    null=True,
+                                    related_name="connections",
+                                    on_delete=models.SET_NULL)
     # User login settings
     username = models.CharField(
         verbose_name="Username",

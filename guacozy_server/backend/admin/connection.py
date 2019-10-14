@@ -41,14 +41,14 @@ class ConnectionChildForm(ModelForm):
             'passphrase': TextInput(attrs={'autocomplete': 'off', 'data-lpignore': 'true'}),
         }
 
-class ConnectionChildAdmin(PolymorphicChildModelAdmin):
 
+class ConnectionChildAdmin(PolymorphicChildModelAdmin):
     base_model = Connection
     base_form = ConnectionChildForm
     base_fieldsets = (
         ('Base', {
             'classes': 'wide',
-            'fields': ('parent', 'name', ('host', 'port'),)
+            'fields': ('parent', 'name', ('host', 'port'), 'guacdserver')
         }),
         ("Authentication", {
             'fields': (
