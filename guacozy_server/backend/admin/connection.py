@@ -1,8 +1,6 @@
-from django import forms
-from django.conf.urls import url
 from django.contrib import admin
-from django.forms import ModelForm, CharField, PasswordInput, ModelChoiceField, TextInput
-from django.utils.translation import ugettext as _
+from django.contrib import admin
+from django.forms import ModelForm, PasswordInput, ModelChoiceField, TextInput
 from polymorphic.admin import PolymorphicChildModelAdmin, PolymorphicParentModelAdmin, PolymorphicChildModelFilter
 
 from backend.models import Connection, ConnectionRdp, Folder
@@ -70,7 +68,6 @@ class ConnectionChildAdmin(PolymorphicChildModelAdmin):
 
 @admin.register(ConnectionRdp)
 class ConnectionRdpAdmin(ConnectionChildAdmin):
-
     base_model = ConnectionRdp
 
     fieldsets = (
