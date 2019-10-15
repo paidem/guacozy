@@ -1,3 +1,41 @@
 body {
   margin: 0;
 }
+
+.ui.selection.dropdown {
+  background-color: #767676;
+}
+
+.ui.dropdown .menu {
+
+  background-color: #292929;
+}
+
+.ui.dropdown .menu>.item {
+  color: #cccccc;
+}
+.ui.dropdown .menu>.item:hover{
+  color: #FFFFFF;
+}
+
+
+
+.ui.selection.dropdown{
+  color: #FFFFFF;
+}
+
+.ui.search.dropdown>input.search {
+  color: #CCCCCC;
+}
+
+.ui.dropdown .menu>.message:not(.ui) {
+    color: #CCCCCC;
+}
+
+.ui.dropdown .menu .active.item {
+  color: #CCCCCC;
+}
+
+.ui.dropdown .menu .selected.item, .ui.dropdown.selected {
+  color: #FFFFFF;
+}
