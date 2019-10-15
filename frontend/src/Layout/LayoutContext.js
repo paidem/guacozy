@@ -12,6 +12,16 @@ const LayoutProvider = (props) => {
         state.model.doAction(FlexLayout.Actions.selectTab(tabid));
     };
 
+    const refreshTab = (tabid) => {
+        if (tabExists(tabid)) {
+            const oldComponent = state.model.getNodeById(tabid)._attributes.component;
+
+            state.model.doAction(FlexLayout.Actions.updateNodeAttributes(tabid, {component: ""}));
+            setTimeout(() =>
+                state.model.doAction(FlexLayout.Actions.updateNodeAttributes(tabid, {component: oldComponent})), 5);
+        }
+    };
+
     const deleteTab = (tabid) => {
         state.model.doAction(FlexLayout.Actions.deleteTab(tabid));
     };
@@ -60,6 +70,7 @@ const LayoutProvider = (props) => {
         actions: {
             activateTicket: activateTicket,
             deleteTab: deleteTab,
+            refreshTab: refreshTab
         }
     };
 

@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import GuacozyApi from "../Api/GuacozyApi";
 import {LayoutContext} from "../Layout/LayoutContext";
 
@@ -85,7 +85,14 @@ const AppProvider = (props) => {
     const createTicket = (connectionUUID, userid, callback) => {
         api.createTicket(connectionUUID, userid, callback);
     };
-    
+
+    /*
+* Duplicate existing ticket
+ */
+    const duplicateticket = (ticketid, callback) => {
+        api.duplicateTicket(ticketid, callback);
+    };
+
     const deleteTicket = (ticketid) => {
         // delete ticket from state before makeing API call - optimistic delete
         setState(state => ({...state, tickets: state.tickets.filter(ticket => ticket.id !== ticketid)}));
@@ -110,6 +117,7 @@ const AppProvider = (props) => {
             checkLoginStatus: checkLoginStatus,
             createTicket: createTicket,
             deleteTicket: deleteTicket,
+            duplicateticket: duplicateticket,
             logout: logout,
             updateConnections: updateConnections,
             updateTickets: updateTickets,

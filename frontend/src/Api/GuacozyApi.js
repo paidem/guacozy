@@ -72,6 +72,14 @@ export default class GuacadminApi {
             })
     }
 
+    duplicateTicket(originalTicketid, callback) {
+        return this.apiInstance.post("/tickets/duplicate/" + originalTicketid + "/")
+            .then(response => {
+                let ticketuuid = response.data.id;
+                callback(ticketuuid);
+            })
+    }
+
     deleteTicket(id, callback) {
         return this.apiInstance.delete("/tickets/" + id + "")
             .then(() => {

@@ -49,6 +49,13 @@ function ConnectionSidebar(props) {
             })
     }, [appState.actions, appState.user, activateTicket]);
 
+    const duplicateTicket = (originalTicketid, tabName) => {
+        appState.actions.duplicateticket(originalTicketid, (ticketid) => {
+            activateTicket(ticketid, tabName)
+            // update tickets, so ticket list is renewed
+            appState.actions.updateTickets();
+        })
+    };
 
     //*************************//
     // Connection context menu //
@@ -171,7 +178,7 @@ function ConnectionSidebar(props) {
                 layoutState.actions.deleteTab(props.tabid);
                 break;
             case "duplicate":
-                // duplicateTicket(props.tabid, props.name);
+                duplicateTicket(props.tabid, props.name);
                 break;
             case "screenSize":
                 // updateScreenSize(props.tabid, props.screenSize);
@@ -281,7 +288,7 @@ function ConnectionSidebar(props) {
             <ConnectionContextMenu/>
             <TabContextMenu/>
             {shareModalOpen && <ShareTicketModal {...shareModalProps}
-                                                       handleClose={handleShareModalClose}/>}
+                                                 handleClose={handleShareModalClose}/>}
         </Container>
     );
 }
