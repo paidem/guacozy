@@ -138,7 +138,7 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
             })
     }, [appState.actions, layoutState.actions, appState.user]);
 
-        /***
+    /***
      * Takes node and returns it's representation. By default representation is just text
      * but here we use it mainly to bind to onDoubleClick event when clicking on connection node
      * @param node

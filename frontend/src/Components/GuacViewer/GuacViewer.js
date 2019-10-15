@@ -50,7 +50,7 @@ function GuacViewer({wspath, tabIndex, controlSize = true, screenSize = null, no
 
         // calculate which scale should we use - width or height, in order to see all of remote display
         let newScale = Math.min(newWidth / remoteDisplayWidth, newHeight / remoteDisplayHeight, 1);
-        
+
         guacRef.current.getDisplay().scale(newScale);
         scale.current = newScale;
     }, []);
@@ -101,8 +101,7 @@ function GuacViewer({wspath, tabIndex, controlSize = true, screenSize = null, no
                     setTimeout(() => {
                         rescaleDisplay()
                     }, 500);
-                }
-                else {
+                } else {
                     // We do not have control over display size, it means GuacamoleClient display will not change
                     // so we can rescale display right away
                     rescaleDisplay();
@@ -270,7 +269,7 @@ function GuacViewer({wspath, tabIndex, controlSize = true, screenSize = null, no
         if (!controlSize) {
             guacRef.current.getDisplay().onresize = (x, y) => {
                 console.log(`Server changed size: ${x} x ${y}`);
-                updateDisplaySize(0,x,y);
+                updateDisplaySize(0, x, y);
             }
         }
     }, [controlSize, updateDisplaySize]);

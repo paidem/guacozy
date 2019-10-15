@@ -1,4 +1,4 @@
-import React, {useRef, useState, useEffect} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import FlexLayout from "flexlayout-react";
 import {defaultLayout} from "./defaultLayout";
 
@@ -63,7 +63,7 @@ const LayoutProvider = (props) => {
         layout: layoutRef,
         actions: {
             activateTicket: activateTicket,
-            deleteTab: deleteTab
+            deleteTab: deleteTab,
         }
     };
 

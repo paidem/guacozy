@@ -44,13 +44,13 @@ export default class GuacadminApi {
     }
 
     logout() {
-        return  this.apiInstance.get("/accounts/logout/",{baseURL:"/"})
+        return this.apiInstance.get("/accounts/logout/", {baseURL: "/"})
     }
 
     getConnections() {
         return this.apiInstance.get("/connections/tree");
     }
-    
+
     getTickets() {
         return this.apiInstance.get("/tickets/");
     }
@@ -75,14 +75,14 @@ export default class GuacadminApi {
             })
 
     }
-    
-     updateNodeLocation = ({id, parentid, isFolder}) => {
+
+    updateNodeLocation = ({id, parentid, isFolder}) => {
         let bodyFormData = new FormData();
         bodyFormData.set('parent', parentid);
-        
+
         if (isFolder) {
             return this.apiInstance.patch("/folders/" + id + "/", bodyFormData);
-        }else{
+        } else {
             return this.apiInstance.patch("/connections/" + id + "/", bodyFormData);
         }
     }

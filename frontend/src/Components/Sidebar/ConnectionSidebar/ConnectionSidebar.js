@@ -54,7 +54,9 @@ function ConnectionSidebar(props) {
                 />
                 <ConnectionsTree searchString={treeNodeFilterString}
                                  draggable={treeDraggable}
-                                 disableDraggebleMode={()=>{setTreeDragable(false)}}
+                                 disableDraggebleMode={() => {
+                                     setTreeDragable(false)
+                                 }}
                 />
             </Segment>
             <Segment raised color='grey' className='ticketList'>
