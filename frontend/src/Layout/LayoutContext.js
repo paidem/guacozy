@@ -27,12 +27,8 @@ const LayoutProvider = (props) => {
     };
 
     const activateTicket = (ticketid, tabName, controlSize) => {
-        console.log("Activating ticket " + ticketid);
-        console.log(state.layout.current);
-
         if (tabExists(ticketid)) {
             activateTab(ticketid);
-            console.log("Returning, this tab exists");
             return
         }
 
