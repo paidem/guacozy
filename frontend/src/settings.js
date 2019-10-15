@@ -8,3 +8,8 @@ export const SCREEN_SIZES = [
     [1920, 1080],
     [2560, 1440],
 ];
+
+export const SETTINGS_LINKS = [
+    {url: "/admin/", name: "Administration", tabName: "Admin"},
+    {url: "/api/",name: "API Browser", tabName: "API"},
+]

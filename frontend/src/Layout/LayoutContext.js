@@ -74,11 +74,23 @@ const LayoutProvider = (props) => {
         }));
     };
 
+    const addIframeTab = ({url, name}) => {
+        state.layout.current.addTabToActiveTabSet({
+            type: "tab",
+            component: "TabIframe",
+            name: name,
+            config: {
+                url: url
+            }
+        });
+    };
+
     const defaultState = {
         model: FlexLayout.Model.fromJson(defaultLayout),
         layout: layoutRef,
         actions: {
             activateTicket: activateTicket,
+            addIframeTab: addIframeTab,
             deleteTab: deleteTab,
             refreshTab: refreshTab,
             updateTabScreenSize: updateTabScreenSize,
