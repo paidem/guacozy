@@ -39,6 +39,10 @@ export default class GuacadminApi {
 
     }
 
+    getUsers() {
+        return this.apiInstance.get("/users/");
+    }
+
     getCurrentUser() {
         return this.apiInstance.get("/users/current/");
     }
@@ -74,6 +78,12 @@ export default class GuacadminApi {
                 callback && callback();
             })
 
+    }
+
+    shareTicket(ticketid, recievingUserId) {
+        let bodyFormData = new FormData();
+        bodyFormData.set('userid', recievingUserId);
+        return this.apiInstance.post("/tickets/share/" + ticketid + "/", bodyFormData);
     }
 
     updateNodeLocation = ({id, parentid, isFolder}) => {

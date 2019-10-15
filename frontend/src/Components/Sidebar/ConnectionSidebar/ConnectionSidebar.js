@@ -6,6 +6,7 @@ import TicketsSegment from "../TicketsSegment/TicketsSegment";
 import {AppContext} from "../../../Context/AppContext";
 import {LayoutContext} from "../../../Layout/LayoutContext";
 import {contextMenu, Item, Menu, Separator, Submenu} from "react-contexify";
+import ShareTicketModal from "../../ShareTicketModal/ShareTicketModal";
 
 function ConnectionSidebar(props) {
     const [appState,] = useContext(AppContext);
@@ -14,6 +15,12 @@ function ConnectionSidebar(props) {
     const [treeDraggable, setTreeDragable] = useState(false);
     const searchInputRef = useRef();
 
+    const [shareModalProps, setShareModalProps] = useState({
+        ticketid: null,
+        name: null
+    });
+
+    const [shareModalOpen, setShareModalOpen] = useState(false);
 
     const tabTitleConstructor = (ticketid, tabName) =>
         <span onContextMenu={(e) => {
@@ -154,11 +161,11 @@ function ConnectionSidebar(props) {
                 layoutState.actions.refreshTab(props.tabid);
                 break;
             case "share":
-                // setShareModalProps({
-                //     open: true,
-                //     tabid: props.tabid,
-                //     name: props.name
-                // });
+                setShareModalProps({
+                    ticketid: props.tabid,
+                    name: props.name
+                });
+                setShareModalOpen(true);
                 break;
             case "disconnect":
                 layoutState.actions.deleteTab(props.tabid);
@@ -208,6 +215,12 @@ function ConnectionSidebar(props) {
                 }}
             >{node.text}</span>
         }
+    };
+
+    const handleShareModalClose = () => {
+        setShareModalProps({ticketid: null, name: null});
+        setShareModalOpen(false);
+        appState.actions.updateTickets();
     };
 
     return (
@@ -267,6 +280,8 @@ function ConnectionSidebar(props) {
             </Segment>
             <ConnectionContextMenu/>
             <TabContextMenu/>
+            {shareModalOpen && <ShareTicketModal {...shareModalProps}
+                                                       handleClose={handleShareModalClose}/>}
         </Container>
     );
 }
