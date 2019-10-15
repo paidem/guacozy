@@ -1,0 +1,1 @@
+export const DEFAULT_VALIDITY_PERIOD = 86400

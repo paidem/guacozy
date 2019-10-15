@@ -1,4 +1,5 @@
 import axios from "axios";
+import {DEFAULT_VALIDITY_PERIOD} from "../settings";
 
 export default class GuacadminApi {
     apiInstance = axios.create({
@@ -53,7 +54,20 @@ export default class GuacadminApi {
     getTickets() {
         return this.apiInstance.get("/tickets/");
     }
-    
+
+    createTicket(connectionid, userid, callback) {
+        let data = {
+            connection: connectionid,
+            validityperiod: DEFAULT_VALIDITY_PERIOD,
+            user: userid,
+        };
+
+        return this.apiInstance.post("/tickets/", data)
+            .then(response => {
+                callback(response.data.id);
+            })
+    }
+
     deleteTicket(id, callback) {
         return this.apiInstance.delete("/tickets/" + id + "")
             .then(() => {

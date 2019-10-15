@@ -4,6 +4,7 @@ import './ConnectionsTree.css'
 import {AppContext} from "../../../Context/AppContext";
 import {LayoutContext} from "../../../Layout/LayoutContext";
 import {Button} from "semantic-ui-react";
+import {tabNameElement} from "../utils/tabutils";
 
 
 function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
@@ -125,6 +126,34 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
             });
     };
 
+    // Use connection id to generate/retrieve ticket  and activate ticket in new tab
+    // or find existing tab and focus it
+    const activateConnection = useCallback((connectionid, tabName) => {
+        appState.actions.createTicket(connectionid, appState.user.id,
+            (ticketid) => {
+                // Activate ticket (this will focus on existing tab or create new tab)
+                layoutState.actions.activateTicket(ticketid, tabNameElement(ticketid, tabName), true);
+                // Update tickets list
+                appState.actions.updateTickets();
+            })
+    }, [appState.actions, layoutState.actions, appState.user]);
+
+        /***
+     * Takes node and returns it's representation. By default representation is just text
+     * but here we use it mainly to bind to onDoubleClick event when clicking on connection node
+     * @param node
+     * @returns {*}
+     */
+    const nodeTitleConstructor = (node) => {
+        if (node.isFolder) {
+            return <span>{node.text}</span>
+        } else {
+            return <span
+                onDoubleClick={() => activateConnection(node.id, node.text)}
+            >{node.text}</span>
+        }
+    };
+
     // This effect determines if tree hierarchy has been changed
     useEffect(() => {
 
@@ -161,7 +190,7 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
              */
             const convertTreeNode = (node) => {
                 let newTreeNode = {
-                    title: node.text,
+                    title: nodeTitleConstructor(node),
                     key: node.id.toString(),
                     isLeaf: !node.isFolder,
                     appid: node.id,

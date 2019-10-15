@@ -76,6 +76,16 @@ const AppProvider = (props) => {
             })
     };
 
+    /*
+    * Crete new access ticket given Connection and User
+    * most of the time user is the same as app user
+    * but it may be different when feature to provide other 
+    * access to connection is added
+     */
+    const createTicket = (connectionUUID, userid, callback) => {
+        api.createTicket(connectionUUID, userid, callback);
+    };
+    
     const deleteTicket = (ticketid) => {
         // delete ticket from state before makeing API call - optimistic delete
         setState(state => ({...state, tickets: state.tickets.filter(ticket => ticket.id !== ticketid)}));
@@ -98,6 +108,7 @@ const AppProvider = (props) => {
         user: null,
         actions: {
             checkLoginStatus: checkLoginStatus,
+            createTicket: createTicket,
             deleteTicket: deleteTicket,
             logout: logout,
             updateConnections: updateConnections,
