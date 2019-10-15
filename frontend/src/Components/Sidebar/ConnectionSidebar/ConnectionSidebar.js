@@ -1,4 +1,4 @@
-import React, {useRef, useState, useContext} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 import {Button, Container, Icon, Input, Segment} from "semantic-ui-react";
 import './ConnectionSidebar.css'
 import ConnectionsTree from "../ConnectionsTree/ConnectionsTree";
@@ -8,6 +8,7 @@ import {AppContext} from "../../../Context/AppContext";
 function ConnectionSidebar(props) {
     const [appState,] = useContext(AppContext);
     const [treeNodeFilterString, setTreeNodeFilterString] = useState("");
+    const [treeDraggable, setTreeDragable] = useState(false);
     const searchInputRef = useRef();
 
     return (
@@ -43,7 +44,18 @@ function ConnectionSidebar(props) {
                         }
                         }
                 />
-                <ConnectionsTree searchString={treeNodeFilterString} draggable={false}/>
+                <Button icon='bars'
+                        color={treeDraggable ? 'green' : 'grey'}
+                        basic
+                        size='mini'
+                        title='Rearrange'
+                        className='topButton'
+                        onClick={() => setTreeDragable(!treeDraggable)}
+                />
+                <ConnectionsTree searchString={treeNodeFilterString}
+                                 draggable={treeDraggable}
+                                 disableDraggebleMode={()=>{setTreeDragable(false)}}
+                />
             </Segment>
             <Segment raised color='grey' className='ticketList'>
                 <TicketsSegment searchString={treeNodeFilterString}/>

@@ -61,4 +61,15 @@ export default class GuacadminApi {
             })
 
     }
+    
+     updateNodeLocation = ({id, parentid, isFolder}) => {
+        let bodyFormData = new FormData();
+        bodyFormData.set('parent', parentid);
+        
+        if (isFolder) {
+            return this.apiInstance.patch("/folders/" + id + "/", bodyFormData);
+        }else{
+            return this.apiInstance.patch("/connections/" + id + "/", bodyFormData);
+        }
+    }
 }
