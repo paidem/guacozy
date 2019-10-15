@@ -64,13 +64,24 @@ const LayoutProvider = (props) => {
         });
     };
 
+    const updateTabScreenSize = (tabid, screenSize) => {
+        let config = state.model.getNodeById(tabid).getConfig();
+        state.model.doAction(FlexLayout.Actions.updateNodeAttributes(tabid, {
+            config: {
+                ...config,
+                screenSize: screenSize
+            }
+        }));
+    };
+
     const defaultState = {
         model: FlexLayout.Model.fromJson(defaultLayout),
         layout: layoutRef,
         actions: {
             activateTicket: activateTicket,
             deleteTab: deleteTab,
-            refreshTab: refreshTab
+            refreshTab: refreshTab,
+            updateTabScreenSize: updateTabScreenSize,
         }
     };
 

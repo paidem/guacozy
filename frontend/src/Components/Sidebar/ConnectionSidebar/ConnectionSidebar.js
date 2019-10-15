@@ -7,6 +7,7 @@ import {AppContext} from "../../../Context/AppContext";
 import {LayoutContext} from "../../../Layout/LayoutContext";
 import {contextMenu, Item, Menu, Separator, Submenu} from "react-contexify";
 import ShareTicketModal from "../../ShareTicketModal/ShareTicketModal";
+import {SCREEN_SIZES} from "../../../settings"
 
 function ConnectionSidebar(props) {
     const [appState,] = useContext(AppContext);
@@ -55,6 +56,10 @@ function ConnectionSidebar(props) {
             // update tickets, so ticket list is renewed
             appState.actions.updateTickets();
         })
+    };
+
+    const updateScreenSize = (tabid, screenSize) => {
+        layoutState.actions.updateTabScreenSize(tabid, screenSize);
     };
 
     //*************************//
@@ -125,33 +130,18 @@ function ConnectionSidebar(props) {
                 <Separator/>
                 <Item
                     onClick={({event, props}) => onTabContextMenuAction(event, props, "disconnect")}>Close</Item>
-                {/*<Item onClick={({event, props}) => onTabContextMenuAction(event, {...props,screenSize:null}, "screenSize")}>Auto</Item>*/}
-                {/*<Item onClick={({event, props}) => onTabContextMenuAction(event, {...props,screenSize:{width:1024, height:768}}, "screenSize")}>1024x768</Item>*/}
                 <Submenu label="Screen size">
                     <Item onClick={({event, props}) => onTabContextMenuAction(event, {
                         ...props,
                         screenSize: null
                     }, "screenSize")}>Auto</Item>
-                    <Item onClick={({event, props}) => onTabContextMenuAction(event, {
-                        ...props,
-                        screenSize: {width: 1024, height: 768}
-                    }, "screenSize")}>1024x768</Item>
-                    <Item onClick={({event, props}) => onTabContextMenuAction(event, {
-                        ...props,
-                        screenSize: {width: 1400, height: 1050}
-                    }, "screenSize")}>1400x1050</Item>
-                    <Item onClick={({event, props}) => onTabContextMenuAction(event, {
-                        ...props,
-                        screenSize: {width: 1440, height: 900}
-                    }, "screenSize")}>1440x900</Item>
-                    <Item onClick={({event, props}) => onTabContextMenuAction(event, {
-                        ...props,
-                        screenSize: {width: 1680, height: 1050}
-                    }, "screenSize")}>1680x1050</Item>
-                    <Item onClick={({event, props}) => onTabContextMenuAction(event, {
-                        ...props,
-                        screenSize: {width: 1920, height: 1080}
-                    }, "screenSize")}>1920x1080</Item>
+                    {SCREEN_SIZES.map(size =>
+                        <Item onClick={({event, props}) => onTabContextMenuAction(event, {
+                            ...props,
+                            screenSize: {width: size[0], height: size[1]}
+                        }, "screenSize")}>{size[0]} x {size[1]}</Item>
+                    )
+                    }
                 </Submenu>
             </Menu>
         );
@@ -181,7 +171,7 @@ function ConnectionSidebar(props) {
                 duplicateTicket(props.tabid, props.name);
                 break;
             case "screenSize":
-                // updateScreenSize(props.tabid, props.screenSize);
+                updateScreenSize(props.tabid, props.screenSize);
                 break;
             default:
                 window.alert("Wrong action: " + action)
