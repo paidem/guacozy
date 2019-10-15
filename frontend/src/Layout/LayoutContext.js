@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import FlexLayout from "flexlayout-react";
 import {defaultLayout} from "./defaultLayout";
 
@@ -68,6 +68,14 @@ const LayoutProvider = (props) => {
     };
 
     const [state, setState] = useState(defaultState);
+
+    // when we have our layout, focus on main tabset
+    // this will alow to use state.layout.current.addTabToActiveTabSet()
+    useEffect(() => {
+        if (state.model) {
+            state.model.doAction(FlexLayout.Actions.setActiveTabset("tabset_main"))
+        }
+    }, [state.model]);
 
     return (
         <LayoutContext.Provider value={[state, setState]}>
