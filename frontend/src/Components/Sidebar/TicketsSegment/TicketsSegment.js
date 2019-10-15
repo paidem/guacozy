@@ -3,7 +3,6 @@ import {Accordion, Icon} from "semantic-ui-react";
 import TicketsList from "./TicketsList";
 import {AppContext} from "../../../Context/AppContext";
 import {LayoutContext} from "../../../Layout/LayoutContext";
-import {tabNameElement} from "../utils/tabutils";
 
 function TicketsSegment({searchString}) {
     const [appState,] = useContext(AppContext);
@@ -11,10 +10,10 @@ function TicketsSegment({searchString}) {
 
     const [ticketListVisible, setTicketListVisible] = useState(true);
 
-    const activateTicket = (ticketUUID, tabName, controlSize) => {
+    const activateTicket = (ticketUUID, tabName, controlSize, tabTitleConstructor) => {
         // create tab with this ticket's connection
         // and attach context menu handler to it
-        layoutState.actions.activateTicket(ticketUUID, tabNameElement(ticketUUID, tabName), controlSize);
+        layoutState.actions.activateTicket(ticketUUID, tabTitleConstructor(ticketUUID, tabName), controlSize);
     };
 
     return (
