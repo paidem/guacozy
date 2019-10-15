@@ -4,8 +4,9 @@ import './ConnectionsTree.css'
 import {AppContext} from "../../../Context/AppContext";
 import {LayoutContext} from "../../../Layout/LayoutContext";
 import {Button} from "semantic-ui-react";
+import {handleConnectionContextMenuEvent} from "../../ContextMenu/ConnectionContextMenu";
 
-function ConnectionsTree({searchString, draggable, disableDraggebleMode, nodeTitleConstructor}) {
+function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
     const [appState,] = useContext(AppContext);
     const [layoutState,] = useContext(LayoutContext);
     const [treeData, setTreeData] = useState([]);
@@ -152,6 +153,28 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode, nodeTit
     // Effect which builds tree data from connections and search string
     useLayoutEffect(() => {
             /***
+             * Takes node and returns it's representation. By default representation is just text
+             * but here we use it mainly to bind to onDoubleClick event when clicking on connection node
+             * @param node
+             * @returns {*}
+             */
+            const nodeTitleConstructor = (node) => {
+                if (node.isFolder) {
+                    return <span>{node.text}</span>
+                } else {
+                    return <span
+                        onDoubleClick={() => appState.actions.activateConnection(node.id, node.text, appState.user)}
+                        onContextMenu={(e) => {
+                            handleConnectionContextMenuEvent(e, {
+                                id: node.id.toString(),
+                                text: node.text
+                            })
+                        }}
+                    >{node.text}</span>
+                }
+            };
+
+            /***
              * This function recursively converts our objects to nodes prepared for rc-tree
              * {title, key, children}
              * all other fields are for our user
@@ -215,7 +238,7 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode, nodeTit
             setTreeData([...newTreeData]);
 
         },
-        [appState.connections, searchString, appState.actions, layoutState.actions, nodeTitleConstructor]
+        [appState.connections, searchString, appState.actions, layoutState.actions, appState.user]
     );
 
 

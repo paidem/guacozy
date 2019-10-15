@@ -7,7 +7,6 @@ import TimeAgo from "react-timeago";
 const TicketElement = ({
                            ticket,
                            activatable = true,
-                           activateTicket,
                            controlSize = true,
                            activeIndex = 0,
                            setActiveIndex
@@ -39,7 +38,7 @@ const TicketElement = ({
 
     const handleTicketClick = (e) => {
         e.stopPropagation();
-        activatable && activateTicket(ticket.id, ticket.connection.name, controlSize);
+        activatable && appState.actions.activateTicket(ticket.id, ticket.connection.name, controlSize);
     };
 
     const formatDateString = (source) => {

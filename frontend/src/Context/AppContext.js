@@ -1,6 +1,7 @@
 import React, {useContext, useState} from 'react';
 import GuacozyApi from "../Api/GuacozyApi";
 import {LayoutContext} from "../Layout/LayoutContext";
+import {handleTabContextMenuEvent} from "../Components/ContextMenu/TabContextMenu";
 
 const api = new GuacozyApi();
 
@@ -87,8 +88,8 @@ const AppProvider = (props) => {
     };
 
     /*
-* Duplicate existing ticket
- */
+    * Duplicate existing ticket
+     */
     const duplicateticket = (ticketid, callback) => {
         api.duplicateTicket(ticketid, callback);
     };
@@ -105,6 +106,37 @@ const AppProvider = (props) => {
             })
     };
 
+    // Use ticket id activate ticket in new tab
+    // or find existing tab and focus it
+    const activateTicket = (ticketid, tabName, controlSize = true) => {
+
+        let tabTitle = <span
+            onContextMenu={(e) => {
+                handleTabContextMenuEvent(e, {tabid: ticketid, name: tabName})
+            }}>
+        {tabName}
+        </span>;
+
+        // Activate ticket (this will focus on existing tab or create new tab)
+        layoutState.actions.activateTicket(ticketid, tabTitle, controlSize);
+    };
+
+    // Use connection id to generate/retrieve ticket  and activate ticket in new tab
+    // or find existing tab and focus it
+    const activateConnection = (connectionid, tabName, user) => {
+        createTicket(connectionid, user.id,
+            (ticketid) => {
+                // Activate ticket (this will focus on existing tab or create new tab)
+                activateTicket(ticketid, tabName);
+                // Update tickets list
+                updateTickets();
+            })
+    };
+
+    const openShareModal = (ticketid, name) => {
+        setState(state => ({...state, shareModalOpen: true, shareModalTicketId: ticketid}));
+    };
+
     const defaultState = {
         api: api,
         apiError: null,
@@ -112,12 +144,17 @@ const AppProvider = (props) => {
         connectionsLoading: false,
         tickets: [],
         ticketsLoading: false,
+        shareModalOpen: false,
+        shareModalTicketId: null,
         user: null,
         actions: {
+            activateConnection: activateConnection,
+            activateTicket: activateTicket,
             checkLoginStatus: checkLoginStatus,
             createTicket: createTicket,
             deleteTicket: deleteTicket,
             duplicateticket: duplicateticket,
+            openShareModal: openShareModal,
             logout: logout,
             updateConnections: updateConnections,
             updateTickets: updateTickets,

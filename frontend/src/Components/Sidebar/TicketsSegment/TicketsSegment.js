@@ -20,7 +20,6 @@ function TicketsSegment({searchString, activateTicket}) {
             </Accordion.Title>
             <Accordion.Content active={ticketListVisible}>
                 <TicketsList tickets={appState.tickets}
-                             activateTicket={activateTicket}
                              searchString={searchString}
                 />
             </Accordion.Content>

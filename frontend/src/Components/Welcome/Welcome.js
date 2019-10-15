@@ -1,13 +1,11 @@
 import React, {useContext} from 'react';
 import {Button, Divider, Segment} from "semantic-ui-react";
 import {AppContext} from "../../Context/AppContext";
-import {LayoutContext} from "../../Layout/LayoutContext";
 import Container from "semantic-ui-react/dist/commonjs/elements/Container";
 
 
 function Welcome(props) {
     const [appState,] = useContext(AppContext);
-    const [layoutState,] = useContext(LayoutContext);
 
     return (
         <React.Fragment>

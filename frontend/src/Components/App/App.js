@@ -6,10 +6,13 @@ import FlexLayout from "flexlayout-react";
 import {AppContext} from "../../Context/AppContext";
 import {LayoutContext} from "../../Layout/LayoutContext";
 import {layoutFactory} from "../../Layout/layoutfactory";
+import ConnectionContextMenu from "../ContextMenu/ConnectionContextMenu";
+import TabContextMenu from "../ContextMenu/TabContextMenu";
+import ShareTicketModal from "../ShareTicketModal/ShareTicketModal";
 
 function App() {
     // Context
-    const [appState,] = useContext(AppContext);
+    const [appState, setAppState] = useContext(AppContext);
     const [layoutState,] = useContext(LayoutContext);
 
     useEffect(() => {
@@ -34,6 +37,15 @@ function App() {
     return (
         <div className="App">
             {getContent()}
+            <ConnectionContextMenu/>
+            <TabContextMenu/>
+            {appState.shareModalOpen && <ShareTicketModal
+                handleClose={() => {
+                    setAppState(state => ({...state, shareModalOpen: false}));
+                    appState.actions.updateTickets();
+                }}
+                ticketid={appState.shareModalTicketId}
+            />}
             <Dimmer active={appState.user == null}>
                 <Loader>
                     Loading<br/>
