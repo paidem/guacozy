@@ -23,20 +23,21 @@ function ConnectionSidebar(props) {
 
     const [shareModalOpen, setShareModalOpen] = useState(false);
 
-    const tabTitleConstructor = (ticketid, tabName) =>
-        <span onContextMenu={(e) => {
-            handleTabContextMenuEvent(e, {tabid: ticketid, name: tabName})
-        }}>
-        {tabName}
-        </span>;
-
 
     // Use ticket id activate ticket in new tab
     // or find existing tab and focus it
     const activateTicket = useCallback((ticketid, tabName) => {
+
+        let tabTitle = <span
+            onContextMenu={(e) => {
+                handleTabContextMenuEvent(e, {tabid: ticketid, name: tabName})
+            }}>
+        {tabName}
+        </span>;
+
         // Activate ticket (this will focus on existing tab or create new tab)
-        layoutState.actions.activateTicket(ticketid, tabTitleConstructor(ticketid, tabName), true);
-    }, [layoutState.actions, tabTitleConstructor]);
+        layoutState.actions.activateTicket(ticketid, tabTitle, true);
+    }, [layoutState.actions]);
 
     // Use connection id to generate/retrieve ticket  and activate ticket in new tab
     // or find existing tab and focus it
