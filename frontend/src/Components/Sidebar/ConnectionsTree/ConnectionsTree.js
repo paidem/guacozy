@@ -5,6 +5,7 @@ import {AppContext} from "../../../Context/AppContext";
 import {LayoutContext} from "../../../Layout/LayoutContext";
 import {Button} from "semantic-ui-react";
 import {tabNameElement} from "../utils/tabutils";
+import {contextMenu, Item, Menu, Separator} from "react-contexify";
 
 
 function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
@@ -138,6 +139,49 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
             })
     }, [appState.actions, layoutState.actions, appState.user]);
 
+
+    //*************************//
+    // Connection context menu //
+    //*************************//
+
+    // Context menu to be shown when user clicks on connection
+    const ConnectionContextMenu = (props) => {
+        return (
+            <Menu animation="fade" id="connection_context_menu" theme="dark">
+                <Item
+                    onClick={({event, props}) => onConnectionContextMenuAction(event, props, "connect")}>Connect</Item>
+                <Item
+                    onClick={({event, props}) => onConnectionContextMenuAction(event, props, "edit")}>Edit</Item>
+                <Separator/>
+            </Menu>
+        );
+    };
+
+    // Connection context menu //
+    // Executes when user selects action in tab's name context menu
+    const onConnectionContextMenuAction = (event, props, action) => {
+        switch (action) {
+            case "connect":
+                activateConnection(props.id, props.text);
+                break;
+            default:
+                window.alert("Action not implemented: " + action);
+        }
+    };
+
+    // Connection context menu //
+    // Action so handle connection's context menu action
+    // Activates menu with "connection_context_menu" (ConnectionContextMenu)
+    const handleConnectionContextMenuEvent = (e, data) => {
+        e.preventDefault();
+        contextMenu.show({
+            id: "connection_context_menu",
+            event: e,
+            props: data
+        });
+    };
+
+
     /***
      * Takes node and returns it's representation. By default representation is just text
      * but here we use it mainly to bind to onDoubleClick event when clicking on connection node
@@ -150,6 +194,12 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
         } else {
             return <span
                 onDoubleClick={() => activateConnection(node.id, node.text)}
+                onContextMenu={(e) => {
+                    handleConnectionContextMenuEvent(e, {
+                        id: node.id.toString(),
+                        text: node.text
+                    })
+                }}
             >{node.text}</span>
         }
     };
@@ -273,7 +323,8 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
                     draggable={draggable}
                     onDrop={onDrop}
                 />
-                : null}
+                : "Loading"}
+            <ConnectionContextMenu/>
         </React.Fragment>
     );
 }
