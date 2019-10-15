@@ -29,6 +29,7 @@ function TicketsList({searchString, activateTicket}) {
                             {myTickets.map(ticket =>
                                 <TicketElement key={ticket.id}
                                                ticket={ticket}
+                                               activateTicket={activateTicket}
                                                activeIndex={activeIndex}
                                                setActiveIndex={setActiveIndex}/>)}
                         </div>}
@@ -39,6 +40,7 @@ function TicketsList({searchString, activateTicket}) {
                             {sharedWithMe.map(ticket =>
                                 <TicketElement key={ticket.id}
                                                ticket={ticket}
+                                               activateTicket={activateTicket}
                                                controlSize={false}
                                                activeIndex={activeIndex}
                                                setActiveIndex={setActiveIndex}/>)}
@@ -50,6 +52,7 @@ function TicketsList({searchString, activateTicket}) {
                             {sharedByMe.map(ticket =>
                                 <TicketElement key={ticket.id}
                                                ticket={ticket}
+                                               activateTicket={activateTicket}
                                                activatable={false}
                                                activeIndex={activeIndex}
                                                setActiveIndex={setActiveIndex}/>)}

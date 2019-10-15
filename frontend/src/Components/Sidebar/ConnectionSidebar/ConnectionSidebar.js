@@ -5,8 +5,7 @@ import ConnectionsTree from "../ConnectionsTree/ConnectionsTree";
 import TicketsSegment from "../TicketsSegment/TicketsSegment";
 import {AppContext} from "../../../Context/AppContext";
 import {LayoutContext} from "../../../Layout/LayoutContext";
-import {contextMenu, Item, Menu, Separator} from "react-contexify";
-import {tabNameElement} from "../utils/tabutils";
+import {contextMenu, Item, Menu, Separator, Submenu} from "react-contexify";
 
 function ConnectionSidebar(props) {
     const [appState,] = useContext(AppContext);
@@ -15,17 +14,34 @@ function ConnectionSidebar(props) {
     const [treeDraggable, setTreeDragable] = useState(false);
     const searchInputRef = useRef();
 
+
+    const tabTitleConstructor = (ticketid, tabName) =>
+        <span onContextMenu={(e) => {
+            handleTabContextMenuEvent(e, {tabid: ticketid, name: tabName})
+        }}>
+        {tabName}
+        </span>;
+
+
+    // Use ticket id activate ticket in new tab
+    // or find existing tab and focus it
+    const activateTicket = useCallback((ticketid, tabName) => {
+        // Activate ticket (this will focus on existing tab or create new tab)
+        layoutState.actions.activateTicket(ticketid, tabTitleConstructor(ticketid, tabName), true);
+    }, [layoutState.actions, tabTitleConstructor]);
+
     // Use connection id to generate/retrieve ticket  and activate ticket in new tab
     // or find existing tab and focus it
     const activateConnection = useCallback((connectionid, tabName) => {
         appState.actions.createTicket(connectionid, appState.user.id,
             (ticketid) => {
                 // Activate ticket (this will focus on existing tab or create new tab)
-                layoutState.actions.activateTicket(ticketid, tabNameElement(ticketid, tabName), true);
+                activateTicket(ticketid, tabName);
                 // Update tickets list
                 appState.actions.updateTickets();
             })
-    }, [appState.actions, layoutState.actions, appState.user]);
+    }, [appState.actions, appState.user, activateTicket]);
+
 
     //*************************//
     // Connection context menu //
@@ -68,6 +84,110 @@ function ConnectionSidebar(props) {
         });
     };
 
+    // *************************** end of Connection context menu ********************************** //
+
+
+    //******************//
+    // Tab context menu //
+    //******************//
+
+    const isTicketShared = ({event, props}) => {
+        let tickets = appState.tickets.filter(t => t.id === props.tabid && !t.parent);
+        return tickets.length === 0;
+    };
+
+    // Context menu to be shown when user clicks on tab's name
+    const TabContextMenu = (props) => {
+        return (
+            <Menu animation="fade" id="tab_context_menu" theme="dark">
+                <Item
+                    onClick={({event, props}) => onTabContextMenuAction(event, props, "reconnect")}>Reconnect</Item>
+                <Separator/>
+                <Item disabled={isTicketShared}
+                      onClick={({event, props}) => onTabContextMenuAction(event, props, "share")}>Share</Item>
+                <Separator/>
+                <Item disabled={isTicketShared}
+                      onClick={({event, props}) => onTabContextMenuAction(event, props, "duplicate")}>Duplicate</Item>
+                <Separator/>
+                <Item
+                    onClick={({event, props}) => onTabContextMenuAction(event, props, "disconnect")}>Close</Item>
+                {/*<Item onClick={({event, props}) => onTabContextMenuAction(event, {...props,screenSize:null}, "screenSize")}>Auto</Item>*/}
+                {/*<Item onClick={({event, props}) => onTabContextMenuAction(event, {...props,screenSize:{width:1024, height:768}}, "screenSize")}>1024x768</Item>*/}
+                <Submenu label="Screen size">
+                    <Item onClick={({event, props}) => onTabContextMenuAction(event, {
+                        ...props,
+                        screenSize: null
+                    }, "screenSize")}>Auto</Item>
+                    <Item onClick={({event, props}) => onTabContextMenuAction(event, {
+                        ...props,
+                        screenSize: {width: 1024, height: 768}
+                    }, "screenSize")}>1024x768</Item>
+                    <Item onClick={({event, props}) => onTabContextMenuAction(event, {
+                        ...props,
+                        screenSize: {width: 1400, height: 1050}
+                    }, "screenSize")}>1400x1050</Item>
+                    <Item onClick={({event, props}) => onTabContextMenuAction(event, {
+                        ...props,
+                        screenSize: {width: 1440, height: 900}
+                    }, "screenSize")}>1440x900</Item>
+                    <Item onClick={({event, props}) => onTabContextMenuAction(event, {
+                        ...props,
+                        screenSize: {width: 1680, height: 1050}
+                    }, "screenSize")}>1680x1050</Item>
+                    <Item onClick={({event, props}) => onTabContextMenuAction(event, {
+                        ...props,
+                        screenSize: {width: 1920, height: 1080}
+                    }, "screenSize")}>1920x1080</Item>
+                </Submenu>
+            </Menu>
+        );
+    };
+
+    // Executes when user selects action in tab's name context menu
+    const onTabContextMenuAction = (event, props, action) => {
+        // When menu is clicked, it is over other element and we need to stop
+        // propagation, otherwise it conflicts with other events
+        event.stopPropagation();
+
+        switch (action) {
+            case "reconnect":
+                layoutState.actions.refreshTab(props.tabid);
+                break;
+            case "share":
+                // setShareModalProps({
+                //     open: true,
+                //     tabid: props.tabid,
+                //     name: props.name
+                // });
+                break;
+            case "disconnect":
+                layoutState.actions.deleteTab(props.tabid);
+                break;
+            case "duplicate":
+                // duplicateTicket(props.tabid, props.name);
+                break;
+            case "screenSize":
+                // updateScreenSize(props.tabid, props.screenSize);
+                break;
+            default:
+                window.alert("Wrong action: " + action)
+        }
+    };
+
+    // Action so handle tab's name context menu action
+    // Activates menu with "tab_context_menu" (TabContextMenu)
+    const handleTabContextMenuEvent = (e, data) => {
+        e.preventDefault();
+        contextMenu.show({
+            id: "tab_context_menu",
+            event: e,
+            props: data
+        });
+    };
+
+    // ************************ end of Tab context menu ****************************** //
+
+
     /***
      * Takes node and returns it's representation. By default representation is just text
      * but here we use it mainly to bind to onDoubleClick event when clicking on connection node
@@ -89,10 +209,6 @@ function ConnectionSidebar(props) {
             >{node.text}</span>
         }
     };
-
-    const tabTitleConstructor = (ticketUUID, tabName) => (
-        <span>{tabName}</span>
-    );
 
     return (
         <Container className='sidebarContainer'>
@@ -146,10 +262,11 @@ function ConnectionSidebar(props) {
             <Segment raised color='grey' className='ticketList'>
                 <TicketsSegment
                     searchString={treeNodeFilterString}
-                    tabTitleConstructor={tabTitleConstructor}
+                    activateTicket={activateTicket}
                 />
             </Segment>
             <ConnectionContextMenu/>
+            <TabContextMenu/>
         </Container>
     );
 }

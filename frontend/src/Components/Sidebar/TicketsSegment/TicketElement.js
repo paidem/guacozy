@@ -1,13 +1,18 @@
 import React, {useContext} from "react";
 import {AppContext} from "../../../Context/AppContext";
-import {LayoutContext} from "../../../Layout/LayoutContext";
 import {Icon, List} from "semantic-ui-react";
 import TimeAgo from "react-timeago";
 
 
-const TicketElement = ({ticket, activatable = true, controlSize = true, activeIndex = 0, setActiveIndex}) => {
+const TicketElement = ({
+                           ticket,
+                           activatable = true,
+                           activateTicket,
+                           controlSize = true,
+                           activeIndex = 0,
+                           setActiveIndex
+                       }) => {
     const [appState,] = useContext(AppContext);
-    const [layoutState,] = useContext(LayoutContext);
 
     const hideTicketInfo = () => {
         window.removeEventListener("click", hideTicketInfo);
@@ -34,7 +39,7 @@ const TicketElement = ({ticket, activatable = true, controlSize = true, activeIn
 
     const handleTicketClick = (e) => {
         e.stopPropagation();
-        activatable && layoutState.actions.activateTicket(ticket.id, ticket.connection.name, controlSize);
+        activatable && activateTicket(ticket.id, ticket.connection.name, controlSize);
     };
 
     const formatDateString = (source) => {

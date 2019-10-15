@@ -2,19 +2,11 @@ import React, {useContext, useState} from 'react';
 import {Accordion, Icon} from "semantic-ui-react";
 import TicketsList from "./TicketsList";
 import {AppContext} from "../../../Context/AppContext";
-import {LayoutContext} from "../../../Layout/LayoutContext";
 
-function TicketsSegment({searchString}) {
+function TicketsSegment({searchString, activateTicket}) {
     const [appState,] = useContext(AppContext);
-    const [layoutState,] = useContext(LayoutContext);
 
     const [ticketListVisible, setTicketListVisible] = useState(true);
-
-    const activateTicket = (ticketUUID, tabName, controlSize, tabTitleConstructor) => {
-        // create tab with this ticket's connection
-        // and attach context menu handler to it
-        layoutState.actions.activateTicket(ticketUUID, tabTitleConstructor(ticketUUID, tabName), controlSize);
-    };
 
     return (
         <Accordion>

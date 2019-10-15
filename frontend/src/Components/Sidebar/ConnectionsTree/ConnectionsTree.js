@@ -4,9 +4,6 @@ import './ConnectionsTree.css'
 import {AppContext} from "../../../Context/AppContext";
 import {LayoutContext} from "../../../Layout/LayoutContext";
 import {Button} from "semantic-ui-react";
-import {tabNameElement} from "../utils/tabutils";
-import {contextMenu, Item, Menu, Separator} from "react-contexify";
-
 
 function ConnectionsTree({searchString, draggable, disableDraggebleMode, nodeTitleConstructor}) {
     const [appState,] = useContext(AppContext);
@@ -218,7 +215,7 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode, nodeTit
             setTreeData([...newTreeData]);
 
         },
-        [appState.connections, searchString, appState.actions, layoutState.actions]
+        [appState.connections, searchString, appState.actions, layoutState.actions, nodeTitleConstructor]
     );
 
 
