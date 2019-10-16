@@ -1,0 +1,30 @@
+version: '3'
+services:
+  guacozy: &guacozy
+    build:
+      context: .
+      dockerfile: Dockerfile-guacozy
+    volumes:
+      - static:/opt/guacozy_server/static/
+    environment:
+      - DJANGO_SECRET_KEY=youshoulddefinetelychangethistosomethingelseandtakecare
+      - DJANGO_TIME_ZONE=Europe/Vilnius
+      - DJANGO_ALLOWED_HOSTS=guacozy,
+  frontend: &frontend
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
+    depends_on:
+      - guacozy
+    volumes:
+      - static:/opt/guacozy_server/static/:ro
+    ports:
+      - 8080:8080
+  guacd:
+    image: linuxserver/guacd
+    restart: always
+    ports:
+      - 4822:4822
+
+volumes:
+  static:

@@ -1,0 +1,16 @@
+FROM node:12.2.0-alpine as build-frontend
+ADD frontend/package.json /frontend/
+ADD frontend/package-lock.json /frontend/
+WORKDIR /frontend
+RUN npm install
+ADD frontend /frontend
+RUN npm run build
+
+FROM nginx:1.15-alpine
+RUN apk add --no-cache \
+      bash
+
+COPY --from=build-frontend /frontend/build /www
+COPY docker/nginx.conf /nginx.conf
+
+CMD ["nginx", "-c", "/nginx.conf"]

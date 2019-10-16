@@ -1,0 +1,4 @@
+**/node_modules
+frontend/build
+*/.env
+*/db.sqlite3
