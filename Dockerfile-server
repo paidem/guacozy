@@ -1,0 +1,78 @@
+ARG FROM=python:3.7-alpine
+ARG REQUIREMENTS=requirements-ldap.txt
+
+###########
+# BUILDER #
+###########
+
+FROM ${FROM} as builder
+
+# set work directory
+WORKDIR /usr/src/app
+
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# install psycopg2 dependencies
+RUN apk update && apk add \
+    build-base \
+    ca-certificates \
+    musl-dev \
+    postgresql-dev \
+    python3-dev \
+    libffi-dev \
+    openldap-dev
+
+COPY guacozy_server/requirements*.txt ./
+RUN pip wheel --no-cache-dir --wheel-dir /usr/src/app/wheels -r requirements-ldap.txt
+
+#########
+# FINAL #
+#########
+
+FROM ${FROM}
+
+# install dependencies
+RUN apk update && apk add --no-cache \
+      bash \
+      build-base \
+      libpq \
+      ca-certificates
+
+COPY --from=builder /usr/src/app/wheels /wheels
+COPY --from=builder /usr/src/app/requirements*.txt ./
+RUN pip install --no-cache /wheels/*
+
+# create the home directory
+ENV HOME=/home/app
+ENV APP_HOME=/home/app/server
+
+
+# create the app user
+# create directory for the static files and all other in the path
+# we need to create staticfiles dir in advance and chown, because permissions later on volume will not let us
+RUN addgroup -S app && \
+    adduser -S app -G app && \
+    mkdir -p $APP_HOME/staticfiles && \
+    chown -R app:app $HOME
+
+
+WORKDIR $APP_HOME
+
+# change to the app user
+USER app
+
+
+# copy project and chown all the files to the app user
+COPY --chown=app:app guacozy_server $APP_HOME
+
+
+# copy project and chown all the files to the app user
+COPY --chown=app:app docker/entrypoint.sh $APP_HOME/
+
+# run entrypoint.prod.sh
+ENTRYPOINT ["/home/app/server/entrypoint.sh"]
+
+CMD ["daphne", "-b", "0.0.0.0","-p","8001","guacozy_server.asgi:application"]
+EXPOSE 8001

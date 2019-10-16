@@ -120,10 +120,10 @@ USE_TZ = True
 
 # Static files
 # How static files will be served
-STATIC_URL = '/djstatic/'  # How static files will be served
+STATIC_URL = '/staticfiles/'  # How static files will be served
 
 # Where static files will be placed after collectstatic
-STATIC_ROOT = 'static/'
+STATIC_ROOT = 'staticfiles/'
 
 # This is needed for django-rules to work
 AUTHENTICATION_BACKENDS = (
