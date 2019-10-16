@@ -84,6 +84,11 @@ class PersonalNamedCredentials(CredentialsFieldsMixin):
                               null=True,
                               related_name="+")
 
+    def save(self, *args, **kwargs):
+        if self.domain == "":
+            self.domain = self.reference.default_domain;
+        super(PersonalNamedCredentials, self).save(*args, **kwargs);
+
     def __str__(self):
         return self.reference.__str__() + " => " + (
             self.owner.__str__() if self.owner is not None else "") + ""

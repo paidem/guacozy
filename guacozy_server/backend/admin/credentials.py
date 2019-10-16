@@ -7,7 +7,6 @@ from backend.models import StaticCredentials, PersonalNamedCredentials, NamedCre
 
 
 class CredentialsForm(ModelForm):
-
     class Meta:
         fields = '__all__'
         help_texts = {
@@ -84,3 +83,9 @@ class PersonalNamedCredentialsAdmin(ObjectPermissionsModelAdmin):
     # shoul see only his own credentials
     def get_queryset(self, request):
         return super().get_queryset(request).filter(owner=request.user)
+
+    def get_form(self, request, obj=None, change=False, **kwargs):
+        form = super(PersonalNamedCredentialsAdmin, self).get_form(request, obj, change, **kwargs)
+        form.Meta.help_texts["domain"] = "Active Directory domain name. If left blank, domain name from Reference " \
+                                         "will be used."
+        return form
