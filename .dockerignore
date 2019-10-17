@@ -1,5 +1,8 @@
 **/node_modules
+**/.idea
+**/.git
 frontend/build
 */venv
 */.env
 */db.sqlite3
+*/wheels
