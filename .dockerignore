@@ -6,3 +6,4 @@ frontend/build
 */.env
 */db.sqlite3
 */wheels
+*/wheelswin
