@@ -6,5 +6,5 @@ module.exports = function(app) {
   app.use(proxy('/tunnelws', { target: 'ws://localhost:8000', ws: true }));
   app.use(proxy('/admin', { target: 'http://localhost:8000' }));
   app.use(proxy('/accounts', { target: 'http://localhost:8000' }));
-  app.use(proxy('/djstatic', { target: 'http://localhost:8000'}));
+  app.use(proxy('/staticfiles', { target: 'http://localhost:8000'}));
 };
