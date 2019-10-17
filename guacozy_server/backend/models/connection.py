@@ -2,6 +2,7 @@ import uuid
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
+from encrypted_model_fields.fields import EncryptedCharField
 from polymorphic.models import PolymorphicModel
 
 from backend.common.dictionaries import ProtocolsDict
@@ -43,7 +44,7 @@ class Connection(PolymorphicModel):
         blank=True,
         null=True)
 
-    password = models.CharField(
+    password = EncryptedCharField(
         verbose_name="Password",
         max_length=50,
         blank=True,

@@ -10,6 +10,7 @@ services:
       - staticfiles:/app/staticfiles/
     environment:
       - DJANGO_SECRET_KEY=youshoulddefinetelychangethistosomethingelseandtakecare
+      - FIELD_ENCRYPTION_KEY=qjq4ObsXMqiqQyfKgD-jjEGm4ep8RaHKGRg4ohGCi1A=
       - DJANGO_TIME_ZONE=Europe/Vilnius
       - DJANGO_ALLOWED_HOSTS=server,
       - DJANGO_DB_URL=postgres://postgres@db:5432/postgres

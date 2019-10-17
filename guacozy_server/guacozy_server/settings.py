@@ -50,6 +50,9 @@ INSTALLED_APPS += [
 
     # Django channels
     'channels',
+
+    # Encrypted model fields
+    'encrypted_model_fields',
 ]
 
 # Application packages
@@ -154,3 +157,6 @@ ASGI_APPLICATION = "guacozy_server.routing.application"
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+# Field encryption key
+FIELD_ENCRYPTION_KEY = env.str('FIELD_ENCRYPTION_KEY')

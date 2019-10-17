@@ -1,5 +1,7 @@
 from django.db import models
 
+from encrypted_model_fields.fields import EncryptedCharField
+
 from users.models import User
 
 
@@ -20,7 +22,7 @@ class CredentialsFieldsMixin(models.Model):
 
     username = models.CharField(verbose_name="Username",
                                 max_length=50, blank=True)
-    password = models.CharField(verbose_name="Password",
+    password = EncryptedCharField(verbose_name="Password",
                                 max_length=50, blank=True)
     domain = models.CharField(verbose_name="Domain",
                               max_length=50, blank=True)
