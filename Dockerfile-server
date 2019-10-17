@@ -70,6 +70,7 @@ COPY --chown=app:app guacozy_server $APP_HOME
 
 # copy project and chown all the files to the app user
 COPY --chown=app:app docker/entrypoint.sh $APP_HOME/
+RUN chmod +x $APP_HOME/entrypoint.sh
 
 # run entrypoint.prod.sh
 ENTRYPOINT ["/home/app/server/entrypoint.sh"]
