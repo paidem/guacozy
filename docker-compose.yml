@@ -3,15 +3,19 @@ services:
   server: &server
     build:
       context: ./
+    restart: always
+    depends_on:
+      - db
     volumes:
       - staticfiles:/app/staticfiles/
     environment:
       - DJANGO_SECRET_KEY=youshoulddefinetelychangethistosomethingelseandtakecare
       - DJANGO_TIME_ZONE=Europe/Vilnius
       - DJANGO_ALLOWED_HOSTS=server,
-      - DJANGO_DB_URL=sqlite:////tmp/db.sqlite3
+      - DJANGO_DB_URL=postgres://postgres@db:5432/postgres
   frontend:
     image: nginx:1.17.4-alpine
+    restart: always
     command: sh -c 'while ! [ -f /app/staticfiles/nginx/nginx.conf ]; do echo "Waiting for nginx.conf"; sleep 1; done; nginx -c /app/staticfiles/nginx/nginx.conf'
     depends_on:
       - server
@@ -22,8 +26,11 @@ services:
   guacd:
     image: linuxserver/guacd
     restart: always
-    ports:
-      - 4822:4822
-
+  db:
+    image: postgres:10.4-alpine
+    restart: always
+    volumes:
+    - postgres-data:/var/lib/postgresql/data
 volumes:
   staticfiles:
+  postgres-data:
