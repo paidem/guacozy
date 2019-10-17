@@ -241,6 +241,23 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
         [appState.connections, searchString, appState.actions, layoutState.actions, appState.user]
     );
 
+    const getContent = () => {
+        if (treeData.length === 0) {
+            if (appState.connectionsLoading) {
+                return "Loading"
+            }
+            return <p>Empty</p>
+        }
+
+        return <Tree
+            defaultExpandAll
+            selectable={false}
+            filterTreeNode={(node) => node.props.hidden}
+            treeData={treeData}
+            draggable={draggable}
+            onDrop={onDrop}
+        />
+    };
 
     return (
         <React.Fragment>
@@ -257,16 +274,7 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
                     }
                     }
             />}
-            {treeData.length > 0 ?
-                <Tree
-                    defaultExpandAll
-                    selectable={false}
-                    filterTreeNode={(node) => node.props.hidden}
-                    treeData={treeData}
-                    draggable={draggable}
-                    onDrop={onDrop}
-                />
-                : "Loading"}
+            {getContent()}
         </React.Fragment>
     );
 }
