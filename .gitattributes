@@ -1,0 +1,32 @@
+# Handle line endings automatically for files detected as text
+# and leave all files detected as binary untouched.
+* -text
+
+# Never modify line endings of our bash scripts
+*.sh -crlf
+docker/* -crlf
+
+#
+# The above will handle all files NOT found below
+#
+# These files are text and should be normalized (Convert crlf => lf)
+*.css           text
+*.html          text
+*.js            text
+*.json          text
+*.properties    text
+*.txt           text
+*.xml           text
+*.yml           text
+*.py            text
+
+# These files are binary and should be left untouched
+# (binary is macro for -text -diff)
+
+# Python wheel dist
+*.whl           binary
+
+# Binary
+*.gif           binary
+*.jpg           binary
+*.png           binary
