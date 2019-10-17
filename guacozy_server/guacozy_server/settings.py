@@ -125,6 +125,11 @@ STATIC_URL = '/staticfiles/'  # How static files will be served
 # Where static files will be placed after collectstatic
 STATIC_ROOT = 'staticfiles/'
 
+# Additional static folder
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
 # This is needed for django-rules to work
 AUTHENTICATION_BACKENDS = (
     'rules.permissions.ObjectPermissionBackend',

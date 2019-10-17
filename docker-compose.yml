@@ -3,21 +3,20 @@ services:
   server: &server
     build:
       context: ./
-      dockerfile: Dockerfile-server
     volumes:
-      - staticfiles:/home/app/server/staticfiles/
+      - staticfiles:/app/staticfiles/
     environment:
       - DJANGO_SECRET_KEY=youshoulddefinetelychangethistosomethingelseandtakecare
       - DJANGO_TIME_ZONE=Europe/Vilnius
       - DJANGO_ALLOWED_HOSTS=server,
+      - DJANGO_DB_URL=sqlite:////tmp/db.sqlite3
   frontend:
-    build:
-      context: ./
-      dockerfile: Dockerfile-frontend
+    image: nginx:1.17.4-alpine
+    command: sh -c 'while ! [ -f /app/staticfiles/nginx/nginx.conf ]; do echo "Waiting for nginx.conf"; sleep 1; done; nginx -c /app/staticfiles/nginx/nginx.conf'
     depends_on:
       - server
     volumes:
-      - staticfiles:/home/app/server/staticfiles/
+      - staticfiles:/app/staticfiles/:ro
     ports:
       - 8080:8080
   guacd:

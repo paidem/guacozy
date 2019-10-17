@@ -1,11 +1,23 @@
-ARG FROM=python:3.7-alpine
-ARG REQUIREMENTS=requirements-ldap.txt
+ARG BUILDFRONTENDFROM=node:12.2.0-alpine
+ARG SERVERFROM=python:3.7-alpine
 
-###########
-# BUILDER #
-###########
+####################
+# BUILDER FRONTEND #
+####################
 
-FROM ${FROM} as builder
+FROM ${BUILDFRONTENDFROM} as builder-frontend
+ADD frontend/package.json /frontend/
+ADD frontend/package-lock.json /frontend/
+WORKDIR /frontend
+RUN npm install
+ADD frontend /frontend
+RUN npm run build
+
+##################
+# BUILDER WHEELS #
+##################
+
+FROM ${SERVERFROM} as builder-wheels
 
 # set work directory
 WORKDIR /usr/src/app
@@ -31,23 +43,21 @@ RUN pip wheel --no-cache-dir --wheel-dir /usr/src/app/wheels -r requirements-lda
 # FINAL #
 #########
 
-FROM ${FROM}
+FROM ${SERVERFROM}
+
+COPY --from=builder-wheels /usr/src/app/wheels /wheels
 
 # install dependencies
 RUN apk update && apk add --no-cache \
       bash \
-      build-base \
       libpq \
       ca-certificates
 
-COPY --from=builder /usr/src/app/wheels /wheels
-COPY --from=builder /usr/src/app/requirements*.txt ./
+COPY --from=builder-wheels /usr/src/app/wheels /wheels
 RUN pip install --no-cache /wheels/*
 
 # create the home directory
-ENV HOME=/home/app
-ENV APP_HOME=/home/app/server
-
+ENV APP_HOME=/app
 
 # create the app user
 # create directory for the static files and all other in the path
@@ -55,25 +65,26 @@ ENV APP_HOME=/home/app/server
 RUN addgroup -S app && \
     adduser -S app -G app && \
     mkdir -p $APP_HOME/staticfiles && \
-    chown -R app:app $HOME
-
+    touch $APP_HOME/.env && \
+    chown -R app:app $APP_HOME
 
 WORKDIR $APP_HOME
 
 # change to the app user
 USER app
 
-
 # copy project and chown all the files to the app user
 COPY --chown=app:app guacozy_server $APP_HOME
 
-
-# copy project and chown all the files to the app user
-COPY --chown=app:app docker/entrypoint.sh $APP_HOME/
+# make entrypoint executable
 RUN chmod +x $APP_HOME/entrypoint.sh
 
-# run entrypoint.prod.sh
-ENTRYPOINT ["/home/app/server/entrypoint.sh"]
+# copy built fronend to static folder, so it can be collected by collectstatic on start
+# after "manape.py collectstatic" will be run, it will be copied to $APP_HOME/staticfiles/cozy
+COPY --chown=app:app --from=builder-frontend /frontend/build $APP_HOME/static/cozy
+
+# Specify entrypoint
+ENTRYPOINT ["/app/entrypoint.sh"]
 
 CMD ["daphne", "-b", "0.0.0.0","-p","8001","guacozy_server.asgi:application"]
 EXPOSE 8001
