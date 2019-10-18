@@ -20,7 +20,7 @@ class Connection(PolymorphicModel):
                                related_name='connections')
 
     # General settings
-    name = models.CharField(blank=False, max_length=60)
+    name = models.CharField(blank=False, unique=True, max_length=60)
     host = models.CharField(blank=False, max_length=60)
     port = models.IntegerField(null=True, blank=True)
     protocol = models.CharField(max_length=10, blank=True, default="n/a",
