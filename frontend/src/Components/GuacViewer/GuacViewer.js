@@ -1,6 +1,7 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import Guacamole from 'guacamole-common-js'
 import {Button, Dimmer, Divider, Loader} from "semantic-ui-react";
+import {GUACAMOLE_STATUS, GUACAMOLE_CLIENT_STATES} from "./const";
 
 /***
  *
@@ -172,7 +173,17 @@ function GuacViewer({wspath, tabIndex, controlSize = true, screenSize = null, no
 
         // Error handler
         guacRef.current.onerror = function (error) {
-            setErrorMessage(error.message);
+            let msg = error.message;
+
+            if (GUACAMOLE_STATUS[error.code]){
+                msg = <p>
+                    {error.message}<br/>
+                    {GUACAMOLE_STATUS[error.code].name}<br/>
+                    {GUACAMOLE_STATUS[error.code].text}
+                </p>
+            }
+
+            setErrorMessage(msg);
         };
 
         // Update state, component knows when to render faders, "Loading..." and so on
@@ -350,12 +361,12 @@ function GuacViewer({wspath, tabIndex, controlSize = true, screenSize = null, no
                  tabIndex={tabIndex}
             />
             <Dimmer
-                active={clientState < GuacamoleClientStates.STATE_CONNECTED}>
+                active={clientState < GUACAMOLE_CLIENT_STATES.STATE_CONNECTED}>
                 <Loader>Connection</Loader>
             </Dimmer>
 
             <Dimmer
-                active={clientState > GuacamoleClientStates.STATE_CONNECTED}>
+                active={clientState > GUACAMOLE_CLIENT_STATES.STATE_CONNECTED}>
                 <Loader><p>Session disconnected</p>
                     {errorMessage &&
                     <span style={{color: "red"}}>Error: {errorMessage}</span>}
@@ -376,11 +387,3 @@ function GuacViewer({wspath, tabIndex, controlSize = true, screenSize = null, no
 
 export default GuacViewer;
 
-const GuacamoleClientStates = {
-    STATE_IDLE: 0,
-    STATE_CONNECTING: 1,
-    STATE_WAITING: 2,
-    STATE_CONNECTED: 3,
-    STATE_DISCONNECTING: 4,
-    STATE_DISCONNECTED: 5
-};
