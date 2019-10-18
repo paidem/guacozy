@@ -51,40 +51,38 @@ COPY --from=builder-wheels /usr/src/app/wheels /wheels
 RUN apk update && apk add --no-cache \
       bash \
       libpq \
-      ca-certificates
+      ca-certificates \
+      nginx \
+	  supervisor
 
+# Inject built wheels and install them
 COPY --from=builder-wheels /usr/src/app/wheels /wheels
 RUN pip install --no-cache /wheels/*
 
-# create the home directory
-ENV APP_HOME=/app
+# Inject django app
+COPY guacozy_server  /app
 
-# create the app user
-# create directory for the static files and all other in the path
-# we need to create staticfiles dir in advance and chown, because permissions later on volume will not let us
-RUN addgroup -S app && \
-    adduser -S app -G app && \
-    mkdir -p $APP_HOME/staticfiles && \
-    touch $APP_HOME/.env && \
-    chown -R app:app $APP_HOME
+# Inject built frontend
+COPY --from=builder-frontend /frontend/build /frontend
 
-WORKDIR $APP_HOME
+# Inject docker specific configuration
+COPY docker /tmp/docker
 
-# change to the app user
-USER app
+# Distribute configuration files and prepare dirs for pidfiles
+RUN mkdir -p /run/nginx && \
+    mkdir -p /run/daphne && \
+    cd /tmp/docker && \
+    mv entrypoint.sh /entrypoint.sh && \
+    chmod +x /entrypoint.sh && \
+    mv nginx-app.conf /etc/nginx/conf.d/ && \
+    mkdir -p /etc/supervisor.d/ && \
+    # create /app/.env if doesn't exists for less noise from django-environ
+    touch /app/.env
 
-# copy project and chown all the files to the app user
-COPY --chown=app:app guacozy_server $APP_HOME
+ENTRYPOINT ["/entrypoint.sh"]
 
-# make entrypoint executable
-RUN chmod +x $APP_HOME/entrypoint.sh
+# Change to app dir so entrypoint.sh can run ./manage.py and other things localy to django
+WORKDIR /app
 
-# copy built fronend to static folder, so it can be collected by collectstatic on start
-# after "manape.py collectstatic" will be run, it will be copied to $APP_HOME/staticfiles/cozy
-COPY --chown=app:app --from=builder-frontend /frontend/build $APP_HOME/static/cozy
-
-# Specify entrypoint
-ENTRYPOINT ["/app/entrypoint.sh"]
-
-CMD ["daphne", "-b", "0.0.0.0","-p","8001","guacozy_server.asgi:application"]
-EXPOSE 8001
+CMD ["supervisord", "-n"]
+EXPOSE 8080

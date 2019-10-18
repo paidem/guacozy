@@ -12,16 +12,7 @@ services:
       - DJANGO_SECRET_KEY=youshoulddefinetelychangethistosomethingelseandtakecare
       - FIELD_ENCRYPTION_KEY=qjq4ObsXMqiqQyfKgD-jjEGm4ep8RaHKGRg4ohGCi1A=
       - DJANGO_TIME_ZONE=Europe/Vilnius
-      - DJANGO_ALLOWED_HOSTS=server,
       - DJANGO_DB_URL=postgres://postgres@db:5432/postgres
-  frontend:
-    image: nginx:1.17.4-alpine
-    restart: always
-    command: sh -c 'while ! [ -f /app/staticfiles/nginx/nginx.conf ]; do echo "Waiting for nginx.conf"; sleep 1; done; nginx -c /app/staticfiles/nginx/nginx.conf'
-    depends_on:
-      - server
-    volumes:
-      - staticfiles:/app/staticfiles/:ro
     ports:
       - 8080:8080
   guacd:
