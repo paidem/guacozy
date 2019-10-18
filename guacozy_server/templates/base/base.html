@@ -1,0 +1,13 @@
+{% load static %}
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}"/>
+    <link rel="stylesheet" href="{% static 'semantic-ui/semantic.min.css' %}">
+    {#    <script src="{% static 'semantic-ui/semantic.min.js'%}" ></script>#}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+{% block content %}{% endblock %}
+</body>
+</html>

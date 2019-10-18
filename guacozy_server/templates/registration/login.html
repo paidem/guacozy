@@ -1,6 +1,30 @@
-<h2>Login</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Login</button>
-</form>
+{% extends 'base/base.html' %}
+{% load semanticui %}
+{% load static %}
+{% block title %}Login{% endblock %}
+{% block content %}
+    <div class="ui container" id="login-container">
+        <div class="ui segment" id="login-segment">
+                <div class="ui two column stackable grid logingrid">
+                    <div class="middle aligned column">
+                        <img src="{% static 'img/logo192.png' %}" class="ui small image" style="margin:0 auto;">
+                    </div>
+                    <div class="column">
+                        <div class="ui divider"></div>
+                        <form class="ui form" method="post">
+                            {% csrf_token %}
+                            {% render_form form %}
+                            {#        {{  form.as_p }}#}
+                            <button class="ui inverted green basic button" type="submit">Submit</button>
+                        </form>
+                    </div>
+
+                </div>
+            {% if form.non_field_errors %}
+                <div class="ui error attached message">
+                    {{ form.non_field_errors.as_text }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

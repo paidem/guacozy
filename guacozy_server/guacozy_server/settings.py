@@ -53,6 +53,9 @@ INSTALLED_APPS += [
 
     # Encrypted model fields
     'encrypted_model_fields',
+
+    # semantic ui forms
+    'semanticuiforms',
 ]
 
 # Application packages
