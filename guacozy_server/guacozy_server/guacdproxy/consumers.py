@@ -105,6 +105,15 @@ class GuacamoleConsumer(AsyncWebsocketConsumer):
             parameters = Connection.objects.get(
                 pk=ticket.connection.pk).get_guacamole_parameters(
                 self.scope['user'])
+
+            if parameters['protocol'] == 'rdp' \
+                    and (not parameters['password'] or not parameters['username'])\
+                    and parameters['security'] not in ['rdp', 'tls']:
+                await self.accept_and_send_error(
+                    "No credentials found for this connection \n. "
+                    "If you want to use RDP login screen, "
+                    "please explicitly specify security as RDP or TLS", 999)
+
             await sync_to_async(self.gclient.handshake)(**parameters, **params)
             await self.update_ticket_sessionid(ticket, self.gclient.id)
 
