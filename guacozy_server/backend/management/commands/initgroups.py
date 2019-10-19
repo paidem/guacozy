@@ -1,5 +1,5 @@
-from django.core.management import BaseCommand
 from django.contrib.auth.models import Group, Permission
+from django.core.management import BaseCommand
 
 from backend import models
 
@@ -32,6 +32,9 @@ class Command(BaseCommand):
             # Get or create group
             group, created = Group.objects.get_or_create(name=group_name)
 
+            if created:
+                self.stdout.write("Created group {}".format(group.__str__()))
+
             # Loop models in group
             for model_cls in GROUPS_PERMISSIONS[group_name]:
 
@@ -45,8 +48,6 @@ class Command(BaseCommand):
                         # Find permission object and add to group
                         perm = Permission.objects.get(codename=codename)
                         group.permissions.add(perm)
-                        self.stdout.write("Adding {} to group {}"
-                                          .format(codename, group.__str__()))
 
                     except Permission.DoesNotExist:
-                        self.stdout.write("{} not found".format(codename))
+                        self.stdout.write("{} permission not found".format(codename))
