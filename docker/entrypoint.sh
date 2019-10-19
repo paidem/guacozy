@@ -36,11 +36,15 @@ python ./manage.py initguacd
 
 # Nginx
 # if certificates doesn't exist create a self signed certificate
-[ ! -f /etc/ssl/private/nginx.key ] && \
-[ ! -f /etc/ssl/certs/nginx.crt ] && \
-echo "/etc/ssl/private/nginx.key and /etc/ssl/certs/nginx.crt not provided" && \
+echo " "
+echo "Checking that SSL certificate and key files exist..."
+
+[ ! -f /ssl/cert.key ] && \
+[ ! -f /ssl/cert.crt ] && \
+echo "/ssl/cert.crt and /ssl/cert.key not provided" && \
 echo "Creating self signed certificate:" && \
-openssl req -x509 -nodes -days 3650 -subj "/CN=guacozy" -addext "subjectAltName=DNS:guacozy" -newkey rsa:4096 -keyout /etc/ssl/private/nginx.key -out /etc/ssl/certs/nginx.crt;
+mkdir -p /ssl && \
+openssl req -x509 -nodes -days 3650 -subj "/CN=guacozy" -addext "subjectAltName=DNS:guacozy" -newkey rsa:4096 -keyout /ssl/cert.key -out /ssl/cert.crt;
 
 
 echo "Initialisation is done."
