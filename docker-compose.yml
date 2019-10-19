@@ -14,7 +14,8 @@ services:
       - DJANGO_TIME_ZONE=Europe/Vilnius
       - DJANGO_DB_URL=postgres://postgres@db:5432/postgres
     ports:
-      - 8080:8080
+      - 80:80
+      - 443:443
   guacd:
     image: linuxserver/guacd
     restart: always

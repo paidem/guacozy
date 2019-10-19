@@ -34,6 +34,15 @@ python ./manage.py collectstatic --no-input
 python ./manage.py initgroups
 python ./manage.py initguacd
 
+# Nginx
+# if certificates doesn't exist create a self signed certificate
+[ ! -f /etc/ssl/private/nginx.key ] && \
+[ ! -f /etc/ssl/certs/nginx.crt ] && \
+echo "/etc/ssl/private/nginx.key and /etc/ssl/certs/nginx.crt not provided" && \
+echo "Creating self signed certificate:" && \
+openssl req -x509 -nodes -days 3650 -subj "/CN=guacozy" -addext "subjectAltName=DNS:guacozy" -newkey rsa:4096 -keyout /etc/ssl/private/nginx.key -out /etc/ssl/certs/nginx.crt;
+
+
 echo "Initialisation is done."
 
 # launch whatever is passed by docker

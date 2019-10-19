@@ -53,6 +53,7 @@ RUN apk update && apk add --no-cache \
       bash \
       libpq \
       ca-certificates \
+      openssl \
       nginx \
 	  supervisor
 
@@ -76,7 +77,7 @@ RUN mkdir -p /run/nginx && \
     cd /tmp/docker && \
     mv entrypoint.sh /entrypoint.sh && \
     chmod +x /entrypoint.sh && \
-    mv nginx-app.conf /etc/nginx/conf.d/ && \
+    mv nginx-default.conf /etc/nginx/conf.d/default.conf && \
     mkdir -p /etc/supervisor.d/ && \
     mv /tmp/docker/supervisor-app.ini /etc/supervisor.d/ &&\
     # create /app/.env if doesn't exists for less noise from django-environ
@@ -88,4 +89,5 @@ ENTRYPOINT ["/entrypoint.sh"]
 WORKDIR /app
 
 CMD ["supervisord", "-n"]
-EXPOSE 8080
+EXPOSE 80
+EXPOSE 443
