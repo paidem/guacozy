@@ -1,6 +1,16 @@
 #!/bin/bash
 set -e
 
+echo "Checking if FIELD_ENCRYPTION_KEY variable is set..."
+if [ -z "$FIELD_ENCRYPTION_KEY" ]
+then
+      echo "FIELD_ENCRYPTION_KEY is not set, will be using a default one. "
+      echo "You should provide FIELD_ENCRYPTION_KEY environment variable  - generate with"
+      echo "./manage.py generate_encryption_key"
+      echo "Generating one for you now:"
+      echo "$(python ./manage.py generate_encryption_key)"
+fi
+
 # wait shortly and then run db migrations (retry on error)
 while ! python ./manage.py migrate 2>&1; do
   echo "Waiting on DB..."
