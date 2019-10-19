@@ -78,6 +78,7 @@ RUN mkdir -p /run/nginx && \
     chmod +x /entrypoint.sh && \
     mv nginx-app.conf /etc/nginx/conf.d/ && \
     mkdir -p /etc/supervisor.d/ && \
+    mv /tmp/docker/supervisor-app.ini /etc/supervisor.d/ &&\
     # create /app/.env if doesn't exists for less noise from django-environ
     touch /app/.env
 
