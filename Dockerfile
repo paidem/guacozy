@@ -37,7 +37,8 @@ RUN apk update && apk add \
     openldap-dev
 
 COPY guacozy_server/requirements*.txt ./
-RUN pip wheel --no-cache-dir --wheel-dir /usr/src/app/wheels -r requirements-ldap.txt
+RUN pip install --upgrade pip && \
+    pip wheel --no-cache-dir --wheel-dir /usr/src/app/wheels -r requirements-ldap.txt
 
 #########
 # FINAL #
@@ -57,7 +58,8 @@ RUN apk update && apk add --no-cache \
 
 # Inject built wheels and install them
 COPY --from=builder-wheels /usr/src/app/wheels /wheels
-RUN pip install --no-cache /wheels/*
+RUN pip install --upgrade pip && \
+    pip install --no-cache /wheels/*
 
 # Inject django app
 COPY guacozy_server  /app
