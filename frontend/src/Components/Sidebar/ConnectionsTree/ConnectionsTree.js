@@ -5,6 +5,7 @@ import {AppContext} from "../../../Context/AppContext";
 import {LayoutContext} from "../../../Layout/LayoutContext";
 import {Button} from "semantic-ui-react";
 import {handleConnectionContextMenuEvent} from "../../ContextMenu/ConnectionContextMenu";
+import {handleFolderContextMenuEvent} from "../../ContextMenu/FolderContextMenu";
 
 function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
     const [appState,] = useContext(AppContext);
@@ -160,7 +161,14 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
              */
             const nodeTitleConstructor = (node) => {
                 if (node.isFolder) {
-                    return <span>{node.text}</span>
+                    return <span
+                        onContextMenu={(e) => {
+                            handleFolderContextMenuEvent(e, {
+                                id: node.id.toString(),
+                                name: node.text
+                            })
+                        }}
+                    >{node.text}</span>
                 } else {
                     return <span
                         onDoubleClick={() => appState.actions.activateConnection(node.id, node.text, appState.user)}

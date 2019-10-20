@@ -1,12 +1,15 @@
 import React, {useContext, useEffect, useLayoutEffect, useRef, useState} from 'react';
 import {AppContext} from "../../Context/AppContext";
 import {Button, Dropdown, Header, Icon, Modal} from "semantic-ui-react";
+import ModalBase from "./ModalBase";
 
-function ShareTicketModal({handleClose, ticketid}) {
+function ShareTicketModal({handleClose, data}) {
     const [appState,] = useContext(AppContext);
     const [users, setUsers] = useState([]);
     const [shareButtonEnabled, setShareButtonEnabled] = useState(false);
     const [ticket, setTicket] = useState(null);
+
+    const ticketid = data.id;
 
     useLayoutEffect(() => {
         let tickets = appState.tickets.filter(t => t.id === ticketid);
@@ -18,6 +21,7 @@ function ShareTicketModal({handleClose, ticketid}) {
     const shareTicket = () => {
         if (selectedUserId.current) {
             appState.api.shareTicket(ticketid, selectedUserId.current).finally(() => {
+                appState.actions.updateTickets();
                 handleClose();
             });
         }
@@ -52,14 +56,7 @@ function ShareTicketModal({handleClose, ticketid}) {
     };
 
     return (
-        <Modal
-            open={true}
-            onClose={handleClose}
-            basic
-            size='small'
-            centered={false}
-            closeOnDimmerClick={false}
-        >
+        <ModalBase handleClose={handleClose}>
             <Header icon='browser' content='Share access to ticket'/>
             <Modal.Content>
                 {ticket && <>
@@ -80,11 +77,11 @@ function ShareTicketModal({handleClose, ticketid}) {
                 <Button color='green' onClick={shareTicket} disabled={!shareButtonEnabled}>
                     <Icon name='checkmark'/> Share
                 </Button>
-                <Button color='red' onClick={handleClose}>
+                <Button color='gray' onClick={handleClose}>
                     <Icon name='delete'/> Cancel
                 </Button>
             </Modal.Actions>
-        </Modal>
+        </ModalBase>
     );
 }
 

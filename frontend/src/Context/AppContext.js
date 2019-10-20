@@ -133,19 +133,26 @@ const AppProvider = (props) => {
             })
     };
 
-    const openShareModal = (ticketid, name) => {
-        setState(state => ({...state, shareModalOpen: true, shareModalTicketId: ticketid}));
+    const openModal = ({type, data}) => {
+        let modal = React.createElement(type, props = {
+                data: data,
+                handleClose: () => {
+                    setState(state => ({...state, activeModal: null}));
+                }
+            }
+        );
+
+        setState(state => ({...state, activeModal: modal}));
     };
 
     const defaultState = {
         api: api,
         apiError: null,
+        activeModal: null,
         connections: [],
         connectionsLoading: false,
         tickets: [],
         ticketsLoading: false,
-        shareModalOpen: false,
-        shareModalTicketId: null,
         user: null,
         actions: {
             activateConnection: activateConnection,
@@ -154,7 +161,7 @@ const AppProvider = (props) => {
             createTicket: createTicket,
             deleteTicket: deleteTicket,
             duplicateticket: duplicateticket,
-            openShareModal: openShareModal,
+            openModal: openModal,
             logout: logout,
             updateConnections: updateConnections,
             updateTickets: updateTickets,

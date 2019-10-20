@@ -5,10 +5,7 @@ import {contextMenu, Item, Menu, Separator, Submenu} from "react-contexify";
 import {SCREEN_SIZES} from "../../settings"
 import {AppContext} from "../../Context/AppContext";
 import {LayoutContext} from "../../Layout/LayoutContext";
-
-//******************//
-// Tab context menu //
-//******************//
+import ShareTicketModal from "../Modals/ShareTicketModal";
 
 // Context menu to be shown when user clicks on tab's name
 function TabContextMenu(props) {
@@ -39,12 +36,7 @@ function TabContextMenu(props) {
                 layoutState.actions.refreshTab(props.tabid);
                 break;
             case "share":
-                // setShareModalProps({
-                //     ticketid: props.tabid,
-                //     name: props.name
-                // });
-                // setShareModalOpen(true);
-                appState.actions.openShareModal(props.tabid, props.name);
+                appState.actions.openModal({type: ShareTicketModal, data: {id: props.tabid, name: props.name}});
                 break;
             case "disconnect":
                 layoutState.actions.deleteTab(props.tabid);
@@ -91,11 +83,8 @@ function TabContextMenu(props) {
 };
 
 
-// ************************ end of Tab context menu ****************************** //
 export default TabContextMenu;
 
-// Action so handle tab's name context menu action
-// Activates menu with "tab_context_menu" (TabContextMenu)
 export const handleTabContextMenuEvent = (e, data) => {
     e.preventDefault();
     contextMenu.show({

@@ -94,14 +94,43 @@ export default class GuacadminApi {
         return this.apiInstance.post("/tickets/share/" + ticketid + "/", bodyFormData);
     }
 
-    updateNodeLocation = ({id, parentid, isFolder}) => {
+    updateNodeLocation = ({id, parentid, newName, isFolder}) => {
         let bodyFormData = new FormData();
-        bodyFormData.set('parent', parentid);
+
+        if (parentid) {
+            bodyFormData.set('parent', parentid);
+        }
+
+        if (newName) {
+            bodyFormData.set('name', newName);
+        }
 
         if (isFolder) {
             return this.apiInstance.patch("/folders/" + id + "/", bodyFormData);
         } else {
             return this.apiInstance.patch("/connections/" + id + "/", bodyFormData);
         }
-    }
+    };
+
+    createFolder = ({parendId, name}) => {
+        let bodyFormData = new FormData();
+        bodyFormData.set('parent', parendId);
+        bodyFormData.set('name', name);
+        return this.apiInstance.post("/folders/", bodyFormData);
+    };
+
+    deleteFolder = ({id}) => {
+        return this.apiInstance.delete("/folders/" + id + "/");
+    };
+
+    // renameNode = ({id, newName, isFolder}) => {
+    //     let bodyFormData = new FormData();
+    //     bodyFormData.set('name', newName);
+    //    
+    //     if (isFolder) {
+    //         return this.apiInstance.patch("/folders/" + id + "/", bodyFormData);
+    //     } else {
+    //         return this.apiInstance.patch("/connections/" + id + "/", bodyFormData);
+    //     }        
+    // };
 }

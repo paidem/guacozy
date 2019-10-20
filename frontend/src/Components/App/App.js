@@ -8,7 +8,7 @@ import {LayoutContext} from "../../Layout/LayoutContext";
 import {layoutFactory} from "../../Layout/layoutfactory";
 import ConnectionContextMenu from "../ContextMenu/ConnectionContextMenu";
 import TabContextMenu from "../ContextMenu/TabContextMenu";
-import ShareTicketModal from "../ShareTicketModal/ShareTicketModal";
+import FolderContextMenu from "../ContextMenu/FolderContextMenu";
 
 function App() {
     // Context
@@ -37,15 +37,10 @@ function App() {
     return (
         <div className="App">
             {getContent()}
+            <FolderContextMenu/>
             <ConnectionContextMenu/>
             <TabContextMenu/>
-            {appState.shareModalOpen && <ShareTicketModal
-                handleClose={() => {
-                    setAppState(state => ({...state, shareModalOpen: false}));
-                    appState.actions.updateTickets();
-                }}
-                ticketid={appState.shareModalTicketId}
-            />}
+            {appState.activeModal}
             <Dimmer active={appState.user == null}>
                 <Loader>
                     Loading<br/>
