@@ -58,7 +58,7 @@ class FolderFlatViewSet(viewsets.ModelViewSet):
 
     # Override to check that user can create folder only inside of folder where user has view permission
     def perform_create(self, serializer):
-        if serializer.validated_data['parent'] not in user_allowed_folders_ids(self.request.user, require_view_permission=True):
+        if serializer.validated_data['parent'] not in user_allowed_folders(self.request.user, require_view_permission=True):
             raise PermissionDenied(detail="You are not allowed to create folder here")
         super(FolderFlatViewSet, self).perform_create(serializer)
 
@@ -70,7 +70,7 @@ class FolderFlatViewSet(viewsets.ModelViewSet):
         if serializer.instance.id not in allowed_to_view_folders_ids:
             raise PermissionDenied(detail="You are not allowed to update this folder")
 
-        if serializer.validated_data['parent'].id not in allowed_to_view_folders_ids:
+        if 'parent' in serializer.validated_data and serializer.validated_data['parent'].id not in allowed_to_view_folders_ids:
             raise PermissionDenied(detail="You are not allowed to move folder here")
 
         super(FolderFlatViewSet, self).perform_update(serializer)
@@ -78,6 +78,10 @@ class FolderFlatViewSet(viewsets.ModelViewSet):
     def perform_destroy(self, instance):
         if instance.id not in user_allowed_folders_ids(self.request.user, require_view_permission=True):
             raise PermissionDenied(detail="You are not delete this folder")
+
+        if instance.connections.count() > 0:
+            raise PermissionDenied(detail="Cannot delete folder which has connections")
+
         super(FolderFlatViewSet, self).perform_destroy(instance)
 
 
