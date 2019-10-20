@@ -14,9 +14,9 @@ You can use your existing **guacd** (if you used guacamole before) or use one in
 e.g. 
 
 ## docker cmd example
-look up the latest version tag (e.g. v0.0.6)
+look up the latest version tag (e.g. v0.0.7)
 ```
-docker run -it --rm -p 8080:80 -p 8443:443 guacozy/guacozy-server:v0.0.6
+docker run -it --rm -p 8080:80 -p 8443:443 guacozy/guacozy-server:v0.0.7
 ```
 
 This will start a container with sqlite database (destroyed after container is down)  
@@ -33,14 +33,14 @@ This example of a composite with 3 services:
 * guacd
 * postgresql
 
-Start by looking up the latest version tag (e.g. v0.0.6)
+Start by looking up the latest version tag (e.g. v0.0.7)
 ```
 # docker-compose.yml
 
 version: '3'  
 services:
   server:
-    image: guacozy/guacozy-server:0.0.6
+    image: guacozy/guacozy-server:v0.0.7
     restart: always
     depends_on:
       - db
