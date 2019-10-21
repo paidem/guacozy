@@ -1,3 +1,6 @@
+import datetime
+from datetime import timedelta
+
 import rules
 from django.db.models import F, Q
 from django.utils import timezone
@@ -174,6 +177,19 @@ def share_ticket_view(request, uuid):
         except KeyError:
             raise ParseError("'userid' argument not provided.")
 
+        try:
+            validityperiod = timedelta(seconds=int(request.data['validityperiod']))
+        except (KeyError, ValueError):
+            validityperiod = timedelta(seconds=600)
+
+        if timezone.now() + validityperiod > original_ticket.created + original_ticket.validityperiod:
+            validityperiod = original_ticket.created + original_ticket.validityperiod - timezone.now()
+
+        try:
+            control = request.data['control'].lower() == "true"
+        except KeyError:
+            control = False
+
         ticket = Ticket.objects.create(
             author=request.user,
             # receiving_user - User provided in request data, who gets
@@ -181,7 +197,7 @@ def share_ticket_view(request, uuid):
             user=receiving_user,
             connection=original_ticket.connection,
             parent=original_ticket,
-            validityperiod=original_ticket.validityperiod)
+            validityperiod=validityperiod)
 
         return Response(TicketSerializer(ticket).data, status=status.HTTP_202_ACCEPTED)
 

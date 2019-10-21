@@ -88,9 +88,11 @@ export default class GuacadminApi {
 
     }
 
-    shareTicket(ticketid, recievingUserId) {
+    shareTicket({ticketid, userid, validityPeriod, control}) {
         let bodyFormData = new FormData();
-        bodyFormData.set('userid', recievingUserId);
+        bodyFormData.set('userid', userid);
+        bodyFormData.set('validityperiod', validityPeriod);
+        bodyFormData.set('control', control);
         return this.apiInstance.post("/tickets/share/" + ticketid + "/", bodyFormData);
     }
 
