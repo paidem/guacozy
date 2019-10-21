@@ -77,10 +77,10 @@ class FolderFlatViewSet(viewsets.ModelViewSet):
 
     def perform_destroy(self, instance):
         if instance.id not in user_allowed_folders_ids(self.request.user, require_view_permission=True):
-            raise PermissionDenied(detail="You are not delete this folder")
+            raise PermissionDenied(detail="You are not allowed to delete this folder.")
 
-        if instance.connections.count() > 0:
-            raise PermissionDenied(detail="Cannot delete folder which has connections")
+        if instance.children.count() > 0 or instance.connections.count() > 0:
+            raise PermissionDenied(detail="Cannot delete: folder is not empty.")
 
         super(FolderFlatViewSet, self).perform_destroy(instance)
 
