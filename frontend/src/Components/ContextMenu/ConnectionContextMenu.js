@@ -2,6 +2,7 @@ import React, {useContext} from 'react';
 
 import {contextMenu, Item, Menu, Separator} from "react-contexify";
 import {AppContext} from "../../Context/AppContext";
+import {LayoutContext} from "../../Layout/LayoutContext";
 
 //*************************//
 // Connection context menu //
@@ -10,6 +11,7 @@ import {AppContext} from "../../Context/AppContext";
 
 function ConnectionContextMenu(props) {
     const [appState,] = useContext(AppContext);
+    const [layoutState,] = useContext(LayoutContext);
 
     // Connection context menu //
     // Executes when user selects action in tab's name context menu
@@ -17,6 +19,9 @@ function ConnectionContextMenu(props) {
         switch (action) {
             case "connect":
                 appState.actions.activateConnection(props.id, props.text, appState.user);
+                break;
+            case "edit":
+                layoutState.actions.addIframeTab({url: "/admin/backend/connection/" + props.id + "/change/", name : "*"+props.text});
                 break;
             default:
                 window.alert("Action not implemented: " + action);
