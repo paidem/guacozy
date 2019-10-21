@@ -2,6 +2,7 @@ import React, {useContext} from "react";
 import {AppContext} from "../../../Context/AppContext";
 import {Icon, List} from "semantic-ui-react";
 import TimeAgo from "react-timeago";
+import getIcon from "../../../Utils/getIcon";
 
 
 const TicketElement = ({
@@ -58,6 +59,7 @@ const TicketElement = ({
         <div index={ticket.id} onClick={toggleTicketInfo} className="ticketItem">
 
                 <span className={activatable ? 'activatable' : ''} onClick={handleTicketClick}>
+                    {getIcon(false, ticket.connection.protocol)}
                     {ticket.connection.name}&nbsp;
                     {ticket.author.id !== appState.user.id && "(" + ticket.author.username + ")"}
                     {ticket.user.id !== appState.user.id && "(" + ticket.user.username + ")"}
@@ -73,7 +75,7 @@ const TicketElement = ({
                      display: activeIndex === ticket.id ? "block" : "none",
                  }}>
                 <List size="tiny">
-                    <List.Item icon='tv' content={<span>{ticket.connection.protocol.toUpperCase()}, ID: <span
+                    <List.Item content={<span>{ticket.connection.protocol.toUpperCase()}, ID: <span
                         title={ticket.id}>...{ticket.id.slice(ticket.id.length - 5)}</span> {ticket.parent && <>,
                         Parent ID: {ticket.parent}</>}</span>}/>
                     <List.Item icon='play circle' content={<><TimeAgo title={formatDateString(ticket.created)}

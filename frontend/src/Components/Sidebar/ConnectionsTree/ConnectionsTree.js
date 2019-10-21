@@ -6,6 +6,7 @@ import {LayoutContext} from "../../../Layout/LayoutContext";
 import {Button} from "semantic-ui-react";
 import {handleConnectionContextMenuEvent} from "../../ContextMenu/ConnectionContextMenu";
 import {handleFolderContextMenuEvent} from "../../ContextMenu/FolderContextMenu";
+import getIcon from "../../../Utils/getIcon";
 
 function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
     const [appState,] = useContext(AppContext);
@@ -168,7 +169,7 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
                                 name: node.text
                             })
                         }}
-                    >{node.text}</span>
+                    > {getIcon(true, null)}{node.text}</span>
                 } else {
                     return <span
                         onDoubleClick={() => appState.actions.activateConnection(node.id, node.text, appState.user)}
@@ -178,7 +179,7 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
                                 text: node.text
                             })
                         }}
-                    >{node.text}</span>
+                    >{getIcon(false, node.protocol)}{node.text}</span>
                 }
             };
 

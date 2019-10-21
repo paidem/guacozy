@@ -84,8 +84,11 @@ def folder_to_object(folder, user, allowed_to_list=None, allowed_to_view=None, i
     # include all objects (currently only connections)
     if include_objects and folder.id in allowed_to_view:
         for connection in folder.connections.all():
-            connection_object = {'id': connection.id, 'text': connection.name,
-                                 'isFolder': False}
+            connection_object = {'id': connection.id,
+                                 'text': connection.name,
+                                 'isFolder': False,
+                                 'protocol': connection.protocol,
+                                 }
             result_children += [connection_object]
 
     result['children'] = result_children
