@@ -46,6 +46,11 @@ function GuacViewer({wspath, tabIndex, controlSize = true, screenSize = null, no
         // get current width/height of connection
         let remoteDisplayWidth = guacRef.current.getDisplay().getWidth();
         let remoteDisplayHeight = guacRef.current.getDisplay().getHeight();
+
+        if (!displayRef.current){
+            return;
+        }
+
         let newWidth = displayRef.current.clientWidth;
         let newHeight = displayRef.current.clientHeight;
 
