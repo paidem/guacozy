@@ -2,6 +2,8 @@ import os
 
 import environ
 
+from django.conf.locale.en import formats as en_formats
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 env = environ.Env()
@@ -123,6 +125,8 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
+# Override time formats
+en_formats.DATETIME_FORMAT = "Y-m-d H:i:s"
 
 # Static files
 # How static files will be served
