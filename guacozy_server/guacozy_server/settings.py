@@ -58,6 +58,9 @@ INSTALLED_APPS += [
 
     # semantic ui forms
     'semanticuiforms',
+
+    # list filters
+    'django_admin_listfilter_dropdown',
 ]
 
 # Application packages
