@@ -234,4 +234,4 @@ class GuacamoleConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def get_default_guacd_server(self):
-        return AppSettings.load().defaultGuacdServer
+        return AppSettings.load().default_guacd_server

@@ -98,7 +98,7 @@ class TicketLog(models.Model):
         if ticket.connection is not None and ticket.connection.guacdserver is not None:
             self.guacdserver = ticket.connection.guacdserver
         else:
-            self.guacdserver = AppSettings.load().defaultGuacdServer
+            self.guacdserver = AppSettings.load().default_guacd_server
 
         if self.guacdserver is not None:
             self.guacdserver_hostname = self.guacdserver.hostname

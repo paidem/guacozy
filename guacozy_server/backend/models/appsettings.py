@@ -23,10 +23,10 @@ class AppSettings(models.Model):
 
     objects = AppSettingsManager()
 
-    defaultGuacdServer = models.ForeignKey(GuacdServer,
-                                           blank=True,
-                                           null=True,
-                                           on_delete=models.SET_NULL)
+    default_guacd_server = models.ForeignKey(GuacdServer,
+                                             blank=True,
+                                             null=True,
+                                             on_delete=models.SET_NULL)
 
     ignore_rdp_cert_by_default = models.BooleanField(blank=False, default=True)
 

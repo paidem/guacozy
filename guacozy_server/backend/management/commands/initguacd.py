@@ -43,11 +43,11 @@ class Command(BaseCommand):
 
         self.stdout.write("\nChecking if default Guacd server is set.")
 
-        if app_settings.defaultGuacdServer is None:
+        if app_settings.default_guacd_server is None:
             self.stdout.write("Default guacd not set. Setting to '{}'"
                               .format(guacd_server.name))
-            app_settings.defaultGuacdServer = guacd_server
+            app_settings.default_guacd_server = guacd_server
             app_settings.save()
         else:
             self.stdout.write("Default guacd is already set ('{}'). Skipping."
-                              .format(app_settings.defaultGuacdServer.name))
+                              .format(app_settings.default_guacd_server.name))
