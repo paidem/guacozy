@@ -1,11 +1,28 @@
 from django.contrib import admin
+from django.forms import ModelForm
 
 from backend.models import AppSettings
+
+
+class AppSettingsForm(ModelForm):
+    class Meta:
+        fields = '__all__'
+
+        model = AppSettings
+
+        help_texts = {
+            'default_guacd_server':
+                'guacd server which will be used if not overriden in Connection settings',
+            'ignore_rdp_cert_by_default':
+                'Default setting for "ignore_cert" field when creating RDP Connection in admin page',
+        }
 
 
 @admin.register(AppSettings)
 class AppSettingsModelAdmin(admin.ModelAdmin):
     model = AppSettings
+
+    form = AppSettingsForm
 
     def has_delete_permission(self, request, obj=None):
         return False
