@@ -1,9 +1,9 @@
 from django.contrib import admin
 from django.forms import ModelForm, PasswordInput, ModelChoiceField, TextInput
-from django_admin_listfilter_dropdown.filters import DropdownFilter, RelatedDropdownFilter
+from django_admin_listfilter_dropdown.filters import RelatedDropdownFilter
 from polymorphic.admin import PolymorphicChildModelAdmin, PolymorphicParentModelAdmin, PolymorphicChildModelFilter
 
-from backend.models import Connection, ConnectionRdp, ConnectionVnc, Folder
+from backend.models import Connection, ConnectionRdp, ConnectionVnc, Folder, AppSettings
 from backend.models.connectionssh import ConnectionSsh
 
 
@@ -101,6 +101,11 @@ class ConnectionRdpAdmin(ConnectionChildAdmin):
     def get_fieldsets(self, request, obj=None):
         parent_fieldsets = super(ConnectionChildAdmin, self).get_base_fieldsets(request, obj)
         return parent_fieldsets + self.fieldsets
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(ConnectionRdpAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['ignore_cert'].initial = AppSettings.load().ignore_rdp_cert_by_default
+        return form
 
 
 @admin.register(ConnectionSsh)

@@ -28,6 +28,8 @@ class AppSettings(models.Model):
                                            null=True,
                                            on_delete=models.SET_NULL)
 
+    ignore_rdp_cert_by_default = models.BooleanField(blank=False, default=True)
+
     def __str__(self):
         return "Applications Settings"
 
