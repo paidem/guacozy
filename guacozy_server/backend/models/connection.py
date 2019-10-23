@@ -61,11 +61,10 @@ class Connection(PolymorphicModel):
         default=False)
 
     def uri(self):
-        return self.name + " (" + self.protocol + "://" + self.host + ":" + \
-               self.port.__str__() + ")"
+        return self.protocol + "://" + self.host + ":" + self.port.__str__()
 
     def __str__(self):
-        return self.uri()
+        return "{} [{}]".format(self.name, self.uri())
 
     # save password as it was on load
     def __init__(self, *args, **kwargs):

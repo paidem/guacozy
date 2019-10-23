@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.forms import ModelForm, PasswordInput, ModelChoiceField, TextInput
+from django_admin_listfilter_dropdown.filters import DropdownFilter, RelatedDropdownFilter
 from polymorphic.admin import PolymorphicChildModelAdmin, PolymorphicParentModelAdmin, PolymorphicChildModelFilter
 
 from backend.models import Connection, ConnectionRdp, ConnectionVnc, Folder
@@ -171,8 +172,44 @@ class ConnectionVncAdmin(ConnectionChildAdmin):
 
 @admin.register(Connection)
 class ConnectionParentAdmin(PolymorphicParentModelAdmin):
-    list_display = ('__str__', 'protocol', 'host', 'port')
+
+    def duplicate_connections(modeladmin, request, queryset):
+        # Get instances of ConnectionSSH, ConnectionRDP instead of Connection
+        qs = Connection.objects.get_real_instances(queryset)
+
+        for connection in qs:
+            # This is a polymorhic model, that's why we have to set both pk and id to None if we want to clone
+            connection.pk = None
+            connection.id = None
+
+            # Queryset of connections, where name is similar to that we want
+            similar_qs = Connection.objects.filter(name__icontains=connection.name)
+
+            candidate_number = 0
+
+            while True:
+                candidate_number += 1
+                candidate_name = "{} ({})".format(connection.name, candidate_number)
+                # check if we have connection with that name
+                if similar_qs.filter(name=candidate_name).count() == 0:
+                    # nothing found, can use candidate name
+                    break
+
+            connection.name = candidate_name
+            connection.save()
+
+    actions = [duplicate_connections]
+
+    ordering = ('name',)
+
+    search_fields = ['name', 'host']
+
+    list_display = ('name', 'uri', 'credentials',)
+
     """ The parent model admin """
     base_model = Connection  # Optional, explicitly set here.
     child_models = (ConnectionRdp, ConnectionSsh, ConnectionVnc)
-    list_filter = (PolymorphicChildModelFilter,)
+
+    list_filter = (PolymorphicChildModelFilter,
+                   ('credentials', RelatedDropdownFilter),
+                   )
