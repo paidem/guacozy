@@ -7,6 +7,7 @@ import {Button} from "semantic-ui-react";
 import {handleConnectionContextMenuEvent} from "../../ContextMenu/ConnectionContextMenu";
 import {handleFolderContextMenuEvent} from "../../ContextMenu/FolderContextMenu";
 import getIcon from "../../../Utils/getIcon";
+import {sortArrayOfObjects} from "../../../Utils/sortArrayOfObjects";
 
 function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
     const [appState,] = useContext(AppContext);
@@ -87,24 +88,23 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
         }, [treeData]);
 
     // Convert tree to flat objects and add "parent" reference
-    const flattenTreeParent = useCallback((tree, parent = 0, sortKey) => {
-        return tree
+    const flattenTreeParent = useCallback((tree, parent = 0) => {
+        return sortArrayOfObjects(tree
             .reduce((acc, node) =>
                     (acc.concat([{...node, parent: parent}])
                         .concat(node.children.length > 0
                             ?
                             flattenTreeParent(node.children, node.appid)
                             : []))
-                , [])
-            .sort((a, b) => a[sortKey] > b[sortKey] ? 1 : (a[sortKey] === b[sortKey] ? 0 : -1));
+                , []),"key")
     }, []);
 
     // Determines which API calls should be made to update hierarchy to desired state
     // and makes API calls
     const saveHierarchyChanges = () => {
         setSaving(true);
-        let flatInitialTree = flattenTreeParent(initialTreeData, 0, "key");
-        let flatTree = flattenTreeParent(treeData, 0, "key");
+        let flatInitialTree = flattenTreeParent(initialTreeData, 0);
+        let flatTree = flattenTreeParent(treeData, 0, );
 
         let updates = [];
 
@@ -198,7 +198,7 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
                     appid: node.id,
                     filtertext: node.text,
                     hidden: false,
-                    children: node.isFolder ? node.children.map(child => convertTreeNode(child)) : []
+                    children: node.isFolder ? sortArrayOfObjects(node.children.map(child => convertTreeNode(child)),'filtertext') : []
                 };
 
                 return newTreeNode
