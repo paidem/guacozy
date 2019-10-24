@@ -126,7 +126,7 @@ class GuacamoleConsumer(AsyncWebsocketConsumer):
 
         # Save ticket reference (so we can update on disconnect) and log event
         self.ticket = ticket
-        await self.log_ticket_action(ticket, 'connect')
+        await self.log_ticket_action(ticket, 'connect', self.scope)
 
         # start polling loop function,
         asyncio.create_task(self.data_polling())
@@ -140,7 +140,7 @@ class GuacamoleConsumer(AsyncWebsocketConsumer):
         Websocket disconnect event handler, which closes session with guacd on  websocket disconnect
         """
         # socket disconnected - inform server that we are out
-        await self.log_ticket_action(self.ticket, 'disconnect')
+        await self.log_ticket_action(self.ticket, 'disconnect', self.scope)
         await sync_to_async(self.gclient.close)()
 
     async def accept_and_send_error(self, error_text, error_code):
@@ -211,8 +211,8 @@ class GuacamoleConsumer(AsyncWebsocketConsumer):
         ticket_to_update.save()
 
     @database_sync_to_async
-    def log_ticket_action(self, ticket, action):
-        TicketLog.addlog(ticket, action)
+    def log_ticket_action(self, ticket, action, scope):
+        TicketLog.addlog(ticket, action, scope=scope)
 
     @database_sync_to_async
     def get_ticket_sessionid(self, ticket):

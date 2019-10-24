@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from rules.contrib.rest_framework import AutoPermissionViewSetMixin
 
 from backend.api.utils import user_allowed_folders, folder_to_object, user_allowed_folders_ids
-from backend.models import Folder, Ticket, Connection
+from backend.models import Folder, Ticket, Connection, TicketLog
 from users.models import User
 from .serializers import UserSerializer, FolderFlatSerializer, TicketSerializer, TicketReadSerializer, \
     ConnectionSerializer
@@ -147,6 +147,9 @@ def duplicate_ticket_view(request, uuid):
             connection=original_ticket.connection,
             validityperiod=original_ticket.validityperiod)
 
+        TicketLog.addlog(original_ticket, 'duplicate', request=request)
+        TicketLog.addlog(ticket, 'create', request=request)
+
         return Response(TicketSerializer(ticket).data, status=status.HTTP_202_ACCEPTED)
 
     except Ticket.DoesNotExist:
@@ -199,6 +202,8 @@ def share_ticket_view(request, uuid):
             parent=original_ticket,
             validityperiod=validityperiod)
 
+        TicketLog.addlog(original_ticket, 'share', request=request)
+        TicketLog.addlog(ticket, 'create', request=request)
         return Response(TicketSerializer(ticket).data, status=status.HTTP_202_ACCEPTED)
 
     except Ticket.DoesNotExist:
@@ -211,10 +216,16 @@ class TicketViewSet(viewsets.ModelViewSet):
 
     # Override perform_create to set author and user
     def perform_create(self, serializer):
-        serializer.save(
+        ticket = serializer.save(
             author=self.request.user,
             user=self.request.user,
         )
+
+        TicketLog.addlog(ticket, 'create', request=self.request)
+
+    def perform_destroy(self, instance):
+        TicketLog.addlog(instance, 'delete', request=self.request)
+        super().perform_destroy(instance)
 
     # Override get_queryset to filter
     def get_queryset(self):

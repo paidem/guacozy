@@ -1,13 +1,16 @@
 from django.db import models
 from django.db.models import QuerySet
-
+from ipware import get_client_ip
 from .appsettings import AppSettings
 from .guacdserver import GuacdServer
 from .connection import Connection
 
 from users.models import User
 
+
 class TicketLog(models.Model):
+    ip = models.GenericIPAddressField(unpack_ipv4=True, null=True)
+
     date = models.DateTimeField(auto_now_add=True)
 
     ticketid = models.UUIDField(null=True)
@@ -69,7 +72,8 @@ class TicketLog(models.Model):
 
     guacdserver_port = models.PositiveIntegerField()
 
-    def populate(self, ticket, action):
+    def populate(self, ticket, action, ip):
+        self.ip = ip
         self.ticketid = ticket.id
 
         self.action = action
@@ -92,8 +96,8 @@ class TicketLog(models.Model):
         self.full_name = self.user.get_full_name()
 
         self.author = ticket.author
-        self.author_username = self.user.username
-        self.author_full_name = self.user.get_full_name()
+        self.author_username = self.author.username
+        self.author_full_name = self.author.get_full_name()
 
         if ticket.connection is not None and ticket.connection.guacdserver is not None:
             self.guacdserver = ticket.connection.guacdserver
@@ -105,7 +109,15 @@ class TicketLog(models.Model):
             self.guacdserver_port = self.guacdserver.port
 
     @classmethod
-    def addlog(cls, ticket, action):
+    def addlog(cls, ticket, action, **kwargs):
+
+        if 'request' in kwargs:
+            ip, ip_routeable = get_client_ip(kwargs['request'], request_header_order=['X_FORWARDED_FOR', 'REMOTE_ADDR'])
+        elif 'scope' in kwargs:
+            ip = kwargs['scope']['client'][0]
+        else:
+            ip = None
+
         tl = cls()
-        tl.populate(ticket, action)
+        tl.populate(ticket, action, ip)
         tl.save()
