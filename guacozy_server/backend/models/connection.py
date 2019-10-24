@@ -88,8 +88,11 @@ class Connection(PolymorphicModel):
             "port": self.port,
         }
 
-        if self.credentials is not None:
-            credentials_object = self.get_credentials_object(user)
+        parameters["username"] = parameters['password'] = parameters['domain'] = ""
+
+        credentials_object = self.get_credentials_object(user)
+
+        if credentials_object is not None:
             parameters["username"] = credentials_object.username \
                 if credentials_object.username else ""
             parameters["password"] = credentials_object.password \
@@ -107,22 +110,24 @@ class Connection(PolymorphicModel):
         return parameters
 
     def get_credentials_object(self, user):
-        if self.credentials:
-            try:
-                # Check if credentials is StaticCredentials. Return if it is
-                static_credentials = StaticCredentials.objects.get(pk=self.credentials.pk)
-                return static_credentials
-            except ObjectDoesNotExist:
-                pass
+        if self.credentials is None:
+            return None
 
-            try:
-                # Then check if this is a NamedCredentials
-                named_credentials = NamedCredentials.objects.get(pk=self.credentials.pk)
-                # If it is NamedCredentials, we need user-specific instance
-                named_credentials_instance = PersonalNamedCredentials.objects.get(reference=named_credentials,
-                                                                                  owner=user)
-                return named_credentials_instance
-            except NamedCredentials.DoesNotExist or PersonalNamedCredentials.DoesNotExist:
-                pass
+        try:
+            # Check if credentials is StaticCredentials. Return if it is
+            static_credentials = StaticCredentials.objects.get(pk=self.credentials.pk)
+            return static_credentials
+        except ObjectDoesNotExist:
+            pass
+
+        try:
+            # Then check if this is a NamedCredentials
+            named_credentials = NamedCredentials.objects.get(pk=self.credentials.pk)
+            # If it is NamedCredentials, we need user-specific instance
+            named_credentials_instance = PersonalNamedCredentials.objects.get(reference=named_credentials,
+                                                                              owner=user)
+            return named_credentials_instance
+        except (NamedCredentials.DoesNotExist, PersonalNamedCredentials.DoesNotExist):
+            pass
 
         return None
