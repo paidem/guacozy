@@ -15,6 +15,7 @@ from backend.models import Ticket, Connection, AppSettings, TicketLog
 class GuacamoleConsumer(AsyncWebsocketConsumer):
     gclient = None
     ticket = None
+    allow_control = False
 
     async def connect(self):
         """
@@ -43,8 +44,8 @@ class GuacamoleConsumer(AsyncWebsocketConsumer):
                 params['audio'] = [p[1]]
 
         try:
-            # ticket = await self.get_ticket_by_uuid(self.scope["url_route"]["kwargs"]["ticket"])
             ticket = await database_sync_to_async(Ticket.objects.get)(id=self.scope["url_route"]["kwargs"]["ticket"])
+            self.allow_control = ticket.control
         except Ticket.DoesNotExist:
             # https://guacamole.apache.org/doc/gug/protocol-reference.html#status-codes
             # 771	CLIENT_FORBIDDEN
@@ -108,7 +109,7 @@ class GuacamoleConsumer(AsyncWebsocketConsumer):
                 self.scope['user'])
 
             if parameters['protocol'] == 'rdp' \
-                    and (not parameters['password'] or not parameters['username'])\
+                    and (not parameters['password'] or not parameters['username']) \
                     and parameters['security'] not in ['rdp', 'tls']:
                 await self.accept_and_send_error(
                     "No credentials found for this connection \n. "
@@ -157,6 +158,8 @@ class GuacamoleConsumer(AsyncWebsocketConsumer):
         """
         Webscocket receive even handler - send everything to associated guacd session
         """
+        if self.allow_control is False and (text_data[0:7] == "5.mouse" or text_data[0:5] == "3.key"):
+            return
         if text_data is not None:
             await sync_to_async(self.gclient.send)(text_data)
 
@@ -182,14 +185,6 @@ class GuacamoleConsumer(AsyncWebsocketConsumer):
                 if content == "4.size,1.1,1.0,1.0;":
                     continue
                 await self.send(text_data=content)
-
-    @database_sync_to_async
-    def get_ticket_by_uuid(self, ticketuuid):
-        """
-        Get ticket having specified uuid
-        """
-        ticket = Ticket.objects.get(uuid=ticketuuid)
-        return ticket
 
     @database_sync_to_async
     def update_ticket_sessionid(self, ticket, sessionid):

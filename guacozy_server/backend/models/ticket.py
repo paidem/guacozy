@@ -19,6 +19,10 @@ class Ticket(models.Model):
     # if ticket has been shared to other user, this is original ticket
     parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name="shared")
 
+    # if this ticket is shared (has parent), controlled shows if input is accepted from the user
+    # control = False means that this session is "read-only"
+    control = models.BooleanField(default=True)
+
     # how long from "created" should this ticket be valid
     validityperiod = models.DurationField(default=timedelta(days=1), blank=False)
 

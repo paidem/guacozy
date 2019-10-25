@@ -40,7 +40,7 @@ const TicketElement = ({
 
     const handleTicketClick = (e) => {
         e.stopPropagation();
-        activatable && appState.actions.activateTicket(ticket.id, ticket.connection.name, controlSize);
+        activatable && appState.actions.activateTicket(ticket.id, ticket.connection.name, controlSize, ticket.control);
     };
 
     return (

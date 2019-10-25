@@ -108,7 +108,7 @@ const AppProvider = (props) => {
 
     // Use ticket id activate ticket in new tab
     // or find existing tab and focus it
-    const activateTicket = (ticketid, tabName, controlSize = true) => {
+    const activateTicket = (ticketid, tabName, controlSize = true, controlInput = true) => {
 
         let tabTitle = <span
             onContextMenu={(e) => {
@@ -118,7 +118,7 @@ const AppProvider = (props) => {
         </span>;
 
         // Activate ticket (this will focus on existing tab or create new tab)
-        layoutState.actions.activateTicket(ticketid, tabTitle, controlSize);
+        layoutState.actions.activateTicket(ticketid, tabTitle, controlSize, controlInput);
     };
 
     // Use connection id to generate/retrieve ticket  and activate ticket in new tab

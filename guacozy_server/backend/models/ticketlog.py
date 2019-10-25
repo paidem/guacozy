@@ -20,6 +20,9 @@ class TicketLog(models.Model):
     # Specify if the ticket is shared
     shared = models.BooleanField(default=False)
 
+    # Specify if the ticket session sould be controlled (not a read-only)
+    control = models.BooleanField(default=True, verbose_name="Control")
+
     sessionid = models.UUIDField(blank=True, null=True)
 
     # Foreign key to connection.
@@ -79,6 +82,8 @@ class TicketLog(models.Model):
         self.action = action
 
         self.shared = ticket.parent is not None
+
+        self.control = ticket.control
 
         if ticket.sessionid:
             self.sessionid = ticket.sessionid

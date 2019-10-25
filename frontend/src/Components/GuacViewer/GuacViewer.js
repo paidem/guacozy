@@ -15,7 +15,7 @@ import {GUACAMOLE_STATUS, GUACAMOLE_CLIENT_STATES} from "./const";
  * @returns {*}
  * @constructor
  */
-function GuacViewer({wspath, tabIndex, controlSize = true, screenSize = null, node, nodeSelectCallback, nodeDeleteCallback}) {
+function GuacViewer({wspath, tabIndex, controlSize = true, controlInput = true, screenSize = null, node, nodeSelectCallback, nodeDeleteCallback}) {
     const displayRef = useRef(null);
     const guacRef = useRef(null);
     const prevServerClipboardRef = useRef(null);
@@ -242,6 +242,10 @@ function GuacViewer({wspath, tabIndex, controlSize = true, screenSize = null, no
     // This effect creates Guacamole.Keyboard / Guacamole.Mouse on current display element and binds callbacks
     // to current guacamole client
     useEffect(() => {
+        // don't bind to events if we know this input will not be accepted at server side
+        if (!controlInput) {
+            return;
+        }
 
         // Keyboard
         let keyboard = new Guacamole.Keyboard(displayRef.current);
@@ -278,7 +282,7 @@ function GuacViewer({wspath, tabIndex, controlSize = true, screenSize = null, no
         };
 
 
-    }, []);
+    }, [controlInput]);
 
     // Thi effect  binds to server side resize event
     useEffect(() => {

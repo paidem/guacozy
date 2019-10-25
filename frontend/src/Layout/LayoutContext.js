@@ -36,7 +36,7 @@ const LayoutProvider = (props) => {
         return false;
     };
 
-    const activateTicket = (ticketid, tabName, controlSize) => {
+    const activateTicket = (ticketid, tabName, controlSize, controlInput) => {
         if (tabExists(ticketid)) {
             activateTab(ticketid);
             return
@@ -51,6 +51,7 @@ const LayoutProvider = (props) => {
                 wspath: "/tunnelws/ticket/" + ticketid + "/",
                 focused: true,
                 tabIndex: 1,
+                controlInput: controlInput,
                 controlSize: controlSize,
                 // screenSize null - means "auto", otherwise object e.g. {witdh:1024, height:768}
                 screenSize: null,

@@ -200,6 +200,7 @@ def share_ticket_view(request, uuid):
             user=receiving_user,
             connection=original_ticket.connection,
             parent=original_ticket,
+            control=control,
             validityperiod=validityperiod)
 
         TicketLog.addlog(original_ticket, 'share', request=request)

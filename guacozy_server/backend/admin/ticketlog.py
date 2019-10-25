@@ -84,6 +84,7 @@ class TicketLogAdmin(ObjectPermissionsModelAdmin):
         'ticketid_short',
         'sessionid_short',
         'shared',
+        'control',
     ]
 
     list_filter = (
