@@ -8,6 +8,9 @@ services:
       - db
     volumes:
       - staticfiles:/app/staticfiles/
+      # e.g. to mount LDAP config:
+      # - /c/Users/username/dockerdata/guacozy/ldap_config.py:/app/guacozy_server/ldap_config.py
+      # - /home/username/dockerdata/guacozy/ldap_config.py:/app/guacozy_server/ldap_config.py
     environment:
       - DJANGO_SECRET_KEY=youshoulddefinetelychangethistosomethingelseandtakecare
       - FIELD_ENCRYPTION_KEY=qjq4ObsXMqiqQyfKgD-jjEGm4ep8RaHKGRg4ohGCi1A=

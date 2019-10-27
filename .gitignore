@@ -105,3 +105,10 @@ venv.bak/
 
 # Intellij IDE
 .idea
+
+# data dumps
+data*.json
+
+guacozy_server/guacozy_server/ldap_config.py
+
+local/

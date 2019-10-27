@@ -5,5 +5,16 @@ frontend/build
 */venv
 */.env
 */db.sqlite3
+
 */wheels
 */wheelswin
+
+.gitignore
+.gitattributes
+.dockerignore
+
+guacozy_server/guacozy_server/ldap_config.py
+README.md
+LICENSE
+
+local/
