@@ -26,6 +26,10 @@ docker run --name guacdlocal --restart always -d -p 4822:4822 linuxserver/guacd
 This will start guacd container with restart policy **always**, name **guacdlocal** 
 and published port **4822** in **detached** (-d) mode
 
+Make sure to add a guacd server in AppSettings (or change the default guacdserver) to include this  
+Hostname: $IP, Port: 4822
+
+Where $IP is address of your docker machine (127.0.0.1 will not do, as container will try to connect to itself)
 
 You can find other builds of guacd containers here: 
 [1](https://hub.docker.com/r/glyptodon/guacd) 
