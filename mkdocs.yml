@@ -1,0 +1,26 @@
+site_name: Guacozy
+theme: readthedocs
+repo_url: https://github.com/paidem/guacozy
+
+pages:
+  - Introduction: 'index.md'
+  - Installation:
+      - Installing Guacozy: 'installation/index.md'
+      - 1. docker-compose: 'installation/docker-compose.md'
+      - 2. Database: 'installation/database.md'
+      - 2. SSL: 'installation/ssl.md'
+      - 4. LDAP: 'installation/ldap.md'
+      - 5. guacd: 'installation/additional-guacd.md'
+      - 6. Running in production: 'installation/running-in-production.md'
+  - Core concepts:
+      - Folders: 'core/folders.md'
+      - Connections: 'core/connections.md'
+      - Tickets: 'core/tickets.md'
+      - Static Credentials: 'core/static-credentials.md'
+      - Named Credentials: 'core/named-credentials.md'
+      - Permissions: 'core/permissions.md'
+  - Features:
+      - Shared access: 'features/ticket-sharing.md'
+      - Audit log: 'features/audit-log.md'
+  - Development:
+      - Environment setup: 'development/environment-setup.md'
