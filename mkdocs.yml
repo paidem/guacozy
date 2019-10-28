@@ -10,7 +10,8 @@ pages:
       - 2. Database: 'installation/database.md'
       - 2. SSL: 'installation/ssl.md'
       - 4. LDAP: 'installation/ldap.md'
-      - 3. guacd: 'installation/additional-guacd.md'
+      - 5. guacd: 'installation/additional-guacd.md'
+      - 6. Running in production: 'installation/running-in-production.md'
   - Core concepts:
       - Folders: 'core/folders.md'
       - Connections: 'core/connections.md'
