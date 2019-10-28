@@ -17,11 +17,17 @@ e.g.
 ```
 docker run -it --rm -p 8080:80 -p 8443:443 guacozy/guacozy-server
 ```
-
 This will start a container with **sqlite** database (destroyed after container is down)  
 In order to actually use it, it should be able to connect to **guacd** service  
+You can run **guacd** as container:
+```
+docker run --name guacdlocal --restart always -d -p 4822:4822 linuxserver/guacd
+```
+This will start guacd container with restart policy **always**, name **guacdlocal** 
+and published port **4822** in **detached** (-d) mode
 
-You can find guacd containers here: 
+
+You can find other builds of guacd containers here: 
 [1](https://hub.docker.com/r/glyptodon/guacd) 
 [2](https://hub.docker.com/r/guacamole/guacd) 
 [3](https://hub.docker.com/r/linuxserver/guacd)  
