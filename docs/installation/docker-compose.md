@@ -1,7 +1,9 @@
-# Running guacozy using docker-compose
-
 ## Step 0
-Install docker-compose (https://docs.docker.com/compose/install/)
+Make sure you have docker-compose
+```
+docker-compose --version
+```
+or install docker-compose [here](https://docs.docker.com/compose/install/)
 
 ## Step 1
 Create empty directory and add docker-compose.yml  

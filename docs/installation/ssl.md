@@ -1,4 +1,4 @@
-## SSL introduction
+## Introduction
 You will want to run guacozy over SSL because of several reasons:  
 - Protect login credentials
 - Guacamole protocol is text base and unecrypted by itself
@@ -12,8 +12,7 @@ You can provide your certificates by mounting to /ssl/ and providing
 /ssl/cert.key
 ```
 
-### Certificates examples
-#### Generate self-signed certificate
+### Generate self-signed certificate
 Create a directory `certs` in the same directory where you docker-compose or where you will run docker run command:
 ```
 mkdir certs
@@ -24,14 +23,14 @@ Generate SSL certificates using openssl
 openssl req -x509 -nodes -days 3650 -subj "/CN=guacozy.example.com" -addext "subjectAltName=DNS:guacozy.example.com" -newkey rsa:4096 -keyout cert.key -out cert.crt;
 ```
 
-#### Prepare commercial certificate
+### Prepare commercial certificate
 If you use your own certificate, concatenate you certificate and intermediate certificates in PEM format to single file
 ```
 cat my-cert.pem intermediate-certs.pem > cert.crt
 ```
 and put private key in PEM format to `cert.key`
 
-#### Mount certificate folder to container 
+### Mount certificate folder to container 
 Now you can mount your `cert` directory using bind mount:
 ###### docker run
 ```shell script
