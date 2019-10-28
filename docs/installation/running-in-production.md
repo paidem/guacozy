@@ -16,10 +16,18 @@ Change to some other value (50 or more symbols, dont' use '$' symbol as it will 
 
 ### Change FIELD_ENCRYPTION_KEY
 If you don't change FIELD_ENCRYPTION_KEY, the key from example will be used (bad idea).   
-If you don't specify FIELD_ENCRYPTION_KEY, on application start you will be notified in logs about this, 
+If you don't specify FIELD_ENCRYPTION_KEY, on application start you will be notified (in container logs) about this, 
 and a new key will be generated on each start, which means your saved password will not work after restart.  
   
-You can use the suggested value or you can generate one at any time using `generate_encryption_key` management command
+You can use the suggested value (in container logs) or you can generate one at any time using `generate_encryption_key` management command
 
-In docker compose:   
-`docker-compose exec server ./manage.py generate_encryption_key` 
+If you started using docker compose:   
+```
+docker-compose exec server ./manage.py generate_encryption_key
+``` 
+
+If you have not started guacocy-server container
+```
+# if you don't have container running
+docker run -it --rm guacozy/guacozy-server python /app/manage.py generate_encryption_key
+``` 
