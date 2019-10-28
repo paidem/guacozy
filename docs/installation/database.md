@@ -8,7 +8,7 @@ The easiest way when running inside a container - run a stack with docker-compos
 For this you specify a service named `db`, and link to it using connection string  `DJANGO_DB_URL=postgres://postgres@db:5432/postgres`
 Mount PostgreSQL data folder to named  volume or bind mount.
 
-#### Using named volume
+##### Using named volume
 ```
 version: '3'
 services:
@@ -30,7 +30,7 @@ volumes:
   postgres-data:
 ```
 
-#### Using bind mount
+##### Using bind mount
 Bind mount postgresql data to directory `./data/postgres`
 ```
 version: '3'
@@ -51,7 +51,7 @@ services:
 ```
 
 ### Connection string examples
-#### SQLite
+##### SQLite
 SQLite file `guacozydb.sqlite3` located in the same directory as guacozy_server manage.py
 ```
 sqlite:///guacozydb.sqlite3
@@ -61,7 +61,7 @@ SQLite file `guacozydb.sqlite3` located under `/datafiles/` (note the four slash
 ```
 sqlite:////datafiles/guacozydb.sqlite3
 ```
-#### PostgreSQL
+##### PostgreSQL
 PostgreSQL located on server `db`, listening on port `5432`, using user `postgres` , no password and database name `postgres` 
 ```
 DJANGO_DB_URL=postgres://postgres@db:5432/postgres
