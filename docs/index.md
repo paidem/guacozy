@@ -48,6 +48,7 @@ All the heavylifting (making connections to VNC/RDP/SSH servers, encoding data a
 ___
 ### Guacozy architecture
 ![alt text](img/guacozy-diagram-1.png "Apache Guacample architecture")
-
-
+___
+### Screenshot
+![alt text](img/guacozy-screenshot-1.jpg "Guacozy Screenshot 1")
 
