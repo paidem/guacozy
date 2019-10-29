@@ -17,7 +17,11 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
 
+# Hide "View Site" link, because admin will be often used in IFRAME
+admin.site.site_url = None
+
 urlpatterns = [
+    path('grappelli/', include('grappelli.urls')),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls',
                               namespace='rest_framework')),

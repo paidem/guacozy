@@ -17,6 +17,9 @@ DEBUG = env.bool('DEBUG', default=False)
 
 ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=[])
 
+# Name in grapelli-admin
+GRAPPELLI_ADMIN_TITLE = "Guacozy Administration"
+
 # Database
 
 DATABASES = {
@@ -26,6 +29,9 @@ DATABASES = {
 # Application definition
 
 INSTALLED_APPS = [
+    # Grapelli admin
+    'grappelli',
+
     # Django packages
     'django.contrib.admin',
     'django.contrib.auth',

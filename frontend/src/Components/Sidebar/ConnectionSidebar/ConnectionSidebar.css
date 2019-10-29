@@ -68,3 +68,7 @@
 .sidebarContainer .ui.segments.ticketList div span:hover.activatable {
     cursor: pointer;
 }
+
+.sidebarContainer .ui.accordion .title {
+    color: #FFFFFF !important;
+}
