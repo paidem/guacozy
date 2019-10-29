@@ -2,6 +2,12 @@ body {
   margin: 0;
 }
 
+/* fix react-contexify menu beiing dimmed under semantic-ui dimmer */
+/* semantic-ui dimmer has z-index of 1000, so add 1 */
+.react-contexify {
+  z-index: 1001;
+}
+
 .ui.selection.dropdown {
   background-color: #767676;
 }
