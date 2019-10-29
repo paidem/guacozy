@@ -18,8 +18,6 @@ import {GUACAMOLE_STATUS, GUACAMOLE_CLIENT_STATES} from "./const";
 function GuacViewer({wspath, tabIndex, controlSize = true, controlInput = true, screenSize = null, node, nodeSelectCallback, nodeDeleteCallback}) {
     const displayRef = useRef(null);
     const guacRef = useRef(null);
-    const prevServerClipboardRef = useRef(null);
-    const prevClientClipboardRef = useRef(null);
     const connectParamsRef = useRef({});
     const scale = useRef(1);
     const demandedScreenSize = useRef(0);
@@ -47,7 +45,7 @@ function GuacViewer({wspath, tabIndex, controlSize = true, controlInput = true, 
         let remoteDisplayWidth = guacRef.current.getDisplay().getWidth();
         let remoteDisplayHeight = guacRef.current.getDisplay().getHeight();
 
-        if (!displayRef.current){
+        if (!displayRef.current) {
             return;
         }
 
@@ -180,7 +178,7 @@ function GuacViewer({wspath, tabIndex, controlSize = true, controlInput = true, 
         guacRef.current.onerror = function (error) {
             let msg = error.message;
 
-            if (GUACAMOLE_STATUS[error.code]){
+            if (GUACAMOLE_STATUS[error.code]) {
                 msg = <p>
                     {error.message}<br/>
                     {GUACAMOLE_STATUS[error.code].name}<br/>
@@ -309,14 +307,7 @@ function GuacViewer({wspath, tabIndex, controlSize = true, controlInput = true, 
                     // we don't want action if our knowledge of server cliboard is unchanged
                     // and also don't want to fire if we just selected several space character accidentaly
                     // which hapens often in SSH session
-                    if (serverClipboard !== prevServerClipboardRef.current && serverClipboard.trim() !== "") {
-                        prevServerClipboardRef.current = serverClipboard;
-
-                        // we know what will be in client's clipboard after this effect.
-                        // so we can update our reference what's in there to skip sending clipboard to server next time
-                        // client focuses here and clipboard will be unchanged
-                        prevClientClipboardRef.current = serverClipboard;
-
+                    if (serverClipboard.trim() !== "") {
                         // put data received form server to client's clipboard
                         navigator.clipboard.writeText(serverClipboard);
 
@@ -333,14 +324,11 @@ function GuacViewer({wspath, tabIndex, controlSize = true, controlInput = true, 
             // when focused, read client clipboard text
             navigator.clipboard.readText().then(
                 (clientClipboard) => {
-                    if (clientClipboard !== prevClientClipboardRef.current) {
-                        prevClientClipboardRef.current = clientClipboard;
-                        let stream = guacRef.current.createClipboardStream("text/plain", "clipboard");
-                        setTimeout(() => {
-                            // remove '\r', because on pasting it becomes two new lines (\r\n -> \n\n)
-                            stream.sendBlob(btoa(unescape(encodeURIComponent(clientClipboard.replace(/[\r]+/gm, "")))));
-                        }, 100)
-                    }
+                    let stream = guacRef.current.createClipboardStream("text/plain", "clipboard");
+                    setTimeout(() => {
+                        // remove '\r', because on pasting it becomes two new lines (\r\n -> \n\n)
+                        stream.sendBlob(btoa(unescape(encodeURIComponent(clientClipboard.replace(/[\r]+/gm, "")))));
+                    }, 200)
                 }
             )
         };
