@@ -1,9 +1,15 @@
 # guacozy
 __Cozy server administration tool based on [Apache Guacamole™](https://guacamole.apache.org/)__
 
+## Demo
+[Video](https://youtu.be/Hx8Cqrug5mM)
+
+Screenshot:
+![alt text](docs/img/guacozy-screenshot-1.jpg "Guacozy Screenshot 1")
 
 ## Links
 [guacozy-server on Dockerhub](https://hub.docker.com/r/guacozy/guacozy-server)
+
 
 # How to run
 
