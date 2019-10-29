@@ -52,7 +52,12 @@ Access the application:
 - https://your-docker-host:10443 (if you are running it on a dedicated docker host/VM)
 
 ## Step 3
-If everything seems right, shutdown applicatin by pressing Ctrl+C once (in terminal where docker-compose is running) and start in detached mode:
+Try to login using default username/password:  
+username: **admin**  
+password: **admin**
+
+## Step 4
+If everything seems right, shutdown application by pressing Ctrl+C once (in terminal where docker-compose is running) and start in detached mode:
 ```
 docker-compose up -d
 ```
