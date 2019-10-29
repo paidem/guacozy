@@ -21,6 +21,7 @@ from django.views.generic import RedirectView
 admin.site.site_url = None
 
 urlpatterns = [
+    path('grappelli/', include('grappelli.urls')),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls',
                               namespace='rest_framework')),
