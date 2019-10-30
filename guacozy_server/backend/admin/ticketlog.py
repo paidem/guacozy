@@ -37,7 +37,7 @@ class TicketLogAdmin(ObjectPermissionsModelAdmin):
                                obj.connection_name,
                                )
 
-        connection_link.short_description = "Connection"
+    connection_link.short_description = "Connection"
 
     def user_link(self, obj):
         try:
