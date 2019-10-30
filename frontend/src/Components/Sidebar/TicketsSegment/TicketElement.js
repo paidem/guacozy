@@ -63,13 +63,26 @@ const TicketElement = ({
                      display: activeIndex === ticket.id ? "block" : "none",
                  }}>
                 <List size="tiny">
-                    <List.Item content={<span>{ticket.connection.protocol.toUpperCase()}, ID: <span
-                        title={ticket.id}>...{ticket.id.slice(ticket.id.length - 5)}</span> {ticket.parent && <>,
-                        Parent ID: {ticket.parent}</>}</span>}/>
-                    <List.Item icon='play circle' content={<><TimeAgo title={formatDateString(ticket.created)}
-                                                                      date={ticket.created}/></>}/>
-                    <List.Item icon='stop circle' content={<><TimeAgo title={formatDateString(ticket.validto)}
-                                                                      date={ticket.validto}/></>}/>
+                    <List.Item>
+                        {ticket.connection.protocol.toUpperCase()},
+
+                        ID: <span title={ticket.id}>...{ticket.id.slice(ticket.id.length - 5)}</span>
+
+                        {/* If this is a shared ticket - show parent ID */}
+                        {ticket.parent &&
+                        <React.Fragment>, Parent:
+                            <span title={ticket.parent}>
+                                ...{ticket.parent.slice(Math.min(ticket.parent.length - 5, ticket.parent.length))}
+                            </span>
+                        </React.Fragment>
+                        }
+                    </List.Item>
+                    <List.Item icon='play circle'
+                               content={<><TimeAgo title={"Ticket created: " + formatDateString(ticket.created)}
+                                                   date={ticket.created}/></>}/>
+                    <List.Item icon='stop circle'
+                               content={<><TimeAgo title={"Ticket valid till " + formatDateString(ticket.validto)}
+                                                   date={ticket.validto}/></>}/>
                     <List.Item icon='time' content={<span title="Period (days)">{ticket.validityperiod}</span>}/>
                 </List>
             </div>
