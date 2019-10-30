@@ -36,19 +36,28 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
 class FolderAccessPermission(BasePermission):
     def has_permission(self, request, view):
-        if request.method in ["GET", 'HEAD', 'OPTIONS'] or request.user.is_staff:
-            return True
-        return False
+        # allow access to folder, because view is already filtered by get_queryset()
+        # and object permission will be checked by has_object_permission() method
+        return True
 
     def has_object_permission(self, request, view, obj):
         if request.method in ["GET", 'HEAD', 'OPTIONS', 'POST']:
             return True
 
-        # Check that user has view permission to a parent if we want to show modification ui
+        allowed_folders_id = user_allowed_folders_ids(request.user, require_view_permission=True)
         if request.method in ['PUT', 'PATCH', 'DELETE']:
-            if obj.id in user_allowed_folders_ids(request.user, require_view_permission=True):
+
+            # Check that user has view permission to a parent if we want to show modification ui
+            if obj.parent is not None:
+                if obj.parent.id in allowed_folders_id:
+                    return True
+            elif obj.id in allowed_folders_id and request.user.is_staff:
+                # Folder has no parent, it means one of root folders.
+                # If a user has been given access to root folder - and user has is_staff status,
+                # user should be able modify folder
                 return True
 
+        # Nothing matched - deny access
         return False
 
 

@@ -1,0 +1,55 @@
+-----
+1. This is a demonstration of guacozy - web based remote connection manager.
+
+2. On the left we can see connections which are available to current user. Connection tree is searchable.
+
+3. We can connect right away by using double click.
+
+4. Or by using a context menu option.
+
+5. Connection is opened in currently active tabset (next to currently active tab).
+
+6. Tabs can be rearranged in many ways. Underlying connection is automatically resized to accommodate for new size.
+
+7. When starting a session a ticket is created. Ticket has a default lifetime of 24 hours.
+
+8. Ticket can be duplicated if you want to have more than one session to server.
+
+9. When a ticket is deleted - it's tab is automatically closed.
+
+10. When session is ended due to any reason, you are presented with a choice: to reconnect or close the tab. The ticket is not deleted if you close the tab. 
+
+11. If you start a session, and a ticket in your name already exists for this connection - it is used automatically. 
+
+12. A ticket can be shared. Let's share a ticket to Jane Doe.
+
+13. Jane logs in and you can see that she has less connections available to her. John needs help with some server command even though he has access to more connections.
+
+14. Ha ha ha ha.
+
+15. Jane can see a ticket shared with her in the "Active tickets" section. She clicks and joins session to help out John.
+
+16. Keyboard and mouse can be controlled by both parties. Session resolution is controlled only by original user.
+
+17. <speak>Back to John.<break time="1s"/>  Folders can be created, <break time="4s"/>  renamed, <break time="4s"/>  or deleted. </speak>
+
+18. Folders can not be deleted, if they have child folders or connections inside.
+
+19. Folders and connections in tree can be rearranged.
+
+20. After rearranging is finished, you have to save your changes.
+
+21. John logs out, and administrator, logs in. 
+
+22. Administrators and users, who have staff status, can access Administration area.
+
+23. We can edit folder permissions by editing a folder. Let's give Jane access to Customers root folder, and revoke John's access. We can do it in the same step.
+
+24. Jane can refresh connections by clicking refresh button.
+
+25. <speak>We can view connections list <break time="2s"/> and we can create new connections.</speak>
+
+26. <speak>Let's see ticket log. <break time="1s"/>. We can search, and use filters. <break time="4s"/> We can click values to filter by selected value. </speak>
+
+27. Thank you for your attention. 
+
