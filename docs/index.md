@@ -1,8 +1,19 @@
 # Introduction
-[GitHub](https://github.com/paidem/guacozy) [DockerHub](https://hub.docker.com/r/guacozy/guacozy-server)
+
+#### Project links
+Code on [GitHub](https://github.com/paidem/guacozy)    
+Docker images on [DockerHub](https://hub.docker.com/r/guacozy/guacozy-server) 
+
+#### Video demo:
+
+[![Guacozy video demo](https://img.youtube.com/vi/R5uCPrH9mnw/0.jpg)](https://www.youtube.com/watch?v=R5uCPrH9mnw)  
+
+#### Screenshot:
+![alt text](img/guacozy-screenshot-1.jpg "Guacozy Screenshot 1")
+
 ___
 ### What is guacozy
-Guacozy is a HTML5 browser based VNC/RDP/SSH remote access solution based on [Apache Guacamole™](https://guacamole.apache.org/) technology
+Guacozy is a HTML5 browser based VNC/RDP/SSH remote connection manager based on [Apache Guacamole™](https://guacamole.apache.org/) technology
 ___
 ### Why was it created
 I manage several hundreds of connections (servers, virtual machines, network equipment) which are
@@ -13,21 +24,26 @@ Often I need possibility to quickly jump in, do some quick job/fix/diagnostics, 
 For years I was using a great application called [Royal TS](https://www.royalapps.com/ts/win/features), 
 but wished more collaboration features and access from web interface.   
 
-I liked the idea/technology of Apache Guacamole™, but was not pleased with it's aesthetics (mostly connection grouping/selection/management)
+I liked the idea/technology of Apache Guacamole™, but was not pleased with it's aesthetics 
+(mostly connection grouping/selection/management)
 
-So I decided to build a tool for internal use base on the guacamole technology, but using Django for administration part and React for frontend.  
+So I decided to build a tool for internal use base on the Apache Guacamole™ technology, 
+but using Django for administration part and React for frontend.  
 ___
 ### Who needs it
-This application was designed for some specific use cases:
+This application was designed thinkink about those use cases:
+
 ##### Case #1: Daily sysadmin remote access to servers
 Have tens/hundreds of connections in a tree view, quickly find, connect, to some work, logout.  
 Have log of connections. 
+
 ##### Case #2: Give programmers access to servers
 Have many dev/prod/support environments and give access to employees to certain
 environments based on project/group/seniority.  
 Give employee access to connection without sharing credentials to server/equipment.
 Limit visibility of available connections while still rendering connection tree.    
 Have log of connections. 
+
 ##### Case #3: Access for contractors/customers
 Allow contractor or customer to connect without using VPN, NAT.  
 For example demo a product in a controlled environment.  
@@ -48,7 +64,3 @@ All the heavylifting (making connections to VNC/RDP/SSH servers, encoding data a
 ___
 ### Guacozy architecture
 ![alt text](img/guacozy-diagram-1.png "Apache Guacample architecture")
-___
-### Screenshot
-![alt text](img/guacozy-screenshot-1.jpg "Guacozy Screenshot 1")
-

@@ -23,4 +23,5 @@ pages:
       - Shared access: 'features/ticket-sharing.md'
       - Audit log: 'features/audit-log.md'
   - Development:
+      - Kudos: 'development/kudos.md'
       - Environment setup: 'development/environment-setup.md'
