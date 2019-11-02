@@ -1,7 +1,7 @@
-##### Main
+#### Audit Log
 Audit log contains ticket actions, because any usage of connection is possible only using a ticket.
 
-##### Actions logged:
+#### Actions logged:
 * Connect
 * Create
 * Delete 
@@ -9,6 +9,6 @@ Audit log contains ticket actions, because any usage of connection is possible o
 * Duplicate
 * Share
 
-##### Screenshot of ticket logs  
+#### Screenshot of ticket logs  
 
 ![Ticket log screenshot](../img/guacozy-demo-ticket-log.png "Ticket log screenshot")

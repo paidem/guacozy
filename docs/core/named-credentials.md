@@ -1,4 +1,4 @@
-#### Main
+#### Named Credentials
 _**Named Credentials**_ allows to store per user credentials, which can be referenced by common name. 
 
 User's personal instance of _**Named Credentials**_ is called _**Personal Named Credentials**_

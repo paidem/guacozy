@@ -1,3 +1,4 @@
+#### Kudos
 This is a list of open source projects I used. Some of them made this project possible, other made it easier
 
 #### Core  
@@ -7,7 +8,7 @@ This is a list of open source projects I used. Some of them made this project po
 [Django](https://www.djangoproject.com/) - great web application framework  
 [Django REST framework](https://www.django-rest-framework.org/) - REST  
 [PyGuacamole](https://github.com/mohabusama/pyguacamole) - Guacamole protocol client for Python  
-[Grapelli](https://grappelliproject.com/) - Django admin interface facelift
+[Grapelli project](https://grappelliproject.com/) - Django admin interface
 
 #### Frontend  
 [React](https://reactjs.org/) - no need to introduce  

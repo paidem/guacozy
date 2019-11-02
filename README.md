@@ -1,23 +1,27 @@
 # guacozy
-__Cozy server administration tool based on [Apache Guacamole™](https://guacamole.apache.org/)__
+Guacozy is a HTML5 browser based VNC/RDP/SSH remote connection manager based on [Apache Guacamole™](https://guacamole.apache.org/) technology
+
+## Links
+[Official documentation](https://guacozy.readthedocs.io)
+
+Docker images on [DockerHub](https://hub.docker.com/r/guacozy/guacozy-server)   
+
 
 ## Demo
-[Video](https://youtu.be/Hx8Cqrug5mM)
+Video demo:  
+[![Guacozy video demo](https://img.youtube.com/vi/R5uCPrH9mnw/0.jpg)](https://www.youtube.com/watch?v=R5uCPrH9mnw)  
 
 Screenshot:
 ![alt text](docs/img/guacozy-screenshot-1.jpg "Guacozy Screenshot 1")
 
-## Links
-[guacozy-server on Dockerhub](https://hub.docker.com/r/guacozy/guacozy-server)
-
 
 # How to run
 
-To run you need a database url. 
-
-To connect to remote servers (RDP/SSH/VNC) you need a **guacd** service.   
-You can use your existing **guacd** (if you used guacamole before) or use one in container  
-e.g. 
+> **guacd server**  
+>
+> To connect to remote servers (RDP/SSH/VNC) you need a **guacd** service.   
+> If you already use Apache Guacamole, you can use your existing **guacd**.   
+> Alternatively use **guacd** in a standalone container or in a docker-compose stack  
 
 ## docker cmd example
 ```
@@ -48,7 +52,7 @@ This example of a composite with 3 services:
 * guacd
 * postgresql
 
-```
+```yaml
 # docker-compose.yml
 
 version: '3'  
@@ -58,15 +62,14 @@ services:
     restart: always
     depends_on:
       - db
-    volumes:
-      - staticfiles:/app/staticfiles/
     environment:
       - DJANGO_SECRET_KEY=abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz
       - FIELD_ENCRYPTION_KEY=qjq4ObsXMqiqQyfKgD-jjEGm4ep8RaHKGRg4ohGCi1A=
       - DJANGO_DB_URL=postgres://postgres@db:5432/postgres
+      - DJANGO_ALLOWED_HOSTS=*
     ports:
-      - 8080:80
-      - 8443:443
+      - 10080:80
+      - 10443:443
   guacd:
     image: linuxserver/guacd
     restart: always
@@ -76,12 +79,15 @@ services:
     volumes:
     - postgres-data:/var/lib/postgresql/data
 volumes:
-  staticfiles:
   postgres-data:
 ```
 
 ### Environment variables:  
 `DEBUG` : Django DEBUG mode  
+
+`DJANGO_ALLOWED_HOSTS`: Let's you specify allowed hosts to prevent host header attacks 
+([Read more](https://docs.djangoproject.com/en/2.2/ref/settings/#allowed-hosts))
+
 
 `DJANGO_SECRET_KEY` : random string used for hashing (50 chars)  
 

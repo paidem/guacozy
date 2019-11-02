@@ -1,4 +1,4 @@
-#### Main
+#### Tickets
 _**Ticket**_ object is a method to allow and log time limited access to a _**Connection**_.
 
 _**Ticket**_ references a _**Connection**_ and has a time limit, defined by time when ticket was created and it's validity period.

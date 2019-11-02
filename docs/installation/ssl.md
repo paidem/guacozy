@@ -41,9 +41,8 @@ docker run -it --rm -p 10080:80 -p 10443:443 -v ./certs:/ssl guacozy/guacozy-ser
 services:
   server:
     image: guacozy/guacozy-server
-    volumes:
-       - ./certs:/ssl  ### ADD THIS ###
-      - staticfiles:/app/staticfiles/
+    volumes:           
+       - ./certs:/ssl  
 ...
 ```
 ### Option: make generated certs persistent
@@ -54,7 +53,6 @@ services:
     image: guacozy/guacozy-server
     volumes:
       - ssl:/ssl
-      - staticfiles:/app/staticfiles/
 ...
 volumes:
   ssl:

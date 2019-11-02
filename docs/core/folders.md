@@ -1,4 +1,4 @@
-#### Main
+#### Folders
 Folders are used to hierarchically organize connections and as permission containers.
 
 Folders have no limit of nesting levels.
