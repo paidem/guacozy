@@ -16,6 +16,7 @@ services:
       - FIELD_ENCRYPTION_KEY=qjq4ObsXMqiqQyfKgD-jjEGm4ep8RaHKGRg4ohGCi1A=
       - DJANGO_TIME_ZONE=Europe/Vilnius
       - DJANGO_DB_URL=postgres://postgres@db:5432/postgres
+      - DJANGO_ALLOWED_HOSTS=*
     ports:
       - 80:80
       - 443:443
