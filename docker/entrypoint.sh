@@ -12,6 +12,7 @@ then
 fi
 
 # wait shortly and then run db migrations (retry on error)
+sleep 3
 while ! python ./manage.py migrate 2>&1; do
   echo "Waiting on DB..."
   sleep 3
