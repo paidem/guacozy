@@ -68,7 +68,7 @@ function Welcome(props) {
                     <Label as='a' target="_blank" href="https://guacozy.readthedocs.io" image style={{float: "right"}}>
                         <img src='favicon.ico' alt="logo"/>
                         Guacozy
-                        <Label.Detail>v0.0.10-alpha</Label.Detail>
+                        <Label.Detail>{process.env.REACT_APP_VERSION}</Label.Detail>
                     </Label>
                     <br/>
                 </Segment>

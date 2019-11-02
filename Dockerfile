@@ -11,6 +11,7 @@ ADD frontend/package-lock.json /frontend/
 WORKDIR /frontend
 RUN npm install
 ADD frontend /frontend
+ENV REACT_APP_VERSION=$DOCKER_TAG
 RUN npm run build
 
 ##################
