@@ -1,4 +1,3 @@
-#### Kudos
 This is a list of open source projects I used. Some of them made this project possible, other made it easier
 
 #### Core  

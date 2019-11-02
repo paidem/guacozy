@@ -1,5 +1,3 @@
-#### Permissions
-
 For most objects you can use default Django permission model (Django doesn't have object-level permissions)
 #### Personal Named Credentials
 _**Personal Named Credentials**_ are by definition _personal_, so strict checking on ony operation is implemented in Admin interface.  

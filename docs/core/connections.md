@@ -1,4 +1,3 @@
-#### Connections
 _**Connection**_ object describes a VNC/RDP/SSH connection.  
 _**Connections**_ live in a Folder
 

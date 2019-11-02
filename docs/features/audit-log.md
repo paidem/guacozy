@@ -1,4 +1,3 @@
-#### Audit Log
 Audit log contains ticket actions, because any usage of connection is possible only using a ticket.
 
 #### Actions logged:

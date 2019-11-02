@@ -1,4 +1,3 @@
-#### Ticket Sharing
 Ticket can be shared.
 
 Sharing let's user specify:

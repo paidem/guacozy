@@ -1,4 +1,3 @@
-#### Static Credentials
 Static Credentials object allows you to specify credentials which can be referenced from connections later.
 
 This allows for situations when you have a common password for several servers.  
