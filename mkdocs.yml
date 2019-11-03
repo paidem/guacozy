@@ -27,3 +27,6 @@ pages:
   - Development:
       - Kudos: 'development/kudos.md'
       - Environment setup: 'development/environment-setup.md'
+      - Docker DEV vs QA: 'development/docker-dev-vs-qa.md'
+      - Dockerhub: 'development/dockerhub.md'
+

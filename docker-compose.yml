@@ -1,3 +1,4 @@
+# Use this stack for development
 version: '3'
 services:
   django: 
