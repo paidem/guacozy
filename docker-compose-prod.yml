@@ -1,13 +1,15 @@
 version: '3'
 services:
-  django: 
+  server: &server
     build:
-      context: ./guacozy_server/
+      context: ./
     restart: always
     depends_on:
       - db
-    volumes:
-      - ./guacozy_server:/app
+#   volumes:
+#       e.g. to mount LDAP config:
+#       - /c/Users/username/dockerdata/guacozy/ldap_config.py:/app/guacozy_server/ldap_config.py
+#       - /home/username/dockerdata/guacozy/ldap_config.py:/app/guacozy_server/ldap_config.py
     environment:
       - DJANGO_SECRET_KEY=youshoulddefinetelychangethistosomethingelseandtakecare
       - FIELD_ENCRYPTION_KEY=qjq4ObsXMqiqQyfKgD-jjEGm4ep8RaHKGRg4ohGCi1A=
@@ -15,17 +17,8 @@ services:
       - DJANGO_DB_URL=postgres://postgres@db:5432/postgres
       - DJANGO_ALLOWED_HOSTS=*
     ports:
-      - 8000:8000
-  react:
-    build:
-      context: ./frontend/
-    volumes:
-      - ./frontend:/frontend
-    ports:
-      - 3000:3000
-    environment:
-      - DJANGO_PROXY_HOST=django
-      - DJANGO_PROXY_PORT=8000
+      - 80:80
+      - 443:443
   guacd:
     image: guacamole/guacd
     restart: always
@@ -33,7 +26,7 @@ services:
     image: postgres:10.4-alpine
     restart: always
     volumes:
-    - dev-postgres-data:/var/lib/postgresql/data
-
+    - postgres-data:/var/lib/postgresql/data
 volumes:
-  dev-postgres-data:
+  postgres-data:
+
