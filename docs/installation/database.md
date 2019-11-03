@@ -1,4 +1,4 @@
-The database connection settings  is passed using `DJANGO_DB_URL` environment variable which conforms to django-environ standarts 
+The database connection settings  is passed using `DJANGO_DB_URL` environment variable which conforms to django-environ standards 
 You can find documentation here: https://django-environ.readthedocs.io/en/latest/#django-environ
 
 Container build includes drivers for SQLite and PostgreSQL (psycopg2)

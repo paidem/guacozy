@@ -7,19 +7,19 @@ Those two servers have file monitoring and automatic reload/live patch on code c
 
 ### PyCharm IDE
 If you develop on in IDE such as PyCharm, start 2 PyCharm instances and open each project in different directories  
-##### Open PyCharm in project root  
+#### Open PyCharm in project root  
 
-Create virtualenvironment intepreted with Python 3.7     
+Create virtualenv interpreter with Python 3.7     
 Configure run command as "python ./manage.py runserver"   
 
 Environment:   
 `PYTHONUNBUFFERED=1;DJANGO_SETTINGS_MODULE=guacozy_server.settings`
     
-##### Open PyCharm in /fronend/
+#### Open PyCharm in /frontend/
 
 Configure run command as `npm run start`
 
-##### Initialize database
+#### Initialize database
 Run
 ```
 # Migrate database. Run once to initialize database and after you add any migrations
@@ -39,15 +39,15 @@ python ./manage.py generate_encryption_key
 
 ```
 
-##### Connect to development servers
+#### Connect to development servers
 Connect to http://localhost:3000/ to open React App  
 Connect to http://localhost:8000/admin/ to open Django Admin  
 
 Calls to django urls (`/admin/`, `/api/`, `/tunnelws/`) will be proxied by react development server (see `frontend/src/setupProxy.js`)
 
 ### Docker-compose
-##### Start stack
-You can also start development environement as a docker compose stack.
+#### Start stack
+You can also start development environment as a docker compose stack.
 
 Inside project root run 
 ```
@@ -70,7 +70,7 @@ On docker-compose up:
 After starting you have to initialize database (migration) and create superuser  
 Open another terminal and go to project folder.  
 
-##### Initialize database
+#### Initialize database
 
 Run
 ```
@@ -90,7 +90,7 @@ docker-compose exec django python ./manage.py  initgroups
 docker-compose exec django python ./manage.py generate_encryption_key
 
 ```
-##### Connect to development servers
+#### Connect to development servers
 Connect to http://localhost:3000/ to open React App  
 Connect to http://localhost:8000/admin/ to open Django Admin 
 

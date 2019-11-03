@@ -8,6 +8,6 @@ Audit log contains ticket actions, because any usage of connection is possible o
 * Duplicate
 * Share
 
-#### Screenshot of ticket logs  
+#### Screenshot  
 
 ![Ticket log screenshot](../img/guacozy-demo-ticket-log.png "Ticket log screenshot")

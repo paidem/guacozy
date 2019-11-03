@@ -38,7 +38,7 @@ volumes:
   postgres-data:
 ```
 
-Adjust environement variables (refer [Environment variables](environment-variables.md) section)
+Adjust environment variables (refer [Environment variables](environment-variables.md) section)
 ## Step 2
 Open shell in the directory hosting docker-compose.yml file and start stack in attached mode   
 ```

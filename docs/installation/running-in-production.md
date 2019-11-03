@@ -8,7 +8,7 @@ In the example we user ports 10080 and 10443
 In productions you may want other ports and disable HTTP altogether because of security concerns
 
 ### Disable HTTP port 
-Cliboard reading is available only on HTTPS ports when using host other than localhost, 
+Clipboard reading is available only on HTTPS ports when using host other than localhost, 
 so if you want to use clipboard sync feature, you will need to access via HTTPS
 
 ### Change DJANGO_SECRET_KEY 
@@ -26,7 +26,7 @@ If you started using docker compose:
 docker-compose exec server ./manage.py generate_encryption_key
 ``` 
 
-If you have not started guacocy-server container
+If you have not started guacozy-server container
 ```
 # if you don't have container running
 docker run -it --rm guacozy/guacozy-server python /app/manage.py generate_encryption_key

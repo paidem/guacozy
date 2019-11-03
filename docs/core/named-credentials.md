@@ -18,6 +18,6 @@ If a user doesn't have a _**Personal Named Credential**_ required for this conne
 
 User will not be able to connect if RDP connection uses NLA or TLS security, 
 because this connection requires username/password to start network connection and 
-will not show login screen for unautheticated users.
+will not show login screen for unauthenticated users.
 
         

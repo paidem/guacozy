@@ -13,16 +13,16 @@ ___
 ![alt text](img/guacozy-screenshot-1.jpg "Guacozy Screenshot 1")
 ___
 ### Guacozy architecture
-![alt text](img/guacozy-diagram-1.png "Apache Guacample architecture")
+![alt text](img/guacozy-diagram-1.png "Apache Guacamole architecture")
 ___
 ### Why was it created
 I manage several hundreds of connections (servers, virtual machines, network equipment) which are
-both internal and external (tens of customers).   
+both company infrastructure, dev/qa servers and customers installations.   
 
-Often I need possibility to quickly jump in, do some quick job/fix/diagnostics, and jump out.
+Often I need possibility to quickly jump in and do some quick job/fix/diagnostics.
   
 For years I was using a great application called [Royal TS](https://www.royalapps.com/ts/win/features), 
-but wished more collaboration features and access from web interface.   
+but wished more collaboration features and web interface.   
 
 I liked the idea/technology of Apache Guacamole™, but was not pleased with it's aesthetics 
 (mostly connection grouping/selection/management)
@@ -32,7 +32,7 @@ but using Django for administration part and React for frontend.
 
 ___
 ### Use cases
-This application was designed thinkink about those use cases:
+This application was designed thanking about those use cases:
 
 ##### Case #1: Daily sysadmin remote access to servers
 Have tens/hundreds of connections in a tree view, quickly find, connect, to some work, logout.  
@@ -57,8 +57,10 @@ Revoke access at any moment.
  
 ___
 ### Apache Guacamole™ technology
-All the heavylifting (making connections to VNC/RDP/SSH servers, encoding data and renderting it in frontend) is done by original Apache Guacamole™ technology  
-###### Apache Guacamole™ components used: 
- * frontend Guacamole protocol implementation (websocket, rendering, keyboard/mouse) - [gucamole-common-js](https://github.com/apache/guacamole-client/tree/master/guacamole-common-js)
+All the heavy lifting (making connections to VNC/RDP/SSH servers, encoding data and rendering it in frontend) is done by original Apache Guacamole™ technology  
+
+###### Apache Guacamole™ components used:
+ 
+ * frontend Guacamole protocol implementation (websocket, rendering, keyboard/mouse) - [guacamole-common-js](https://github.com/apache/guacamole-client/tree/master/guacamole-common-js)
  * server-side proxy - [guacd](https://github.com/apache/guacamole-server/tree/master/src/guacd)
  

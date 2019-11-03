@@ -18,7 +18,7 @@ These are environment variables which you can specify when starting guacozy-serv
 `SUPERUSER_NAME`,`SUPERUSER_EMAIL`,`SUPERUSER_PASSWORD` : use these if you want default admin to have specified values  
 
 If you don't specify `SUPERUSER_` values, user **admin** with password **admin** 
-and email **admin@example.com** wiil be created.  
+and email **admin@example.com** will be created.  
 You can always change admin's email/password later, 
-owever if you ever delete "admin" user it will be recreated on next startup.  
+however if you ever delete "admin" user it will be recreated on next startup.  
 So if you are unhappy with **admin** username, specify just it (you can specify name/email and skip password)

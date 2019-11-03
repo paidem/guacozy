@@ -1,7 +1,7 @@
 ## Introduction
 You will want to run guacozy over SSL because of several reasons:  
 - Protect login credentials
-- Guacamole protocol is text base and unecrypted by itself
+- Guacamole protocol is text base and unencrypted by itself
 - Clipboard sync doesn't work over HTTP on hosts other than localhost
 
 If certificate is not provided, it is generated on every start (in entrypoint.sh)

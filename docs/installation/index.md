@@ -1,6 +1,6 @@
-The easiest way to run Guacozy is using [_docker-compose_](docker-compose.md), because it will provide 2 additional containers:
+The easiest way to run Guacozy is using [_docker-compose_](docker-compose.md), which will provide 2 additional containers:
   
-- _database_ - needed to store connection data, users, etc.
+- _PostgreSQL database_ - needed to store connection data, users, etc.
 - _guacd_ - needed to make actual VNC/RDP/SSH connections
 
 

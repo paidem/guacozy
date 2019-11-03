@@ -1,4 +1,4 @@
-guacd is the Guacamole daemon component which does the heavylifting of connecting to VNC/RDP/SSH
+guacd is the Guacamole daemon component which does the heavy lifting of connecting to VNC/RDP/SSH
 
 Sometime you will want do have several guacd servers
  (e.g. if you have several customers - you can install guacd in customers network 
@@ -8,14 +8,14 @@ Sometime you will want do have several guacd servers
 When using docker-compose - add a guacd service in your stack
 ```
   guacd:
-    image: linuxserver/guacd
+    image: guacamole/guacd
     restart: always
 ```
 When running in docker-compose you do not have to expose port, as other containers will have access to it under DNS name `guacd` 
 
 Or if you want to run it in a different host - you can run it as a standalone container
 ```
-docker run --name guacdlocal --restart always -d -p 4822:4822 linuxserver/guacd
+docker run --name guacdlocal --restart always -d -p 4822:4822 guacamole/guacd
 ```
 
 List of alternative docker images with guacd  
