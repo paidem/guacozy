@@ -24,8 +24,6 @@ admin.site.site_url = None
 urlpatterns = [
     path('grappelli/', include('grappelli.urls')),
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls',
-                              namespace='rest_framework')),
     path('api/', include('backend.api.urls')),
     # path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/login/', CustomLoginView.as_view(), name='login'),
