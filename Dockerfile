@@ -55,6 +55,7 @@ RUN apk update && apk add --no-cache \
       libpq \
       ca-certificates \
       openssl \
+      memcached \
       nginx \
 	  supervisor
 

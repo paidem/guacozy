@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
+from users.views import CustomLoginView
 
 # Hide "View Site" link, because admin will be often used in IFRAME
 admin.site.site_url = None
@@ -26,6 +27,8 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls',
                               namespace='rest_framework')),
     path('api/', include('backend.api.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
+    # path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/login/', CustomLoginView.as_view(), name='login'),
+    path('accounts/logout/', CustomLoginView.as_view(), name='logout'),
     path('', RedirectView.as_view(url='/cozy/')),
 ]

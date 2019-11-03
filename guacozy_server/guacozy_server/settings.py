@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
@@ -89,6 +88,19 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+
+if DEBUG:
+    CACHES = {
+        # In DEBUG  mode try using CACHE_URL and fail back to user local memory cache if not configured
+        'default': env.cache('CACHE_URL', default='locmemcache://'),
+    }
+else:
+    CACHES = {
+        # Try using CACHE_URL and fail if not set
+        'default': env.cache('CACHE_URL'),
+    }
 
 ROOT_URLCONF = 'guacozy_server.urls'
 

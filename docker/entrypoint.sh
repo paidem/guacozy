@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+# Set CACHE_URL to use local memory
+# This is needed because currently memcached is not started and we need cache inside management commands
+export CACHE_URL=locmemcache://
+
 echo "Checking if FIELD_ENCRYPTION_KEY variable is set..."
 if [ -z "$FIELD_ENCRYPTION_KEY" ]
 then
@@ -44,6 +48,10 @@ python ./manage.py collectstatic --no-input
 # init default groups
 python ./manage.py initgroups
 python ./manage.py initguacd
+
+
+# Set CACHE_URL to use memcached via sock file
+export CACHE_URL=memcache:///tmp/memcached.sock
 
 # Nginx
 # if certificates doesn't exist create a self signed certificate

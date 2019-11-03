@@ -13,6 +13,7 @@ django-semanticui-forms==1.6.5
 djangorestframework==3.10.3
 psycopg2==2.8.3
 pyguacamole==0.9
+python-memcached==1.59
 pytz==2019.3
 rules==2.1
 sqlparse==0.3.0

@@ -90,6 +90,15 @@ class Connection(PolymorphicModel):
 
         parameters["username"] = parameters['password'] = parameters['domain'] = ""
 
+        parameters["passthrough_credentials"] = self.passthrough_credentials
+
+        # If connection is specified to use passthrough credentials - don't try to get credentials
+        # guacdproxy will have to determine credentials from session
+        if self.passthrough_credentials:
+            # Domain should be specified in connection
+            parameters['domain'] = self.domain if self.domain else ""
+            return parameters
+
         credentials_object = self.get_credentials_object(user)
 
         if credentials_object is not None:

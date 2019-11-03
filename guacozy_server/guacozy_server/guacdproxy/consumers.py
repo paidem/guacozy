@@ -108,6 +108,15 @@ class GuacamoleConsumer(AsyncWebsocketConsumer):
                 pk=ticket.connection.pk).get_guacamole_parameters(
                 self.scope['user'])
 
+            if parameters['passthrough_credentials']:
+                try:
+                    parameters['username'] = self.scope['session']['username']
+                    parameters['password'] = self.scope['session']['password']
+                except KeyError:
+                    await self.accept_and_send_error(
+                        "Exception! Username/passord not found in session.\n. "
+                        , 999)
+
             if parameters['protocol'] == 'rdp' \
                     and (not parameters['password'] or not parameters['username']) \
                     and parameters['security'] not in ['rdp', 'tls']:
