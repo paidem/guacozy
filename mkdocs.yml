@@ -22,8 +22,9 @@ pages:
       - Named Credentials: 'core/named-credentials.md'
       - Permissions: 'core/permissions.md'
   - Features:
-      - Shared access: 'features/ticket-sharing.md'
       - Audit log: 'features/audit-log.md'
+      - Credentials passthrough: 'features/credentials-passthrough.md'
+      - Shared access: 'features/ticket-sharing.md'
   - Development:
       - Kudos: 'development/kudos.md'
       - Environment setup: 'development/environment-setup.md'
