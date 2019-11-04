@@ -6,6 +6,7 @@ ARG SERVERFROM=python:3.7-alpine
 ####################
 
 FROM ${BUILDFRONTENDFROM} as builder-frontend
+ARG DOCKER_TAG
 ADD frontend/package.json /frontend/
 ADD frontend/package-lock.json /frontend/
 WORKDIR /frontend
