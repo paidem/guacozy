@@ -71,7 +71,7 @@ services:
       - 10080:80
       - 10443:443
   guacd:
-    image: linuxserver/guacd
+    image: guacamole/guacd
     restart: always
   db:
     image: postgres:10.4-alpine
@@ -118,19 +118,26 @@ volumes:
 ## Notes
 
 ### SSL
-Container exposes ports **TCP/80** and **TCP/443**  
-If certificate is not provided, it is generated on every start in entrypoint.sh
+Container exposes ports **TCP/80** and **TCP/443**
+If you want Guacozy to be accessible only via HTTPS, do not map port 80    
+If SSL certificate is not provided, a new one is generated on every start.
   
-You can provide your certificates by mounting to /ssl/ and providing  
+You can provide your certificates by bind mounting a directory to /ssl/ and providing your certificates  
+Note that certificates are used by Nginx, so it means that your certificate and CA chain certificates has to be concatenated in one file
+```hell script
+cat certificate.crt ca.crt > cert.crt
+```  
+
+Certificates has to be in these locations:
 ```
 /ssl/cert.crt  
 /ssl/cert.key
 ```
-e.g. in docker run
+Example how to mount when using docker command line
 ```shell script
-docker run -it --rm -p 8080:80 -p 8443:443 -v ./myssldir:/ssl guacozy/guacozy-server
+docker run -it --rm -p 10080:80 -p 10443:443 -v ./myssldir:/ssl guacozy/guacozy-server
 ```
-or in docker-compose
+Example how to mount when using docker-compose
 ```yaml
 services:
   server:
@@ -140,18 +147,14 @@ services:
       - staticfiles:/app/staticfiles/
 ```
 
-or you can make the generated certificates static by providing a volume to **/ssl** path
+or you can make automatically generated certificates static by providing a volume to **/ssl** path
 ```yaml
 services:
   server:
     image: guacozy/guacozy-server
     volumes:
       - ssl:/ssl
-      - staticfiles:/app/staticfiles/
-...
-...
 ...
 volumes:
   ssl:
-  staticfiles:
 ```
