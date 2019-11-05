@@ -13,6 +13,7 @@ frontend/build
 .gitattributes
 .dockerignore
 
+guacozy_server/tmp
 guacozy_server/guacozy_server/ldap_config.py
 README.md
 LICENSE

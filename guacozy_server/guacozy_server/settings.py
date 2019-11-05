@@ -89,18 +89,31 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
-if DEBUG:
-    CACHES = {
-        # In DEBUG  mode try using CACHE_URL and fail back to user local memory cache if not configured
-        'default': env.cache('CACHE_URL', default='locmemcache://'),
-    }
+# Try using CACHE_URL env and fallback to user local memory cache if not configured
+
+
+CACHES = {
+    'default': env.cache('CACHE_URL', default='locmemcache://'),
+}
+
+# Production uses memcached for CACHE_URL (so all instances of Daphne server can access session info)
+# Using cache as session engine and locmemcache as cache will result session clearing
+# after each restart of application (you will have to login again)
+# So in DEV environment you can either spin up your own memcached instance and specify it, e.g.
+# CACHE_URL=memcache://192.168.99.100:11211
+# or you can use file backend as session engine.
+if DEBUG and CACHES['default']['BACKEND'] == 'django.core.cache.backends.locmem.LocMemCache':
+    SESSION_ENGINE = "django.contrib.sessions.backends.file"
+
+    # Override default SESSION_FILE_PATH (which default to tempfile.gettempdir())
+    # because it WILL contain your passwords and you DON'T want them hanging there, where other people might see
+    # so we use 'tmp' folder in Django root folder and add it to .gitignore
+    SESSION_FILE_PATH = os.path.join(BASE_DIR, 'tmp')
+    if not os.path.exists(SESSION_FILE_PATH):
+        os.mkdir(SESSION_FILE_PATH)
 else:
-    CACHES = {
-        # Try using CACHE_URL and fail if not set
-        'default': env.cache('CACHE_URL'),
-    }
+    SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 ROOT_URLCONF = 'guacozy_server.urls'
 
