@@ -259,6 +259,7 @@ if LDAP_CONFIG is not None:
     AUTH_LDAP_USER_DN_TEMPLATE = getattr(LDAP_CONFIG, 'AUTH_LDAP_USER_DN_TEMPLATE', None)
     AUTH_LDAP_USER_FLAGS_BY_GROUP = getattr(LDAP_CONFIG, 'AUTH_LDAP_USER_FLAGS_BY_GROUP', {})
     AUTH_LDAP_USER_SEARCH = getattr(LDAP_CONFIG, 'AUTH_LDAP_USER_SEARCH', None)
+    AUTH_LDAP_DEBUG = getattr(LDAP_CONFIG, 'AUTH_LDAP_DEBUG', False)
 
     # Optionally disable strict certificate checking
     if getattr(LDAP_CONFIG, 'LDAP_IGNORE_CERT_ERRORS', False):
@@ -275,4 +276,8 @@ if LDAP_CONFIG is not None:
     # Enable logging for django_auth_ldap
     ldap_logger = logging.getLogger('django_auth_ldap')
     ldap_logger.addHandler(logging.StreamHandler())
-    ldap_logger.setLevel(logging.DEBUG)
+    ldap_logger.setLevel(logging.INFO)
+
+    # Enable DEBUG level if AUTH_LDAP_DEBUG or DEBUG is True
+    if AUTH_LDAP_DEBUG or DEBUG:
+        ldap_logger.setLevel(logging.DEBUG)

@@ -49,3 +49,6 @@ AUTH_LDAP_USER_FLAGS_BY_GROUP = {
 
 # AUTH_LDAP_CACHE_TIMEOUT - cache the result of search for user's groups and attributes
 AUTH_LDAP_CACHE_TIMEOUT = 600
+
+# AUTH_LDAP_DEBUG - enable DEBUG level messages for LDAP. This helps a lot if you struggle to connect to LDAP
+AUTH_LDAP_DEBUG = False
