@@ -13,6 +13,8 @@ frontend/build
 .gitattributes
 .dockerignore
 
+docker-compose*.yml
+
 guacozy_server/tmp
 guacozy_server/guacozy_server/ldap_config.py
 README.md
