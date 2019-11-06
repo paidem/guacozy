@@ -1,4 +1,9 @@
 #!/bin/bash
 docker build --build-arg DOCKER_TAG=$DOCKER_TAG -t $IMAGE_NAME .
-docker tag $IMAGE_NAME ${DOCKER_REPO}:latest
-docker push ${DOCKER_REPO}:latest
+
+if [ $DOCKER_TAG != 'develop' ]; then
+    docker tag $IMAGE_NAME ${DOCKER_REPO}:latest
+    docker push ${DOCKER_REPO}:latest
+fi
+
+
