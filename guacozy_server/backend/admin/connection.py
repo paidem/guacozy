@@ -21,7 +21,7 @@ class ConnectionChildForm(ModelForm):
         help_texts = {
             'port': 'If not specified, will use default port for selected protocol.',
             'ignore_cert': 'Ignore server certificates.',
-            'credentials': 'If specified, will override username, password, domain and host key fields.',
+            'credentials': 'If selected, will override username, password, domain and host key / passphrase fields.',
             'private_key': 'Private RSA key to connect to host.',
             'passphrase': 'IF passphrase is used to protect private key enter it here.',
             'host_key': 'Server''s host key to verify host identity before connecting.',
