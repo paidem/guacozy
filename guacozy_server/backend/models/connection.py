@@ -108,6 +108,10 @@ class Connection(PolymorphicModel):
                 if credentials_object.password else ""
             parameters["domain"] = credentials_object.domain \
                 if credentials_object.domain else ""
+            parameters["private_key"] = credentials_object.private_key \
+                if credentials_object.private_key else ""
+            parameters["passphrase"] = credentials_object.passphrase \
+                if credentials_object.passphrase else ""
         else:
             parameters["username"] = self.username \
                 if self.username else ""
