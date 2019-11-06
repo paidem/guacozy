@@ -4,6 +4,8 @@ services:
   server: &server
     build:
       context: ./
+      args:
+        - DOCKER_TAG=QA
     restart: always
     depends_on:
       - db
