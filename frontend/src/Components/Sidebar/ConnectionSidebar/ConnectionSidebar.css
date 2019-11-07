@@ -25,10 +25,25 @@
     padding: 0;
 }
 
-/* topButton inside connectionList segment */
-.sidebarContainer .ui.segment.connectionList .topButton {
+
+#connectionTree {
+    margin-top:28px;
+}
+
+.connectionCount {
+    color: #404040;
+}
+
+/* topButtonRight inside connectionList segment */
+.sidebarContainer .ui.segment.connectionList .topButtonRight {
     float: right;
     margin: 2px 2px 0 0;
+}
+
+/* topButtonLeft inside connectionList segment */
+.sidebarContainer .ui.segment.connectionList .topButtonLeft {
+    float: left;
+    margin: 2px -4px 0 2px;
 }
 
 
