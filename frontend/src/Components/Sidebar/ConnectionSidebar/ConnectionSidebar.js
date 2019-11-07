@@ -36,7 +36,7 @@ function ConnectionSidebar(props) {
                         basic inverted
                         size='mini'
                         title='Reload'
-                        className='topButton'
+                        className='topButtonRight'
                         loading={appState.connectionsLoading || appState.ticketsLoading}
                         onClick={() => {
                             appState.actions.updateConnections();
@@ -46,10 +46,11 @@ function ConnectionSidebar(props) {
                 />
                 <Button icon='bars'
                         color={treeDraggable ? 'green' : 'grey'}
+                        disabled={treeNodeFilterString !== ""}
                         basic
                         size='mini'
                         title='Rearrange'
-                        className='topButton'
+                        className='topButtonRight'
                         onClick={() => setTreeDragable(!treeDraggable)}
                 />
                 <ConnectionsTree searchString={treeNodeFilterString}

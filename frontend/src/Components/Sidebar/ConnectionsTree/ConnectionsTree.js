@@ -16,6 +16,9 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
     const [initialTreeData, setInitialTreeData] = useState([]);
     const [treeChanged, setTreeChanged] = useState(false);
     const [saving, setSaving] = useState(false);
+    const [expandedKeys, setExpandedKeys] = useState([]);
+    const [stashedExpandedKeys, setStashedExpandedKeys] = useState([]);
+
 
     // Taken from author's example:
     // http://react-component.github.io/tree/examples/draggable.html
@@ -96,7 +99,7 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
                             ?
                             flattenTreeParent(node.children, node.appid)
                             : []))
-                , []),"key")
+                , []), "key")
     }, []);
 
     // Determines which API calls should be made to update hierarchy to desired state
@@ -104,7 +107,7 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
     const saveHierarchyChanges = () => {
         setSaving(true);
         let flatInitialTree = flattenTreeParent(initialTreeData, 0);
-        let flatTree = flattenTreeParent(treeData, 0, );
+        let flatTree = flattenTreeParent(treeData, 0,);
 
         let updates = [];
 
@@ -152,6 +155,59 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
     }, [initialTreeData, treeData, flattenTreeParent]);
 
 
+    const getConnectionsCount = useCallback(node => {
+        return node.children ? node.children.filter(n => n.isFolder).reduce(function (total, child) {
+            return total + getConnectionsCount(child)
+        }, node.children.filter(n => !n.isFolder).length) : 0;
+    }, []);
+
+    const expandMode = {
+        COLLAPSE_ALL: 1,
+        EXPAND_SHALLOW: 2,
+        EXPAND_ALL: 3,
+    };
+
+    /***
+     *  Sets initial expandedKeys state, which is defined as
+     *  "Expand all folders which contain folders"
+     * @param tree
+     * @param expandToNodes - if "leaf" folders (which have only connections in them) should be expanded
+     */
+    const expandTree = useCallback((tree, exMode = 2) => {
+        let newExpandedKeys = [];
+
+        switch (exMode) {
+            case expandMode.COLLAPSE_ALL:
+                newExpandedKeys = [-1];
+                break;
+            case expandMode.EXPAND_ALL:
+                flattenTreeParent(tree)
+                    .forEach(n => {
+                        if (!n.hidden && !n.isLeaf) {
+                            newExpandedKeys.push(n.key);
+                        }
+                    });
+                break;
+            case expandMode.EXPAND_SHALLOW:
+                flattenTreeParent(tree)
+                    .forEach(n => {
+                        if (!n.hidden && !n.isLeaf && n.children.filter(node => !node.isLeaf).length > 0) {
+                            newExpandedKeys.push(n.key);
+                        }
+                    });
+                break;
+            default:
+                console.log("Unsupported treeExpandMode!");
+                return;
+        }
+
+        if (JSON.stringify(expandedKeys.sort()) !== JSON.stringify(newExpandedKeys.sort())) {
+            setExpandedKeys(newExpandedKeys);
+            localStorage.setItem('expandedKeys', JSON.stringify(newExpandedKeys))
+        }
+
+    }, [expandMode.COLLAPSE_ALL, expandMode.EXPAND_ALL, expandMode.EXPAND_SHALLOW, expandedKeys, flattenTreeParent]);
+
     // Effect which builds tree data from connections and search string
     useLayoutEffect(() => {
             /***
@@ -163,13 +219,18 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
             const nodeTitleConstructor = (node) => {
                 if (node.isFolder) {
                     return <span
+                        className="nodeTitle"
                         onContextMenu={(e) => {
                             handleFolderContextMenuEvent(e, {
                                 id: node.id.toString(),
                                 name: node.text
                             })
                         }}
-                    > {getIcon(true, null)}{node.text}</span>
+                    >
+                        {getIcon(true, null)}
+                        {node.text}
+                        &nbsp;<span className="connectionCount"> {getConnectionsCount(node)}</span>
+                    </span>
                 } else {
                     return <span
                         onDoubleClick={() => appState.actions.activateConnection(node.id, node.text, appState.user)}
@@ -190,23 +251,23 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
              * @param node
              * @returns {{hidden: boolean, children: (*|[]), appid: *, filtertext: *, title: *, isLeaf: boolean, key: string}}
              */
-            const convertTreeNode = (node) => {
-                let newTreeNode = {
-                    title: nodeTitleConstructor(node),
-                    key: node.id.toString(),
-                    isLeaf: !node.isFolder,
-                    appid: node.id,
-                    filtertext: node.text,
-                    hidden: false,
-                    children: node.isFolder ? sortArrayOfObjects(node.children.map(child => convertTreeNode(child)),'filtertext') : []
-                };
+            const convertTreeNode = (node) => ({
+                title: nodeTitleConstructor(node),
+                key: node.id.toString(),
+                isLeaf: !node.isFolder,
+                appid: node.id,
+                filtertext: node.text,
+                hidden: false,
+                subFolderCount: node.isFolder ? node.children.filter(n => n.isFolder).length : 0,
+                children: node.isFolder ? sortArrayOfObjects(node.children.map(child => convertTreeNode(child)), 'filtertext') : []
+            });
 
-                return newTreeNode
-            };
 
-            // set item's visibility according to filter term
-            // also resolve parents visibility so if an object (connection) is visible
-            // all it's ancestors are visible
+            /***
+             * set item's visibility according to filter term
+             * also resolve parents visibility so if an object (connection) is visible
+             * all it's ancestors are visible
+             */
             const filterTree = (items, term) => {
                 return items.map(item => {
                     // by default item is hidden
@@ -214,7 +275,7 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
 
                     // unhide if item has search term in filtertext
                     if (item.filtertext.toLowerCase().includes(term.toLowerCase())) {
-                        item.hidden = false
+                        item.hidden = false;
                     }
 
                     // unhide if any of children is not hidden
@@ -236,19 +297,64 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
                 });
             };
 
+            /***
+             * Try to load expanded folders list from Local Storage. Return true on success
+             */
+            const loadExpandedKeyFromLocalStorage = () => {
+                let loadedExpandedKeys = JSON.parse(localStorage.getItem("expandedKeys"));
+                if (Array.isArray(loadedExpandedKeys) && loadedExpandedKeys.length > 0) {
+                    setExpandedKeys(loadedExpandedKeys);
+                }
+            };
 
+
+            // Effect actions start
+
+            /// convert connection tree from application state to rc-tree format
             let newTreeData = appState.connections.map(node => convertTreeNode(node));
 
-            // Set initial tree data so we can later compared if dragging changed it's hierarchy
+            // Save initial tree data so we can later compared if dragging changed it's hierarchy
             setInitialTreeData(JSON.parse(JSON.stringify(newTreeData)));
 
-            searchString && filterTree(newTreeData, searchString);
+            // Check if we are in a search mode
+            if (searchString) {
+                // Filter tree to searchString
+                newTreeData = filterTree(newTreeData, searchString);
+
+                // Save expandedKeys state before changing expandedKeys
+                if (stashedExpandedKeys.length === 0) {
+                    setStashedExpandedKeys(expandedKeys);
+                }
+
+                expandTree(newTreeData, expandMode.EXPAND_ALL);
+
+                setTreeData([...newTreeData]);
+                return;
+            }
+
+            // Check if we have stashed expanded keys. They are saved before entering filter mode
+            // if they are saved - we have just exited filter mode and have to restore state.
+            if (stashedExpandedKeys.length > 0) {
+                setExpandedKeys(stashedExpandedKeys);
+                setStashedExpandedKeys([]);
+            }
+
+            // Check if page was just loaded - first time load (when expanded keys are blank)
+            if (expandedKeys.length === 0) {
+                loadExpandedKeyFromLocalStorage();
+                expandTree(newTreeData, expandMode.EXPAND_SHALLOW);
+            }
 
             setTreeData([...newTreeData]);
 
         },
-        [appState.connections, searchString, appState.actions, layoutState.actions, appState.user]
+        [appState.connections, searchString, appState.actions, layoutState.actions, appState.user, flattenTreeParent, getConnectionsCount, stashedExpandedKeys, expandedKeys, expandTree, expandMode.EXPAND_ALL, expandMode.EXPAND_SHALLOW]
     );
+
+    const onExpand = (keys) => {
+        setExpandedKeys(keys);
+        localStorage.setItem('expandedKeys', JSON.stringify(keys))
+    };
 
     const getContent = () => {
         if (treeData.length === 0) {
@@ -259,7 +365,8 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
         }
 
         return <Tree
-            defaultExpandAll
+            expandedKeys={expandedKeys}
+            onExpand={onExpand}
             selectable={false}
             filterTreeNode={(node) => node.props.hidden}
             treeData={treeData}
@@ -270,20 +377,58 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
 
     return (
         <React.Fragment>
+            <Button icon='arrow up'
+                    color='grey'
+                    basic
+                    inverted
+                    size='mini'
+                    title='Collapse all'
+                    className='topButtonLeft'
+                    onClick={() => {
+                        expandTree(treeData, expandMode.COLLAPSE_ALL);
+                    }
+                    }
+            />
+            <Button icon='folder outline'
+                    color='grey'
+                    basic
+                    inverted
+                    size='mini'
+                    title='Shallow expand'
+                    className='topButtonLeft'
+                    onClick={() => {
+                        expandTree(treeData, expandMode.EXPAND_SHALLOW);
+                    }
+                    }
+            />
+            <Button icon='list'
+                    color='grey'
+                    basic
+                    inverted
+                    size='mini'
+                    title='Expand all'
+                    className='topButtonLeft'
+                    onClick={() => {
+                        expandTree(treeData, expandMode.EXPAND_ALL);
+                    }
+                    }
+            />
             {treeChanged ||
             <Button icon='save'
                     color='red'
                     inverted
                     size='mini'
                     title='Save'
-                    className='topButton'
+                    className='topButtonRight'
                     loading={saving}
                     onClick={() => {
                         saveHierarchyChanges();
                     }
                     }
             />}
-            {getContent()}
+            <div id="connectionTree">
+                {getContent()}
+            </div>
         </React.Fragment>
     );
 }
