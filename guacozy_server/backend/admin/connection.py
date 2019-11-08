@@ -177,6 +177,8 @@ class ConnectionVncAdmin(ConnectionChildAdmin):
 
 @admin.register(Connection)
 class ConnectionParentAdmin(PolymorphicParentModelAdmin):
+    # Move filter to sidebar
+    change_list_template = "admin/change_list_filter_sidebar.html"
 
     def duplicate_connections(modeladmin, request, queryset):
         # Get instances of ConnectionSSH, ConnectionRDP instead of Connection
