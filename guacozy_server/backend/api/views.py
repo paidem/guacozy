@@ -15,7 +15,7 @@ from backend.api.utils import user_allowed_folders, folder_to_object, user_allow
 from backend.models import Folder, Ticket, Connection, TicketLog
 from users.models import User
 from .serializers import UserSerializer, FolderFlatSerializer, TicketSerializer, TicketReadSerializer, \
-    ConnectionSerializer
+    ConnectionSerializer, UserShortSerializer
 
 
 # Users
@@ -23,13 +23,21 @@ from .serializers import UserSerializer, FolderFlatSerializer, TicketSerializer,
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
 
     def dispatch(self, request, *args, **kwargs):
         if kwargs.get('pk') == 'current' and request.user:
             kwargs['pk'] = request.user.pk
         return super(UserViewSet, self).dispatch(request, *args, **kwargs)
 
+    def get_serializer_class(self, *args, **kwargs):
+        try:
+            # If we have pk and this pk is same as user's pk - user has requested /current/ or own pk.
+            if self.kwargs['pk'].__str__() == self.request.user.pk.__str__():
+                return UserSerializer
+        except KeyError:
+            pass
+
+        return UserShortSerializer
 
 # Folders / Connections part
 

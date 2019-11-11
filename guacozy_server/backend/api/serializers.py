@@ -28,7 +28,8 @@ class UserShortSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'full_name']
+        fields = ['id', 'username', 'first_name',
+                  'last_name', 'full_name']
 
 
 class FolderFlatSerializer(serializers.ModelSerializer):
