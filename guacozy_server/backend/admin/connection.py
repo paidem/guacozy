@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.forms import ModelForm, PasswordInput, ModelChoiceField, TextInput
+from django.urls import reverse
+from django.utils.html import format_html
 from django_admin_listfilter_dropdown.filters import RelatedDropdownFilter
 from polymorphic.admin import PolymorphicChildModelAdmin, PolymorphicParentModelAdmin, PolymorphicChildModelFilter
 
@@ -211,7 +213,23 @@ class ConnectionParentAdmin(PolymorphicParentModelAdmin):
 
     search_fields = ['name', 'host']
 
-    list_display = ('name', 'uri', 'credentials',)
+    # Add field "location" with breadcrumbs
+    def location(self, obj):
+        if obj.parent is not None:
+            link = reverse("admin:backend_folder_change", args=[obj.parent.id])
+            return format_html('<a href="{}" title="Edit folder">{}</a>',
+                               link, obj.parent.breadcrumbs)
+        else:
+            return "n/a"
+
+    # Sort by MPTT's lft when sorting by location. This will give order resembling tree.
+    location.admin_order_field = 'parent__lft'
+
+    # Override queryset to select related field "parent" to minimize queries to DB
+    def get_queryset(self, request):
+        return super(ConnectionParentAdmin, self).get_queryset(request).select_related('parent')
+
+    list_display = ('name', 'uri', 'credentials', 'location',)
 
     """ The parent model admin """
     base_model = Connection  # Optional, explicitly set here.
