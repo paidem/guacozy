@@ -259,7 +259,8 @@ class TicketViewSet(viewsets.ModelViewSet):
 
     # override create to return existing ticket if exists
     def create(self, request, *args, **kwargs):
-        ticket_serializer = TicketSerializer(data=request.data)
+        context = self.get_serializer_context()
+        ticket_serializer = TicketSerializer(data=request.data, context=context)
 
         if not ticket_serializer.is_valid():
             raise ValidationError(ticket_serializer.errors)
