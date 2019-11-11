@@ -36,6 +36,19 @@ class FolderFlatSerializer(serializers.ModelSerializer):
         model = Folder
         fields = ['id', 'name', 'parent']
 
+    def __init__(self, *args, **kwargs):
+        super(FolderFlatSerializer, self).__init__(*args, **kwargs)
+
+        try:
+            user = kwargs['context']['request'].user
+
+            # Limit parent dropdown list in API browser
+            # to folders user is allowed to view
+            self.fields['parent'].queryset = Folder.objects \
+                .filter(id__in=user_allowed_folders_ids(user, require_view_permission=True))
+        except KeyError:
+            pass
+
 
 class ConnectionSerializer(serializers.ModelSerializer):
     class Meta:
