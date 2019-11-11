@@ -54,7 +54,8 @@ class FolderFlatSerializer(serializers.ModelSerializer):
 class ConnectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Connection
-        exclude = ['password']
+        fields = ['id', 'name', 'parent', 'protocol']
+        read_only_fields = ['id', 'name', 'protocol']
 
 
 class TicketSerializer(serializers.ModelSerializer):
