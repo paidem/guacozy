@@ -10,6 +10,8 @@ from users.models import User
 
 @admin.register(TicketLog)
 class TicketLogAdmin(ObjectPermissionsModelAdmin):
+    # Move filter to sidebar
+    change_list_template = "admin/change_list_filter_sidebar.html"
 
     def has_delete_permission(self, request, obj=None):
         return request.user.is_superuser

@@ -15,7 +15,7 @@ from backend.api.utils import user_allowed_folders, folder_to_object, user_allow
 from backend.models import Folder, Ticket, Connection, TicketLog
 from users.models import User
 from .serializers import UserSerializer, FolderFlatSerializer, TicketSerializer, TicketReadSerializer, \
-    ConnectionSerializer
+    ConnectionSerializer, UserShortSerializer
 
 
 # Users
@@ -23,13 +23,21 @@ from .serializers import UserSerializer, FolderFlatSerializer, TicketSerializer,
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
 
     def dispatch(self, request, *args, **kwargs):
         if kwargs.get('pk') == 'current' and request.user:
             kwargs['pk'] = request.user.pk
         return super(UserViewSet, self).dispatch(request, *args, **kwargs)
 
+    def get_serializer_class(self, *args, **kwargs):
+        try:
+            # If we have pk and this pk is same as user's pk - user has requested /current/ or own pk.
+            if self.kwargs['pk'].__str__() == self.request.user.pk.__str__():
+                return UserSerializer
+        except KeyError:
+            pass
+
+        return UserShortSerializer
 
 # Folders / Connections part
 
@@ -114,7 +122,7 @@ def folders_objects_treeview(request, include_objects=True):
     return Response(result)
 
 
-class ConnectionViewSet(viewsets.ModelViewSet, AutoPermissionViewSetMixin):
+class ConnectionViewSet(viewsets.ReadOnlyModelViewSet, AutoPermissionViewSetMixin):
     serializer_class = ConnectionSerializer
 
     # Limit queryset to only include connections located in allowed to view folders
@@ -122,6 +130,22 @@ class ConnectionViewSet(viewsets.ModelViewSet, AutoPermissionViewSetMixin):
         allowed_to_view_folders = user_allowed_folders_ids(self.request.user, require_view_permission=True)
         return Connection.objects.filter(parent__in=allowed_to_view_folders)
 
+    def partial_update(self, request, *args, **kwargs):
+        partial = True
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
+
+    def perform_update(self, serializer):
+        serializer.save()
 
 # Ticket part
 
@@ -259,7 +283,8 @@ class TicketViewSet(viewsets.ModelViewSet):
 
     # override create to return existing ticket if exists
     def create(self, request, *args, **kwargs):
-        ticket_serializer = TicketSerializer(data=request.data)
+        context = self.get_serializer_context()
+        ticket_serializer = TicketSerializer(data=request.data, context=context)
 
         if not ticket_serializer.is_valid():
             raise ValidationError(ticket_serializer.errors)
