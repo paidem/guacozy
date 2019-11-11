@@ -114,7 +114,7 @@ def folders_objects_treeview(request, include_objects=True):
     return Response(result)
 
 
-class ConnectionViewSet(viewsets.ModelViewSet, AutoPermissionViewSetMixin):
+class ConnectionViewSet(viewsets.ReadOnlyModelViewSet, AutoPermissionViewSetMixin):
     serializer_class = ConnectionSerializer
 
     # Limit queryset to only include connections located in allowed to view folders
