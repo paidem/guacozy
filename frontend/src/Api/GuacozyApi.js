@@ -4,7 +4,7 @@ import {DEFAULT_VALIDITY_PERIOD} from "../settings";
 export default class GuacadminApi {
     apiInstance = axios.create({
         baseURL: '/api/',
-        timeout: 1000,
+        timeout: 30000,
         xsrfCookieName: "csrftoken",
         xsrfHeaderName: "X-CSRFToken",
     });
