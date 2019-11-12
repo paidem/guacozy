@@ -1,6 +1,10 @@
 import rules
 
 # PersonalNamedCredentials permissions
+from django.conf import settings
+from django.contrib.auth.models import Group
+
+
 @rules.predicate
 def is_owner(user, obj):
     if obj is None:
@@ -48,6 +52,15 @@ def has_direct_permission(user, node):
     for group in user.groups.all():
         if group in node.groups.all():
             return True
+
+
+    # If built-in groups did not match we should check LDAP groups
+    # LDAP groups can only be check by accessing user.ldap_user attribute
+    if hasattr(settings, 'AUTH_LDAP_FIND_GROUP_PERMS') and settings.AUTH_LDAP_FIND_GROUP_PERMS:
+        ldap_groups = Group.objects.filter(name__in=user.ldap_user.group_names)
+        for group in ldap_groups:
+            if group in node.groups.all():
+                return True
 
     return False
 
