@@ -22,12 +22,14 @@ class ConnectionChildForm(ModelForm):
 
         help_texts = {
             'port': 'If not specified, will use default port for selected protocol.',
-            'ignore_cert': 'Ignore server certificates.',
             'credentials': 'If selected, will override username, password, domain and host key / passphrase fields.',
             'private_key': 'Private RSA key to connect to host.',
             'passphrase': 'IF passphrase is used to protect private key enter it here.',
             'host_key': 'Server''s host key to verify host identity before connecting.',
             'guacdserver': 'Override default guacd server.',
+            # RDP specific
+            'server_layout': 'failsafe will work on any keyboard but has a problem with Ctrl key',
+            'ignore_cert': 'Ignore server certificates.',
             # VNC Specific
             'cursor_remote': 'If set, the mouse pointer will be rendered remotely, and the local position of the mouse pointer will be indicated by a small dot. A remote mouse cursor will feel slower than a local cursor, but may be necessary if the VNC server does not support sending the cursor image to the client.',
             'read_only': 'Whether this connection should be read-only. If set to "true", no input will be accepted on the connection at all. Users will only see the desktop and whatever other users using that same desktop are doing. ',
