@@ -33,8 +33,10 @@ function ConnectionContextMenu(props) {
         <Menu animation="fade" id="connection_context_menu" theme="dark">
             <Item
                 onClick={({event, props}) => onConnectionContextMenuAction(event, props, "connect")}>Connect</Item>
+            {appState.user && appState.user.is_staff &&
             <Item
                 onClick={({event, props}) => onConnectionContextMenuAction(event, props, "edit")}>Edit</Item>
+            }
             <Separator/>
         </Menu>
     );

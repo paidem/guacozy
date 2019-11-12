@@ -1,5 +1,6 @@
 # This file is an example how to implement LDAP login
 import django_auth_ldap.config as config
+from django_auth_ldap.config import LDAPSearch, NestedActiveDirectoryGroupType
 import ldap
 
 # Read here how to configure this file: https://django-auth-ldap.readthedocs.io/en/latest/
@@ -36,9 +37,24 @@ AUTH_LDAP_USER_ATTR_MAP = {"first_name": "givenName",
                            "last_name": "sn",
                            "email": "mail"}
 
-# use AUTH_LDAP_GROUP_TYPE = GroupOfNamesType() for simple group membership
-# use AUTH_LDAP_GROUP_TYPE = NestedGroupOfNamesType("cn") for nested (groups of groups) using Active Directory
-AUTH_LDAP_GROUP_TYPE = config.NestedGroupOfNamesType("cn")
+# use AUTH_LDAP_GROUP_TYPE = GroupOfNamesType(name_attr="cn") for simple group membership
+# use AUTH_LDAP_GROUP_TYPE = NestedGroupOfNamesType("cn") for nested (groups of groups) using LDAP
+# and NestedActiveDirectoryGroupType for ActiveDirecotry.
+# Make sure to import it in the beginning!
+#
+# from django_auth_ldap.config import LDAPSearch, NestedActiveDirectoryGroupType
+#
+# list of available matching type - https://django-auth-ldap.readthedocs.io/en/latest/groups.html
+# E.g.
+# GroupOfNamesType
+# NestedGroupOfNamesType
+# GroupOfUniqueNamesType
+# NestedGroupOfUniqueNamesType
+# ActiveDirectoryGroupType
+# NestedActiveDirectoryGroupType
+# OrganizationalRoleGroupType
+# NestedOrganizationalRoleGroupType
+AUTH_LDAP_GROUP_TYPE = config.NestedActiveDirectoryGroupType()
 
 # AUTH_LDAP_USER_FLAGS_BY_GROUP
 # user flags is_staff and is_superuser can be set if user is a member of specified group

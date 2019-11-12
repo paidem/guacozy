@@ -5,9 +5,11 @@ import {AppContext} from "../../Context/AppContext";
 import RenameFolderModal from "../Modals/RenameFolderModal";
 import NewFolderModal from "../Modals/NewFolderModal";
 import DeleteFolderModal from "../Modals/DeleteFolderModal";
+import {LayoutContext} from "../../Layout/LayoutContext";
 
 function FolderContextMenu(props) {
     const [appState,] = useContext(AppContext);
+    const [layoutState,] = useContext(LayoutContext);
 
     const onFolderContextMenuAction = (event, props, action) => {
         switch (action) {
@@ -19,6 +21,9 @@ function FolderContextMenu(props) {
                 break;
             case "delete":
                 appState.actions.openModal({type: DeleteFolderModal, data: {id: props.id, name: props.name}});
+                break;
+             case "edit":
+                layoutState.actions.addIframeTab({url: "/admin/backend/folder/" + props.id + "/change/", name : "*"+props.text});
                 break;
             default:
                 window.alert("Action not implemented: " + action);
@@ -32,6 +37,10 @@ function FolderContextMenu(props) {
                 onClick={({event, props}) => onFolderContextMenuAction(event, props, "new")}>New</Item>
             <Item
                 onClick={({event, props}) => onFolderContextMenuAction(event, props, "rename")}>Rename</Item>
+            {appState.user && appState.user.is_staff &&
+            <Item
+                onClick={({event, props}) => onFolderContextMenuAction(event, props, "edit")}>Edit</Item>
+            }
             <Separator/>
             <Item
                 onClick={({event, props}) => onFolderContextMenuAction(event, props, "delete")}>Delete</Item>
