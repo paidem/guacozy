@@ -1,6 +1,6 @@
 from django.db import models
 
-from backend.common.dictionaries import RDPSecurityDict, ProtocolsDict
+from backend.common.dictionaries import RDPSecurityDict
 from backend.common.utils import model_choices_from_dictionary
 from .connection import Connection
 
@@ -30,9 +30,29 @@ class ConnectionRdp(Connection):
                                      choices=[
                                          ('en-us-qwerty',
                                           'English (US) keyboard'),
+                                         ('en-gb-qwerty',
+                                          'English (UK) keyboard'),
+                                         ('de-de-qwertz',
+                                          'German keyboard (qwertz)'),
+                                         ('fr-fr-azerty',
+                                          'French keyboard (azerty)'),
+                                         ('fr-ch-qwertz',
+                                          'Swiss French keyboard (qwertz)'),
+                                         ('it-it-qwerty',
+                                          'Italian keyboard'),
+                                         ('ja-jp-qwerty',
+                                          'Japanese keyboard'),
+                                         ('pt-br-qwerty',
+                                          'Portuguese Brazilian keyboard'),
+                                         ('es-es-qwerty',
+                                          'Spanish keyboard'),
+                                         ('sv-se-qwerty',
+                                          'Swedish keyboard'),
+                                         ('tr-tr-qwerty',
+                                          'Turkish-Q keyboard'),
                                          ('failsafe', 'Failsafe')
                                      ],
-                                     default='failsafe')
+                                     default='en-us-qwerty')
 
     # Display settings
     color_depth = models.CharField(max_length=2,
@@ -41,7 +61,7 @@ class ConnectionRdp(Connection):
                                        ('16', '16 bits'),
                                        ('24', '24 bits'),
                                    ],
-                                   default='8')
+                                   default='16')
 
     resize_method = models.CharField(max_length=20,
                                      choices=[

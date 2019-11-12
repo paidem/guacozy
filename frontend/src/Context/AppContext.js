@@ -40,7 +40,7 @@ const AppProvider = (props) => {
 
     const logout = () => {
         api.logout().then(() => {
-                setState(defaultState);
+                // setState(defaultState);
                 window.location.href = "/accounts/login/";
             }
         )
@@ -153,6 +153,7 @@ const AppProvider = (props) => {
         connectionsLoading: false,
         tickets: [],
         ticketsLoading: false,
+        confirmedUnsafeConnection: false,
         user: null,
         actions: {
             activateConnection: activateConnection,
