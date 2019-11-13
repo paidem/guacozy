@@ -15,8 +15,11 @@ class FolderInheritedPermissionInlineFormSet(BaseInlineFormSet):
         super(FolderInheritedPermissionInlineFormSet, self).__init__(*args, **kwargs)
         # Get FolderPermission objects which reference any ancestor folders
         # .order_by('folder__lft') make use of MPTT lft to make them appear in same order as in tree
-        self.queryset = FolderPermission.objects.filter(folder__in=kwargs['instance']
-                                                        .get_ancestors()).order_by('folder__lft')
+        instance = kwargs['instance']
+        if instance.parent:
+            ancestors = instance.parent.get_ancestors(include_self=True)
+            self.queryset = FolderPermission.objects.filter(folder__in=ancestors).order_by('folder__lft')
+
 
 
 class FolderInheritedPermissionInline(admin.TabularInline):
