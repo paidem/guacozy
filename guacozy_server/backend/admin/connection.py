@@ -27,6 +27,8 @@ class ConnectionChildForm(ModelForm):
             'passphrase': 'IF passphrase is used to protect private key enter it here.',
             'host_key': 'Server''s host key to verify host identity before connecting.',
             'guacdserver': 'Override default guacd server.',
+            # SSH specifig
+            'terminal_type': 'If not set, guacd will use ''linux'' by default',
             # RDP specific
             'server_layout': 'failsafe will work on any keyboard but has a problem with Ctrl key',
             'ignore_cert': 'Ignore server certificates.',
@@ -125,6 +127,7 @@ class ConnectionSshAdmin(ConnectionChildAdmin):
         }),
         ('Display settings', {
             'fields': (
+                'terminal_type',
                 'font_size',
             )
         }),

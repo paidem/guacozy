@@ -34,6 +34,15 @@ class ConnectionSsh(Connection):
     # color_scheme
     # font_name
 
+    terminal_type = models.CharField(max_length=32, blank=True, null=True, choices=[
+        ('ansi', 'ansi'),
+        ('linux', 'linux'),
+        ('vt100', 'vt100'),
+        ('vt220', 'vt220'),
+        ('xterm', 'xterm'),
+        ('xterm-256colors', 'xterm-256colors'),
+    ], )
+
     font_size = models.IntegerField(default=8, blank=True)
 
     # other
@@ -65,9 +74,8 @@ class ConnectionSsh(Connection):
         if 'passphrase' not in parameters:
             parameters['passphrase'] = self.passphrase if self.passphrase else ""
 
-        # this is needed so servers do not see us as "dumb terminal"
-        # by default "linux" is sent
-        parameters['terminal_type'] = 'xterm'
+        if self.terminal_type is not None:
+            parameters['terminal_type'] = self.terminal_type
 
         # becaus we are hax0rs
         # parameters['color_scheme'] = 'green-black'
