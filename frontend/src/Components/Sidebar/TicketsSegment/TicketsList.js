@@ -24,7 +24,7 @@ function TicketsList({searchString}) {
                 <SegmentGroup className='ticketList'>
                     <Accordion>
                         {myTickets.length > 0 &&
-                        <div className="ticketSection">
+                        <div className="ticketSection noselect">
                             <span className="ticketSectionHeader">My tickets</span>
                             {myTickets.map(ticket =>
                                 <TicketElement key={ticket.id}
@@ -34,7 +34,7 @@ function TicketsList({searchString}) {
                         </div>}
 
                         {sharedWithMe.length > 0 &&
-                        <div className="ticketSection">
+                        <div className="ticketSection noselect">
                             <span className="ticketSectionHeader">Shared with me:</span>
                             {sharedWithMe.map(ticket =>
                                 <TicketElement key={ticket.id}
@@ -45,7 +45,7 @@ function TicketsList({searchString}) {
                         </div>}
 
                         {sharedByMe.length > 0 &&
-                        <div className="ticketSection">
+                        <div className="ticketSection noselect">
                             <span className="ticketSectionHeader">Shared by me:</span>
                             {sharedByMe.map(ticket =>
                                 <TicketElement key={ticket.id}

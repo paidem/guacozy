@@ -426,7 +426,7 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
                     }
                     }
             />}
-            <div id="connectionTree">
+            <div id="connectionTree" className="noselect">
                 {getContent()}
             </div>
         </React.Fragment>
