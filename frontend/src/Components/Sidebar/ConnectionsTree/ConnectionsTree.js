@@ -3,7 +3,7 @@ import Tree from "rc-tree";
 import './ConnectionsTree.css'
 import {AppContext} from "../../../Context/AppContext";
 import {LayoutContext} from "../../../Layout/LayoutContext";
-import {Button} from "semantic-ui-react";
+import {Button, Icon} from "semantic-ui-react";
 import {handleConnectionContextMenuEvent} from "../../ContextMenu/ConnectionContextMenu";
 import {handleFolderContextMenuEvent} from "../../ContextMenu/FolderContextMenu";
 import getIcon from "../../../Utils/getIcon";
@@ -351,6 +351,14 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
         [appState.connections, searchString, appState.actions, layoutState.actions, appState.user, flattenTreeParent, getConnectionsCount, stashedExpandedKeys, expandedKeys, expandTree, expandMode.EXPAND_ALL, expandMode.EXPAND_SHALLOW]
     );
 
+    const switcherIcon = (obj) => {
+        if (obj.isLeaf){
+            return null;
+        }
+
+        return <Icon inverted color='grey ' name={obj.expanded ? "caret up" : "caret right"}/>
+    };
+
     const onExpand = (keys) => {
         setExpandedKeys(keys);
         localStorage.setItem('expandedKeys', JSON.stringify(keys))
@@ -372,6 +380,7 @@ function ConnectionsTree({searchString, draggable, disableDraggebleMode}) {
             treeData={treeData}
             draggable={draggable}
             onDrop={onDrop}
+            switcherIcon={switcherIcon}
         />
     };
 
