@@ -13,6 +13,7 @@ pages:
       - LDAP: 'installation/ldap.md'
       - guacd: 'installation/additional-guacd.md'
       - Running in production: 'installation/running-in-production.md'
+      - Running with Træfik: 'installation/traefik.md'
       - Troubleshooting: 'installation/troubleshooting.md'
   - Core concepts:
       - Folders: 'core/folders.md'
