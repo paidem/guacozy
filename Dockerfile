@@ -38,6 +38,9 @@ RUN apk update && apk add \
     libffi-dev \
     openldap-dev
 
+# install mysqlclient dependencies
+RUN apk add --no-cache mariadb-connector-c-dev mariadb-connector-c musl-dev mariadb-dev gcc
+
 COPY guacozy_server/requirements*.txt ./
 RUN pip install --upgrade pip && \
     pip wheel --no-cache-dir --wheel-dir /usr/src/app/wheels -r requirements-ldap.txt
@@ -59,6 +62,9 @@ RUN apk update && apk add --no-cache \
       memcached \
       nginx \
 	  supervisor
+
+# install mysqlclient dependencies
+RUN apk add --no-cache mariadb-connector-c
 
 # Inject built wheels and install them
 COPY --from=builder-wheels /usr/src/app/wheels /wheels

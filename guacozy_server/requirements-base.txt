@@ -17,3 +17,4 @@ python-memcached==1.59
 pytz==2019.3
 rules==2.1
 sqlparse==0.3.0
+mysqlclient==1.4.6
