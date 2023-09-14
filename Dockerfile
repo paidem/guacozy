@@ -1,5 +1,5 @@
 ARG BUILDFRONTENDFROM=node:12.2.0-alpine
-ARG SERVERFROM=python:3.7-alpine
+ARG SERVERFROM=python:3.7-alpine3.14
 
 ####################
 # BUILDER FRONTEND #
@@ -80,7 +80,7 @@ RUN mkdir -p /run/nginx && \
     cd /tmp/docker && \
     mv entrypoint.sh /entrypoint.sh && \
     chmod +x /entrypoint.sh && \
-    mv nginx-default.conf /etc/nginx/conf.d/default.conf && \
+    mv nginx-default.conf /etc/nginx/http.d/default.conf && \
     mkdir -p /etc/supervisor.d/ && \
     mv /tmp/docker/supervisor-app.ini /etc/supervisor.d/ && \
     mv /tmp/docker/supervisord.conf /etc/supervisord.conf && \
